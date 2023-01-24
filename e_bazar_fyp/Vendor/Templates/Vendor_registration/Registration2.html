@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'simple.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vendor registration</title>
+</head>
+
+<body>
+
+
+<br>
+<br>
+<br>
+<h1 style="  padding: 60px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+  font-size: 30px;">
+  E-Bazar seller central registration
+</h1>
+<div>
+  <form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+      <legend>
+    <h2>
+    Create Account
+  </h2>
+      </legend>
+
+      <div>
+    <label style="color: black;font-weight:500;font-size:30px"  for="storeName">Store Name</label><br>
+    <input style="border: 2px solid black;
+  border-radius: 4px;"  type="text" id="storeName" name="storeName"><br><br>
+  </div>
+
+      <div>
+    <label style="color: black;font-weight:500;font-size:30px"  for="brandOwner">Are you the brand owner/manufacturer of products you are selling ?</label><br>
+    <input style="border: 2px solid black;
+  border-radius: 4px;"  type="text" id="brandOwner" name="brandOwner"><br><br>
+  </div>
+
+            <div>
+    <label style="color: black;font-weight:500;font-size:30px"  for="cnicFront">Cnic front picture</label><br>
+    <input style="border: 2px solid black;
+  border-radius: 4px;"  type="text" id="cnicFront" name="cnicFront"><br><br>
+  </div>
+
+      <div>
+    <label style="color: black;font-weight:500;font-size:30px"  for="cnicBack">Cnic back picture</label><br>
+    <input style="border: 2px solid black;
+  border-radius: 4px;"  type="text" id="cnicBack" name="cnicBack"><br><br>
+  </div>
+
+
+      <div>
+    <label style="color: black;font-weight:500;font-size:30px"  for="bankStatement">Bank statement picture</label><br>
+    <input style="border: 2px solid black;
+  border-radius: 4px;"  type="text" id="bankStatement" name="bankStatement"><br><br>
+  </div>
+
+
+
+
+    </fieldset>
+    <input style=" background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;" type="submit" value="Next">
+  </form>
+</div>
+</body>
+</html>

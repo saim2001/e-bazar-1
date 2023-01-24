@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'simple.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign_Up</title>
+</head>
+
+<body>
+
+
+<br>
+<br>
+<br>
+<h1 style="  padding: 60px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+  font-size: 30px;">
+  E-Bazar Sign-Up
+</h1>
+<div>
+  <form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+      <legend>
+    <h2 >
+    Create Account
+  </h2>
+      </legend>
+  <div>
+    <label style="color: black;font-weight:500;font-size:30px" for="user_name">Your name</label><br>
+    <input style="border: 2px solid black;
+  border-radius: 4px;" type="text" id="user_name" name="user_name"><br><br>
+  </div>
+    <div>
+    <label style="color: black;font-weight:500;font-size:30px" for="Mob_or_Eml">Mobile number or Email</label><br>
+    <input style="border: 2px solid black;
+  border-radius: 4px;" type="text" id="Mob_or_Eml" name="Mob_or_Eml"><br><br>
+  </div>
+     <div>
+    <label style="color: black;font-weight:500;font-size:30px" for="password">Password</label><br>
+    <input style="border: 2px solid black;
+  border-radius: 4px;" type="password" id="password" name="password"><br><br>
+  </div>
+     <div>
+    <label style="color: black;font-weight:500;font-size:30px" for="re_password">Re-type password</label><br>
+    <input style="border: 2px solid black;
+  border-radius: 4px;" type="password" id="re_password" name="re_password"><br><br>
+  </div>
+    </fieldset>
+    <input style=" background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;"  type="submit" value="Sign-Up">
+  </form>
+</div>
+</body>
+</html>

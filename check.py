@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient,ASCENDING,DESCENDING
 from bson.objectid import ObjectId
 from django.conf import settings
 from pprint import pprint
@@ -9,46 +9,46 @@ connection_string= "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongo
 client = MongoClient(connection_string)
 # print(client.list_database_names())
 database = client["E-Bazar"]
-dbConnection= database["Categories"]
+dbConnection= database["Vendors"]
 #cate=dbConnection.find({'parent':'/Electronics'})
 # for cat in cate:
-#     print(cat)
-categories={}
-def nested(path,categories,index,actual_path):
-    if index==len(path)-1:
-        child= dbConnection.find({'parent':actual_path})
-        if child.count()==0:
-            leaf = dbConnection.find({'category': actual_path})
-            for l in leaf:
-                categories[path[index]] = {'leaf':l['_id']}
-        else:
-            categories[path[index]]={}
-        return
-    else:
-        if path[index] in categories.keys():
-            nested(path,categories[path[index]],index+1,actual_path)
-        else:
-            categories[path[index]]={}
-            nested(path,categories,index,actual_path)
+# #     print(cat)
+# categories={}
+# def nested(path,categories,index,actual_path):
+#     if index==len(path)-1:
+#         child= dbConnection.find({'parent':actual_path})
+#         if child.count()==0:
+#             leaf = dbConnection.find({'category': actual_path})
+#             for l in leaf:
+#                 categories[path[index]] = {'leaf':l['_id']}
+#         else:
+#             categories[path[index]]={}
+#         return
+#     else:
+#         if path[index] in categories.keys():
+#             nested(path,categories[path[index]],index+1,actual_path)
+#         else:
+#             categories[path[index]]={}
+#             nested(path,categories,index,actual_path)
 
 
-cat= dbConnection.find({})
-for element in cat:
-    actual_path= element['category']
-    path= actual_path.split('/')
-    path= path[1:]
-    #print(path)
-    #categories={}
-    index=0
-    #path=['Electronics', 'embedded','audio']
-    #categories={'Electronics': {'embedded': {}}}
-    #nested(path,categories,index,actual_path)
-#print(categories)
-flag= True
-def recursive(category):
-        print(category.keys())
-c= {'maaz':{'age':18}}
-recursive(c)
+# cat= dbConnection.find({})
+# for element in cat:
+#     actual_path= element['category']
+#     path= actual_path.split('/')
+#     path= path[1:]
+#     #print(path)
+#     #categories={}
+#     index=0
+#     #path=['Electronics', 'embedded','audio']
+#     #categories={'Electronics': {'embedded': {}}}
+#     #nested(path,categories,index,actual_path)
+# #print(categories)
+# flag= True
+# def recursive(category):
+#         print(category.keys())
+# c= {'maaz':{'age':18}}
+# recursive(c)
 
 # cat= dbConnection.find({})
 # categories={}
@@ -118,5 +118,5 @@ recursive(c)
 
 
 # # {base:{categories:[kj,jkb,..],leaf:[id,name]]
-
-## {electronic{}}
+vendor = dbConnection.find_one({"email":"zain@gmail.com"})
+print(vendor["database_name"])

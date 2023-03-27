@@ -1,0 +1,31 @@
+form {
+      width: 350px;
+      margin: 0 auto;
+
+    }
+
+input[type="text"], input[type="password"] {
+      width: 90%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+    }
+button[type="submit"] {
+      width: 90%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    /* Style the error message */
+.error {
+      color: red;
+    }

@@ -17,17 +17,17 @@ import json
 # order['products'].append({'profession':'software'})
 # database.insert_one(order)
 
-string_cart= [['63c939544ab360d0f5c90ff7', ' 5'], ['63c9440b550f287e572b02bf', '2']]
-
-string_cart = string_cart[2:-2]
-string_cart = string_cart.split('],[')
-cart_list = []
-for item in string_cart:
-    item = item.replace("'", "")
-    item = item.split(",")
-    cart_list.append(item)
-
-print(cart_list)
+# string_cart= [['63c939544ab360d0f5c90ff7', ' 5'], ['63c9440b550f287e572b02bf', '2']]
+#
+# string_cart = string_cart[2:-2]
+# string_cart = string_cart.split('],[')
+# cart_list = []
+# for item in string_cart:
+#     item = item.replace("'", "")
+#     item = item.split(",")
+#     cart_list.append(item)
+#
+# print(cart_list)
 
 # database= database['Vendors']
 # find= database.find({'email':'ain@gmail.com'})

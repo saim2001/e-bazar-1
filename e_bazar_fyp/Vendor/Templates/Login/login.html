@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/Login.css' %}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+  <form method="post" action="{% url 'Vendor:logIn' %}">
+      {% csrf_token %}
+      <h1>E-bazar Seller Central</h1><br><br>
+      <label for="username">Email:</label><br>
+    <input type="text" id="username" name="Email"><br>
+      <label for="password">Password</label>:<br>
+    <input type="password" id="password" name="password"><br>
+      <a href="#">Forgot Password?</a>
+      <br>
+        <button type="submit" >Login</button>
+  </form>
+</body>
+</html>

@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from django.conf import settings
+from django.shortcuts import redirect
 
 def connect_database(databaseName):
 
@@ -8,3 +9,9 @@ def connect_database(databaseName):
     database = client[databaseName]
     a= database["status"]
     return database
+
+def verify_login(request):
+    if "Vendor_Db" in request.session:
+        return True
+    else :
+        return False

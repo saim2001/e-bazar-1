@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from pymongo import MongoClient
 import hashlib
 from bson.objectid import ObjectId
+from .decorators import user_login_required
 
 from . import utils
 
@@ -25,11 +26,50 @@ from . import utils
 
 class vendorRegister:
     def __init__(self):
-        pass
+     pass
 
+    #saim's function
+    def renLogIn(self,request):
+
+        return render(request,"Login/login.html")
+    #saim's function
     def logIn(self,request):
+        if request.method == "POST":
+            email = request.POST["Email"]
+            password = request.POST["password"]
+            dataBase = utils.connect_database("E-Bazar")
+            vendors = dataBase["Vendors"]
+            vendor = vendors.find_one({"email":email,"password":password})
+            if vendors.count_documents({"email":email,"password":password}) > 0:
+                print("in")
+                vendorDtbase = vendor["database_name"]
+                request.session["Vendor_Db"] = vendorDtbase
+                return redirect("Vendor:renDashbrd")
+                # else:
+                #     print("in2")
+                #     return redirect("renLogIn")
+            else:
+                return redirect("Vendor:renlogin")
 
-        return redirect("vendorregister")
+    def getUser(self,request):
+        dataBase = utils.connect_database(request.session["Vendor_Db"])
+        vendor = dataBase["Information"]
+        info = vendor.find_one({})
+        return info
+
+    #saim's function
+    def renDashboard(self,request):
+            info=self.getUser(request)
+            print(info)
+            return render(request,"Seller_Central/Dashbourd.html",context=info)
+
+
+
+
+
+
+
+
 
     def register(self,request):
         if request.method == 'POST':
@@ -358,6 +398,8 @@ class Product:
                                                         'Batch_price': batch_3_price
                                                         }
                     dbConnection.insert_one(product_variation)
+                    # if dbConnection.count_documents({}) > 20:
+
                 return render(request, 'Seller_Central/Dashbourd.html', {'product': product_name})
 
             else:
@@ -365,9 +407,6 @@ class Product:
                 return render(request, 'Products/Add_products.html', {
                     'error_message': "SKU already exists !", "category": self.product_category
                 })
-
-
-
 
 
 

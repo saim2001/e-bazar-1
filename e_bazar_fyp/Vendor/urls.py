@@ -10,7 +10,7 @@ categories=Category()
 app_name = 'Vendor'
 
 urlpatterns = [
-    path('',user_login_required(vendor.renDashboard),name="renDashbrd"),
+    path('',vendor.renDashboard,name="renDashbrd"),
     path('login',vendor.renLogIn,name="renlogin"),
     path('loging/',vendor.logIn,name="logIn"),
     path('vendorregister/',vendor.register,name="vendorregister"),

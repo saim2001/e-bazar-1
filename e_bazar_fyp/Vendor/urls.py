@@ -11,8 +11,8 @@ app_name = 'Vendor'
 
 urlpatterns = [
     path('',vendor.renDashboard,name="renDashbrd"),
-    path('login',vendor.renLogIn,name="renlogin"),
-    path('loging/',vendor.logIn,name="logIn"),
+    # path('login',vendor.renLogIn,name="renlogin"),
+    path('login/',vendor.logIn,name="logIn"),
     path('vendorregister/',vendor.register,name="vendorregister"),
     path('addproduct/',product.renselectCat,name="addproduct"),
     path('selectcategory1/',product.selectCat,name="selectcategory"),

@@ -29,9 +29,9 @@ class vendorRegister:
      pass
 
     #saim's function
-    def renLogIn(self,request):
-
-        return render(request,"Login/login.html")
+    # def renLogIn(self,request):
+    #
+    #     return render(request,"Login/login.html")
     #saim's function
     def logIn(self,request):
         if request.method == "POST":
@@ -52,6 +52,7 @@ class vendorRegister:
                 #change new
                 return render(request, 'Login/login.html', {
                     'error_message': "Email or password is incorrect !",})
+        return render(request, "Login/login.html")
                 #change end
 
     def getUser(self,request):

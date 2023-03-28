@@ -26,7 +26,7 @@ def session_check(function):
     @functools.wraps(function)
     def wrapper(self,request,*args,**kwargs):
         print(function.__name__)
-        login_url = "Vendor:renlogin"
+        login_url = "Vendor:logIn"
         if session_key in request.session:
             return function(self,request,*args,**kwargs)
         else:

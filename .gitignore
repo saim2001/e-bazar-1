@@ -1,4 +1,4 @@
-.env/
+env/
 .idea/
 e_bazar_fyp/AdminApp/__pycache__/
 e_bazar_fyp/AdminApp/migrations/__pycache__/

@@ -1,14 +1,29 @@
-{% extends "VendorBase.html" %}
-{% load static %}    
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
 
-    {% block title %}Add Product{% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Product</title>
+<!--    <link rel="stylesheet" href="add_product.css">-->
+    <link rel="stylesheet" href="{% static 'css/add_product.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
 
-    {% block content %}
-    <br><br><br>
+<body>
+
+  <div id="headdiv">
+    <a href="#"><img src="img/logo.svg" alt="" width="180" height="150"></a>
+    <h4>Seller center</h4>
+    
+</div>  <br><br><br>
+
+
 <h2>{{category}}</h2>
 <div class="tabs">
 <button class="tablink" onclick="openPage('Product_identity', this, 'white', 'inside')" id="default">Product</button>
-<button class="tablink" onclick="openPage('variations', this, 'white', 'inside'); createVarhtml()">Variations</button>
+<button class="tablink" onclick="openPage('variations', this, 'white', 'inside'); createVarhtml()">Variations new</button>
 <button class="tablink" onclick="openPage('information', this, 'white', 'inside')" >Information</button>
 <button class="tablink" onclick="openPage('Description', this, 'white', 'inside')">description</button>
 
@@ -79,24 +94,10 @@
       <option value="ean">EAN</option>
       </select></td>
       </tr> -->
-
-      <tr>
-        <td><label for="b2bsingle">Enable B2B</label></td>
-        <td>
-          <div id="b2bsingle" class="radio">
-            <label for="b2b_yes">Yes</label>
-            <input type="radio" id="b2b_yes" name="B2Boptions" value="yes" onclick="showB2B()">     
-            <label for="b2b_no">No</label>
-            <input type="radio" id="b2b_no" name="B2Boptions" value="no" checked onclick="hideB2B()">
-    </div>
-        </td>
-    </tr>
-
-
       <tr class="singleProduct">
       <td><label >Product SKU: <span class="required">*</span></label></td>
 
-      <td><input type="text" name="skuSingle" ></td>
+      <td><input type="text" name="sku" required></td>
       </tr>
 
       <tr>
@@ -118,59 +119,27 @@
 
       <tr class="singleProduct">
       <td><label for="image">Image:<span class="required">*</span> </label></td>
-      <td><input class="no-border" type="file" id="imageSingle" name="imageSingle" ></td>
+      <td><input class="no-border" type="file" id="image" name="image" required></td>
       </tr>
 
       <tr class="singleProduct">
         <td><label for="units">Units:<span class="required">*</span></label></td>
-        <td><input type="text" id="unitsSingle" name="unitsSingle"></td>
+        <td><input type="text" id="units" name="units"></td>
     </tr>
 
     <tr class="singleProduct">
       <td><label for="price">Price:<span class="required">*</span></label></td>
-      <td><input type="text" id="priceSingle" name="priceSingle"></td>
+      <td><input type="text" id="price" name="price"></td>
   </tr>
 
   <tr class="singleProduct">
     <td><label>Condition:<span class="required">*</span></label></td>
-    <td><select name="conditionSingle" required>
+    <td><select name="condition" required>
       <option selected value="new">New</option>
       <option value="old">Old</option>
     </select></td>
     
 </tr>
-
-
-<tr class="b2bBatches" style="display: none;">
-  <td><label for="batchUnits1">Batch 1 units:</label></td>
-  <td><input type="number" id="batchUnits1" name="batchUnits1" ></td>
-</tr>
-
-<tr class="b2bBatches" style="display: none;">
-  <td><label for="batchPrice1">Batch 1 price/unit:</label></td>
-  <td><input type="number" id="batchPrice1" name="batchPrice1" ></td>
-</tr>
-
-<tr class="b2bBatches" style="display: none;">
-  <td><label for="batchUnits2">Batch 2 units:</label></td>
-  <td><input type="number" id="batchUnits2" name="batchUnits2" ></td>
-</tr>
-
-<tr class="b2bBatches" style="display: none;">
-  <td><label for="batchPrice2">Batch 2 price/unit:</label></td>
-  <td><input type="number" id="batchPrice2" name="batchPrice2" ></td>
-</tr>
-
-<tr class="b2bBatches" style="display: none;">
-  <td><label for="batchUnits3">Batch 3 units:</label></td>
-  <td><input type="number" id="batchUnits3" name="batchUnits3" ></td>
-</tr>
-
-<tr class="b2bBatches" style="display: none;">
-  <td><label for="batchPrice3">Batch 3 price/unit:</label></td>
-  <td><input type="number" id="batchPrice3" name="batchPrice3" ></td>
-</tr>
-
 
     </table>
 </div>
@@ -214,12 +183,6 @@
         <th scope="col">Condition <span class="required">*</span></th>
         <th scope="col">Price/unit(Rs) <span class="required">*</span></th>
         <th scope="col">Main Page<span class="required">*</span></th>
-        <th scope="col">Batch 1 Minimum units</th>
-        <th scope="col">Batch 1 Price/unit</th>
-        <th scope="col">Batch 2 Minimum units</th>
-        <th scope="col">Batch 2 Price/unit</th>
-        <th scope="col">Batch 3 Minimum units</th>
-        <th scope="col">Batch 3 Price/unit</th>
         <th scope="col">image <span class="required">*</span></th>
         
       </tr>
@@ -308,11 +271,10 @@
 
 </div>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
-<link rel="stylesheet" href="{% static 'css/add_product.css' %}">
-<script type="text/javascript" src="{% static 'js/add_product.js' %}"></script>
 
+<!--<script type="text/javascript" src="add_product.js"></script>-->
+  <script type="text/javascript" src="{% static 'js/add_product.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-{% endblock %}
-
-
+</body>
+  </html>

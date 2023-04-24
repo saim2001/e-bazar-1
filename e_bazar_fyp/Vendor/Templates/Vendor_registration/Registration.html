@@ -1,172 +1,203 @@
-<!DOCTYPE html>
+{% extends "VendorBase.html" %}
+{% load static %}    
 
-<html lang="en">
+    {% block title %}Add Product{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block content %}
 
-    <title>Vendor registration</title>
-</head>
-<style>
-.header {
-  padding: 60px;
-  text-align: center;
-  background: #1abc9c;
-  color: white;
-  font-size: 30px;
-}
-</<style>
-</style>
-
-<body>
+    <h2 class="headingtop" >Create Account</h2>
 
 
-<br>
-<br>
-<br>
-<div class="header">
-  <h1>E bazar seller registration</h1>
-</div>
-<div align="left">
-  <form align="left" action="{% url 'Vendor:vendorregister' %}" method="post">
-    {% csrf_token %}
-    <fieldset>
-      <legend>
-    <h2 style="center">Create Account</h2>
-      </legend>
-  <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="businessType">Enter business type</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="businessType" name="businessType"><br><br>
-  </div>
+    <form action="{% url 'Vendor:vendorregister' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
 
-    <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="firstName">First Name</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="firstName" name="firstName"><br><br>
-  </div>
+      <div class="register1">
 
-      <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="middleName">Middle Name</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="middleName" name="middleName"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="firstname" class="col-sm-2 col-form-label">First Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="firstname" name="firstname" required>
+        </div>
+      </div>
 
-      <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="lastName">Last Name</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="lastName" name="lastName"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="middlename" class="col-sm-2 col-form-label">Middle Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="middlename" name="middlename">
+        </div>
+      </div>
 
+      <div class="row mb-3">
+        <label for="lastname" class="col-sm-2 col-form-label">Last Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="lastname" name="lastname" required>
+        </div>
+      </div>
 
+      <div class="row mb-3">
+        <label for="email" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+      </div>
 
-       <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="dto">Date of birth</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="dto" name="dto"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="password" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-10">
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+      </div>
 
+      <div class="row mb-3">
+        <label for="dto" class="col-sm-2 col-form-label">Date of birth</label>
+        <div class="col-sm-4">
+          <input type="date" class="form-control" id="dto" name="dto" required>
+        </div>
+      </div>
 
-       <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="city">City</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="city" name="city"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="city" class="col-sm-2 col-form-label">City</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="city" name="city" required>
+        </div>
+      </div>
 
+      <div class="row mb-3">
+        <label for="province" class="col-sm-2 col-form-label">Province</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="province" name="province" required>
+        </div>
+      </div>
 
-      <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="province">Province</label>&nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="province" name="province"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="StAdd" class="col-sm-2 col-form-label">Street Address</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="StAdd" name="StAdd" required>
+        </div>
+      </div>
 
+      <div class="row mb-3">
+        <label for="area" class="col-sm-2 col-form-label">Area</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="area" name="area" required>
+        </div>
+      </div>
 
-         <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="address1">Address line 1</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="address1" name="address1"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="AddDetail" class="col-sm-2 col-form-label">Address detail</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="AddDetail" name="AddDetail" >
+        </div>
+      </div>
 
-            <div>
-    <label  style="color: black;font-weight:500;font-size:30px" for="address2">Address line 2</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="address2" name="address2"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="zipcode" class="col-sm-2 col-form-label">Postal/Zip code</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="zipcode" name="zipcode" required>
+        </div>
+      </div>
 
-         <div>
-    <label  style="color: black;font-weight:500;font-size:30px" for="postalCode">Postal code</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="postalCode" name="postalCode"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="cnic" class="col-sm-2 col-form-label">Cnic</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="cnic" name="cnic" required>
+        </div>
+      </div>
 
-         <div>
-    <label  style="color: black;font-weight:500;font-size:30px" for="cnic">Cnic no</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="cnic" name="cnic"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="phone" class="col-sm-2 col-form-label">Phone number</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+      </div>
+      
+      <div class="row mb-3">
+        <label for="cardno" class="col-sm-2 col-form-label">Card number</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="cardno" name="cardno" required>
+        </div>
+      </div>
 
+      <div class="row mb-3">
+        <label for="cardholdername" class="col-sm-2 col-form-label">Card holder name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="cardholdername" name="cardholdername" required>
+        </div>
+      </div>
 
-         <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="phone">Phone no</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="phone" name="phone"><br><br>
-  </div>
-
-
-
-    <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="email">Email</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="email" name="email"><br><br>
-  </div>
-
-
-       <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="password">Password</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="password" id="password" name="password"><br><br>
-  </div>
-
-     <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="rePassword">Re-type password</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="password" id="rePassword" name="rePassword"><br><br>
-  </div>
-
-
-        <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="creditCard">Credit card number</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="creditCard" name="creditCard"><br><br>
-  </div>
-
-
-            <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="cardHolder">Card Holder Name</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="cardHolder" name="cardHolder"><br><br>
-  </div>
-
-            <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="billingAddress">Billing Address</label> &nbsp;
-    <input style="border: 2px solid black;font-size:30px;
-  border-radius: 4px;" type="text" id="billingAddress" name="billingAddress"><br><br>
-  </div>
+      <div class="row mb-3">
+        <label for="billadd" class="col-sm-2 col-form-label">Billing Address</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="billadd" name="billadd" required>
+        </div>
+      </div>
 
 
+      <div class="row mb-3">
+        <label for="busstype" class="col-sm-2 col-form-label">Bussiness type</label>
+        <div class="col-sm-4">
+            <select class="form-select" id="busstype" name="busstype">
+              <option selected value="individual">Individual</option>
+              <option value="professional">Professional</option>
+            </select>
+          </div>
+      </div>
+      {% if error_message %}
+      <p><strong>{{ error_message }}</strong></p>
+      {% endif %}
 
-    </fieldset>
-            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        <button style=" background-color: #04AA6D;
-  border: none;
-  color: white;
-  padding: 16px 32px;
-  text-decoration: none;
-  margin: 4px 2px;
-  cursor: pointer;" type="submit" class="registerbtn"> Next </button>
+    </div>
 
-  </form>
-</div>
-</body>
-</html>
+    <div class="register2">
+
+        <div class="row mb-3">
+          <label for="storename" class="col-sm-2 col-form-label">Store name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="storename" name="storename" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="manufacturerRadio" class="col-sm-2 col-form-label">Are you the manufacturer of products you are selling ?</label>
+          <div class="col-sm-10">
+            <div id="manufacturerRadio">
+            <label for="manuYes" >Yes</label>
+            <input type="radio" value="true" id="manuYes" name="manufacturerBool">
+            <label for="manuNo" >No</label>
+            <input type="radio" value="false" id="manuNo" name="manufacturerBool" checked>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="cnicfront" class="col-sm-2 col-form-label">Cnic front picture</label>
+          <div class="col-sm-10">
+            <input type="file" class="form-control" id="cnicfront" name="cnicfront" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="cnicback" class="col-sm-2 col-form-label">Cnic back picture</label>
+          <div class="col-sm-10">
+            <input type="file" class="form-control" id="cnicback" name="cnicback" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="bankstatement" class="col-sm-2 col-form-label">Bank statement</label>
+          <div class="col-sm-10">
+            <input type="file" class="form-control" id="bankstatement" name="bankstatement" required>
+          </div>
+        </div>
+
+    </div>
+
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+
+    <link rel="stylesheet" href="{% static 'css/vendorVerification.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+{% endblock %}

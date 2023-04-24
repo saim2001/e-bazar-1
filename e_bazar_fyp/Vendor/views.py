@@ -6,8 +6,9 @@ from pymongo import MongoClient
 import hashlib
 from bson.objectid import ObjectId
 from .decorators import *
-
+from django.views import View
 from . import utils
+from . import azureCon
 
 # class User_vw:
 #
@@ -29,9 +30,12 @@ class vendorRegister:
      pass
 
     #saim's function
-    def renLogIn(self,request):
+    # def renLogIn(self,request):
+    #     return render(request, "Login/login.html")
 
-        return render(request,"Login/login.html")
+    def check(self,request):
+        return render(request,"Vendor_registration/base.html")
+
     #saim's function
     def logIn(self,request):
         if request.method == "POST":
@@ -40,8 +44,8 @@ class vendorRegister:
             dataBase = utils.connect_database("E-Bazar")
             vendors = dataBase["Vendors"]
             vendor = vendors.find_one({"email":email,"password":password})
-            if vendors.count_documents({"email":email,"password":password}) > 0:
-                vendorDtbase = vendor["database_name"]
+            if vendor:
+                vendorDtbase = str(vendor["_id"])
                 print('vendorDtbase',vendorDtbase)
                 request.session["Vendor_Db"] = vendorDtbase
                 return redirect("Vendor:renDashbrd")
@@ -52,10 +56,13 @@ class vendorRegister:
                 #change new
                 return render(request, 'Login/login.html', {
                     'error_message': "Email or password is incorrect !",})
+
+        return render(request, "Login/login.html")
                 #change end
 
     def getUser(self,request):
         dataBase = utils.connect_database(request.session["Vendor_Db"])
+        print(request.session["Vendor_Db"])
         vendor = dataBase["Information"]
         info = vendor.find_one({})
         return info
@@ -70,73 +77,106 @@ class vendorRegister:
 
     def register(self,request):
         if request.method == 'POST':
-            firstName = request.POST['firstName']
-            middleName = request.POST['middleName']
-            lastName = request.POST['lastName']
-            businessType = request.POST['businessType']
-            dto = request.POST['dto']
-            city = request.POST['city']
-            province = request.POST['province']
-            address1 = request.POST['address1']
-            address2 = request.POST['address2']
-            postalCode = request.POST['postalCode']
-            cnic = int(request.POST['cnic'])
-            phone = request.POST['phone']
+            dataBase = utils.connect_database("E-Bazar")
+            vendors = dataBase["Vendors"]
+            db_status= dataBase["status"]
+
             email = request.POST['email']
             email=email.strip()
             password = request.POST['password']
             password= password.strip()
-            rePassword = request.POST['rePassword']
-            creditCard = request.POST['creditCard']
-            cardHolder = request.POST['cardHolder']
-            billingAddress = request.POST['billingAddress']
+            cnic = int(request.POST['cnic'])
+            phone = request.POST['phone']
 
-            vendor_databse_name= 'vendor'+str(cnic)
 
-            database_genvendor= utils.connect_database("E-Bazar")
-            db_status= database_genvendor["status"]
-            not_verified= db_status.find({"name":"not verified"})
-            for i in not_verified:
-                not_verified= ObjectId(i["_id"])
-            db_genvendor= database_genvendor["Vendors"]
-            database_specvendor= utils.connect_database(vendor_databse_name)
-            db_info = database_specvendor["Information"]
-            db_products= database_specvendor["Products"]
-            cnicCheckCount= db_genvendor.find({"cnic":cnic}).count()
-
-            if cnicCheckCount==0:
-                vendor_login= {
-                    "email": email,
-                    "password":password,
-                    "phone":phone,
-                    'status':not_verified,
-                    'database_name':vendor_databse_name }
-                vendor_info={
-                    "firstName": firstName,
-                    "middleName": middleName,
-                    "lastName": lastName,
-                    "businessType": businessType,
-                    "dto": dto,
-                    "city": city,
-                    "province": province,
-                    "address1": address1,
-                    "address2": address2,
-                    "postalCode": postalCode,
-                    "cnic": cnic,
-                    "creditCard": creditCard,
-                    "cardHolder": cardHolder,
-                    "billingAddress": billingAddress,
-                }
-                print(vendor_info)
-                print(vendor_login)
-                db_genvendor.insert_one(vendor_login)
-                db_info.insert_one(vendor_info)
-
-                return redirect("vendorregister")
-            else:
+            VendorEmailCheck = vendors.find_one({"email":email,"password":password})
+            VendorCnicCheck = vendors.find_one({"cnic": cnic})
+            VendorPhoneCheck = vendors.find_one({"phone": phone})
+            if VendorEmailCheck:
                 return render(request, 'Vendor_registration/Registration.html', {
-                    'error_message': "Maybe you are already registered or entered incorrect information !",
-                })
+                    'error_message': "You are already registered !"})
+            if VendorCnicCheck:
+                return render(request, 'Vendor_registration/Registration.html', {
+                    'error_message': "You are already registered with same Cnic !"})
+            if VendorPhoneCheck:
+                return render(request, 'Vendor_registration/Registration.html', {
+                    'error_message': "You are already registered with same phone number !"})
+
+
+            firstName = request.POST['firstname']
+            middleName = request.POST['middlename']
+            lastName = request.POST['lastname']
+            dto = request.POST['dto']
+            city = request.POST['city']
+            province = request.POST['province']
+            StAdd = request.POST['StAdd']
+            area = request.POST['area']
+            addDetail = request.POST['AddDetail']
+            zipCode = request.POST['zipcode']
+            cardNo = request.POST['cardno']
+            cardHolder = request.POST['cardholdername']
+            billingAddress = request.POST['billadd']
+            businessType = request.POST['busstype']
+            storename = request.POST['storename']
+            manufacturerBool = request.POST['manufacturerBool']
+            cnicfront = request.FILES.get('cnicfront')
+            cnicback = request.FILES.get('cnicback')
+            bankstatement = request.FILES.get('bankstatement')
+
+            not_verified= db_status.find_one({"name":"not verified"})
+            not_verified= ObjectId(not_verified["_id"])
+
+            vendor_login= {
+                "email": email,
+                "password":password,
+                "phone":phone,
+                "cnic":cnic,
+                'status':not_verified }
+            newVendor= vendors.insert_one(vendor_login)
+            vendorIdCreated= newVendor.inserted_id
+
+            cnicfrontUrl= azureCon.uploadimg(cnicfront)
+            cnicbackUrl= azureCon.uploadimg(cnicback)
+            bankstatementUrl= azureCon.uploadimg(bankstatement)
+
+            vendor_info={
+                "_id": vendorIdCreated,
+                "firstName": firstName,
+                "lastName": lastName,
+                "dto": dto,
+                "city": city,
+                "province": province,
+                "address1": StAdd,
+                "address2": area,
+                "postalCode": zipCode,
+                "cnic": cnic,
+                "creditCard": cardNo,
+                "cardHolder": cardHolder,
+                "billingAddress": billingAddress,
+                "businessType": businessType,
+                "storename": storename,
+                "isManufacturer": manufacturerBool,
+                "cnicFront": cnicfrontUrl,
+                "cnicBack": cnicbackUrl,
+                "bankStatement": bankstatementUrl
+            }
+
+            if addDetail:
+                vendor_info["addDetail"]= addDetail
+
+            if middleName:
+                vendor_info["middleName"]= middleName
+
+            print(vendor_info)
+            print(vendor_login)
+
+            vendorSpec= utils.connect_database(str(vendorIdCreated))
+            vendorSpecInfo= vendorSpec["Information"]
+
+            vendorSpecInfo.insert_one(vendor_info)
+
+            return render(request, "Login/login.html")
+
 
         return render(request, 'Vendor_registration/Registration.html')
 class Category:
@@ -144,8 +184,6 @@ class Category:
     client = MongoClient(connection_string)
     database = client["E-Bazar"]
     dbConnection = database["Categories"]
-    def __init__(self):
-        pass
 
     def fetchAll(self,request):
         categories=self.dbConnection.find({"parent":"/"})
@@ -163,6 +201,7 @@ class Category:
 
     # def fetchSubCat(self,request):
 
+
 class Product:
     category=Category()
     def __init__(self):
@@ -171,27 +210,18 @@ class Product:
 
     # def storeContext(self,name,value):
     #     self.context[name]=value
+
     @session_check
     def renselectCat(self,request):
         return render(request, "Products/Search_Category.html")
+
+    @session_check
     def selectCat(self,request):
         main_categories=self.category.fetchAll(request)
-        # sub_categories=[]
-        # leaf_categories=[]
-        #
-        # for i in main_categories:
-        #     j=self.category.fetchChild(request,"/" + i["name"])
-        #     sub_categories.append([i["name"],j])
-        #     for k in j:
-        #         leaf=self.category.fetchChild(request,"/" + i["name"] + "/" + k["name"])
-        #         leaf_categories.append([k["name"],leaf])
-
-
-
         self.context['maincats']=main_categories
-
-
         return render(request,"Products/Search_Category_1.html",self.context)
+
+    @session_check
     def selectSubCat(self,request):
         category= request.POST['category']
         print(2)
@@ -199,6 +229,7 @@ class Product:
         self.context['subcats']=sub_categories
         return render(request,"Products/Search_Category_2.html",self.context)
 
+    @session_check
     def selectLeafCat(self,request):
         category = request.POST['category']
         leaf_categories=self.category.fetchChild(request,category)
@@ -206,6 +237,7 @@ class Product:
         self.context['leafcats']=leaf_categories
         return render(request,"Products/Search_Category_3.html",self.context)
 
+    @session_check
     def renAddProduct(self,request):
         self.product_category=request.POST['category']
         context={
@@ -213,198 +245,142 @@ class Product:
         }
         return render(request, "Products/Add_Products.html",context)
 
-
+    @session_check
     def addProduct(self,request):
         if request.method == 'POST':
-            manufacturer = request.POST['manufacturer']
-            product_id = request.POST['productid']
-            product_id_type = request.POST['idtype']
-            product_SKU = request.POST['SKU']
-            product_name = request.POST['productname']
-            product_price = request.POST['price']
-            if "isbrand" not in request.POST:
-                product_brand = request.POST['brand']
+            productDict={}
+            vartype= request.POST.getlist("varname")
+            productname = request.POST.get("productname")
+            manufacturer = request.POST.get("manufacturer")
+            length = request.POST.get("length")
+            width = request.POST.get("width")
+            height = request.POST.get("height")
+            weight = request.POST.get("weight")
+            description = request.POST.get("descriptionPara")
+            brand = request.POST.get("brand")
+            expireDate = request.POST.get("expireDate")
+            productDict["points"] = request.POST.getlist("points")
+
+            if brand:
+                productDict["brand"]= brand
+            if expireDate:
+                productDict["expireDate"] = expireDate
+
+
+            productDict.update({"manufacturer": manufacturer,"length":length,"width":width,"height":height
+                ,"weight":weight,"description":description})
+
+
+            if len(vartype)==0:
+                sku= request.POST.get("skuSingle")
+                units = request.POST.get("unitsSingle")
+                price = request.POST.get("priceSingle")
+                condition = request.POST.get("conditionSingle")
+                isb2b = request.POST.get("B2Boptions")
+
+                if isb2b =="yes":
+                    batches= []
+                    for i in range(1,4):
+                        batchUnits = request.POST.get("batchUnits"+str(i))
+                        batchPrice = request.POST.get("batchPrice"+str(i))
+
+                        if batchUnits is not None and batchPrice is not None:
+                            batches.append({"MinUnits":int(batchUnits),"Price":batchPrice})
+
+                image = request.FILES.get('image')
+                img_url = azureCon.uploadimg(image)
+                productDict.update({'sku':sku , 'productname':productname, 'units':units, 'price':price,'condition':condition,"image":img_url})
+                productDict["reviews"] = []
+                productDict["batches"]=batches
+
             else:
-                product_brand = None
+                variations=[]
+                sku= request.POST.getlist("sku")
+                units = request.POST.getlist("units")
+                price = request.POST.getlist("price")
+                condition = request.POST.getlist("condition")
+                image = request.FILES.getlist('image')
+                mainpage= request.POST.get("mainpage")
+                isb2b = request.POST.get("B2Boptions")
+                if isb2b == "yes":
+                    batch1MinUnit = request.POST.getlist("batch1MinUnit")
+                    batch1price = request.POST.getlist("batch1price")
+                    batch2MinUnit = request.POST.getlist("batch2MinUnit")
+                    batch2price = request.POST.getlist("batch2price")
+                    batch3MinUnit = request.POST.getlist("batch3MinUnit")
+                    batch3price = request.POST.getlist("batch3price")
 
-            if request.POST["exp"] == "True":
-                product_expire = True
-            else:
-                product_expire = False
+                if len(vartype)==1:
+                    varatt = request.POST.getlist("var")
+                    for index in range(0,len(varatt)):
+                        img_url = azureCon.uploadimg(image[index])
+                        tempVar= {'vartype':varatt[index] ,'sku':sku[index] , 'units':units[index], 'price':price[index],'condition':condition[index],"image":img_url}
+                        if mainpage == varatt[index]:
+                            tempVar['mainpage']=True
 
-            product_unitcount = request.POST['unitcount']
-            product_condition = request.POST['condition']
-            product_quantity = request.POST['quantity']
-            product_unitcountype = request.POST['unitcounttype']
-            product_length = request.POST['length']
-            product_width = request.POST['width']
-            product_height = request.POST['height']
-            product_weight = request.POST['weight']
 
-            if "isvariation" in request.POST:
-                print('var')
-                product_variation = True
-                product_varsku = request.POST['varsku']
-                product_varproductid = request.POST['varproductid']
-                product_varidtype = request.POST['varidtype']
-                product_varcondition = request.POST['varcondition']
-                product_varprice = request.POST['varprice']
-                product_varquantity = request.POST['varquantity']
-                if "iscolor" in request.POST:
-                    product_varcolor = request.POST['color']
-                    color = True
+                        if isb2b == "yes":
+                            batches = []
+                            if batch1MinUnit[index] is not None and batch1price[index] is not None:
+                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
+                            if batch2MinUnit[index] is not None and batch2price[index] is not None:
+                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
+                            if batch3MinUnit[index] is not None and batch3price[index] is not None:
+                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
+
+                            if len(batches)!=0:
+                                tempVar["batches"]=batches
+                        variations.append(tempVar)
+
                 else:
-                    color = False
-                if "issize" in request.POST:
-                    product_varsize = request.POST['size']
-                    size = True
-                else:
-                    size = False
+                    mainpage= mainpage.split("-")
+                    varatt1 = request.POST.getlist("var1")
+                    varatt2 = request.POST.getlist("var2")
+                    for index in range(0, len(varatt1)):
+                        img_url = azureCon.uploadimg(image[index])
+                        tempVar= {'vartype1': varatt1[index],'vartype2': varatt2[index], 'sku': sku[index],
+                             'units': units[index], 'price': price[index], 'condition': condition[index],
+                             "image": img_url}
 
-                if "isvolume" in request.POST:
-                    product_varvolume = request.POST['volume']
-                    volume = True
-                else:
-                    volume = False
-            else:
-                print('var0')
-                product_variation = False
+                        if mainpage[0] == varatt1[index] and mainpage[1]== varatt2[index]:
+                            tempVar['mainpage']=True
 
-            if request.POST['offer'] == 'Seller fulfilled':
-                product_fulfillment = 'Seller fulfilled'
-            elif request.POST['offer'] == 'E-bazar fulfilled':
-                product_fulfillment = 'E-bazar fulfilled'
+                        if isb2b == "yes":
+                            batches = []
+                            if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
+                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
+                            if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
+                                batches.append({"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])})
+                            if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
+                                batches.append({"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])})
 
-            if "isb2b" in request.POST:
-                product_b2b = True
-                batch_1_range = request.POST['b2boffamo']
-                batch_1_price = request.POST['b2boffpri']
-                batch_2_range = request.POST['b2boffamo1']
-                batch_2_price = request.POST['b2boffpri1']
-                batch_3_range = request.POST['b2boffamo2']
-                batch_3_price = request.POST['b2boffpri2']
-            else:
-                product_b2b = False
-            product_images = "src:xxxxxxxxxxxxxxxxxxxxxxxxx"
-            product_description = request.POST['descrip']
-            product_warning = request.POST['caution']
+                            if len(batches)!=0:
+                                tempVar["batches"]=batches
+                        variations.append(tempVar)
 
-            connection_string = "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongodb.net/test"
-            client = MongoClient(connection_string)
-            database = client["vendor23423525252"]
-            dbConnection = database['Products']
-            skuCheckCount = dbConnection.find({"SKU": product_SKU}).count()
-            varskuCheckCount = dbConnection.find({"SKU": product_varsku}).count()
-            product = {
-                'SKU': product_SKU,
-                'name': product_name,
-                'ID': product_id,
-                'ID_type': product_id_type,
-                'Manufacturer': manufacturer,
-                'Brand': product_brand,
-                'Category': self.product_category,
-                'Expirable': product_expire,
-                'Unit_count': product_unitcount,
-                'Unit_count_type': product_unitcountype,
-                'Condition': product_condition,
-                'Quantity': product_quantity,
-                'Price': product_price,
-                'Dimensions': {'Length': product_length,
-                               'Width': product_width,
-                               'Weight': product_weight,
-                               'height': product_height
 
-                               },
-                'Variation': product_variation,
-                'Fulfillment': product_fulfillment,
-                'B2B_offer': product_b2b,
-                'Image': product_images,
-                'Description': product_description,
-                'Caution_warning': product_warning,
-                'Base_product': 'null',
-                'Variation_type': []
+                productDict['variations']=variations
+                productDict["reviews"]=[]
+                productDict['status']="enabled"
 
-            }
-            if skuCheckCount == 0 and varskuCheckCount == 0:
-                if product_b2b == True:
-                    product['Batch_1'] = {'Batch_range': batch_1_range,
-                                          'Batch_price': batch_1_price
-                                          }
-                    product['Batch_2'] = {'Batch_range': batch_2_range,
-                                          'Batch_price': batch_2_price
-                                          }
-                    product['Batch_3'] = {'Batch_range': batch_3_range,
-                                          'Batch_price': batch_3_price
-                                          }
-                if color == True:
-                    product['Variation_type'].append('Color')
-                if size == True:
-                    product['Variation_type'].append('Size')
-                if volume == True:
-                    product['Variation_type'].append('Volume')
+            vendorId= request.session.get('Vendor_Db')
+            vendorDatabase= utils.connect_database(vendorId)
+            ebazarDatabase= utils.connect_database("E-Bazar")
+            allProducts= ebazarDatabase["Products"]
+            vendorProducts= vendorDatabase["Products"]
+            productDict["vendorId"]= vendorId
+            vendorProductInsert= vendorProducts.insert_one(productDict)
+            insertId= vendorProductInsert.inserted_id
+            productDict["_id"]= insertId
+            allProducts.insert_one(productDict)
 
-                _id = dbConnection.insert_one(product)
-                base_id = _id.inserted_id
+            print(productDict)
+            return HttpResponse("Product uploaded")
 
-                if product_variation == True and varskuCheckCount == 0:
-                    print("inserting var")
-                    product_variation = {
-                        'SKU': product_varsku,
-                        'name': product_name,
-                        'ID': product_varproductid,
-                        'ID_type': product_varidtype,
-                        'Manufacturer': manufacturer,
-                        'Brand': product_brand,
-                        'Category': self.product_category,
-                        'Expirable': product_expire,
-                        'Unit_count': product_unitcount,
-                        'Unit_count_type': product_unitcountype,
-                        'Condition': product_varcondition,
-                        'Quantity': product_varquantity,
-                        'Price': product_varprice,
-                        'Dimensions': {'Length': product_length,
-                                       'Width': product_width,
-                                       'Weight': product_weight,
-                                       'height': product_height
+        else:
+            return "Some error"
 
-                                       },
-                        'Base_product': ObjectId(base_id),
-                        'Fulfillment': product_fulfillment,
-                        'B2B_offer': product_b2b,
-                        'Image': product_images,
-                        'Description': product_description,
-                        'Caution_warning': product_warning
-                    }
-                    if color == True:
-                        product_variation['Color'] = product_varcolor
-                        product['Variation_type'].append('Color')
-                    if size == True:
-                        product_variation['Size'] = product_varsize
-                        product['Variation_type'].append('Size')
-                    if volume == True:
-                        product_variation['volume'] = product_varvolume
-                        product['Variation_type'].append('Volume')
 
-                    if product_b2b == True:
-                        product_variation['Batch_1'] = {'Batch_range': batch_1_range,
-                                                        'Batch_price': batch_1_price
-                                                        }
-                        product_variation['Batch_2'] = {'Batch_range': batch_2_range,
-                                                        'Batch_price': batch_2_price
-                                                        }
-                        product_variation['Batch_3'] = {'Batch_range': batch_3_range,
-                                                        'Batch_price': batch_3_price
-                                                        }
-                    dbConnection.insert_one(product_variation)
-                    # if dbConnection.count_documents({}) > 20:
-
-                return render(request, 'Seller_Central/Dashbourd.html', {'product': product_name})
-
-            else:
-                print(self.product_category)
-                return render(request, 'Products/Add_products.html', {
-                    'error_message': "SKU already exists !", "category": self.product_category
-                })
 
 
 

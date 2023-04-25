@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 import functools
 from .utils import verify_login
 
+
 #prev
 def user_login_required(function=None,session_key="Vendor_Db"):
     def decorator(view_func,):
@@ -25,7 +26,6 @@ def session_check(function):
     session_key = "Vendor_Db"
     @functools.wraps(function)
     def wrapper(self,request,*args,**kwargs):
-        print(function.__name__)
         login_url = "Vendor:logIn"
         if session_key in request.session:
             return function(self,request,*args,**kwargs)

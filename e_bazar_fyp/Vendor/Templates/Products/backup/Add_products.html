@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Product</title>
+<!--    <link rel="stylesheet" href="add_product.css">-->
+    <link rel="stylesheet" href="{% static 'css/add_product.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+
+  <div id="headdiv">
+    <a href="#"><img src="img/logo.svg" alt="" width="180" height="150"></a>
+    <h4>Seller center</h4>
+    
+</div>  <br><br><br>
+
+
+<h2>{{category}}</h2>
+<div class="tabs">
+<button class="tablink" onclick="openPage('Product_identity', this, 'white', 'inside')" id="default">Product</button>
+<button class="tablink" onclick="openPage('variations', this, 'white', 'inside'); createVarhtml()">Variations new</button>
+<button class="tablink" onclick="openPage('information', this, 'white', 'inside')" >Information</button>
+<button class="tablink" onclick="openPage('Description', this, 'white', 'inside')">description</button>
+
+</div>
+<br><br>
+
+<form action="{% url 'Vendor:insertpro' %}" id="formMain" method="post" enctype="multipart/form-data">
+<div id="Product_identity" class="tabcontent">
+     {% csrf_token %}
+
+      <table >
+        <tr>
+       <td><label >Variations:</label></td>
+       <td>
+        <div id="variations_div" >
+        <div class="radio_variation">
+        <p>Does the product have variations ?</p>
+        <div class="radio">
+        <label for="var_yes">Yes</label>
+<input type="radio" id="var_yes" name="options" value="yes" onclick="showVar()"> 
+
+<label for="var_no">No</label>
+<input type="radio" id="var_no" name="options" value="no" checked onclick="hideVar()">
+</div>
+</div>
+
+</div>
+<p id="var_p" style="display:none;">Which of these attributes are different across the product variant ? You can add custom also.</p>
+</td>
+</tr>
+<tr><td colspan="2">
+<div id="variations_enable" >
+
+
+  <div class="variations">
+  <input class="varValue" type="checkbox" id="var_style" name="varname" value="style">
+  <label for="var_style">Style</label>
+    </div>
+
+  <div class="variations">
+    <input class="varValue" type="checkbox" id="var_size" name="varname" value="size">
+    <label for="var_style">Size</label>
+      </div>
+
+  <div class="variations">
+    <input class="varValue" type="checkbox" id="var_color" name="varname" value="color">
+    <label for="var_style">Color</label>
+      </div>
+
+  <div class="variations var_custom">
+    <input type="checkbox" >
+    <input class="varValue" name="varname" type="text" maxlength="20" disabled>
+      </div>
+  
+  <div class="variations var_custom">
+    <input type="checkbox" >
+    <input class="varValue" name="varname" type="text" maxlength="20" disabled>
+      </div> 
+
+</div>
+
+</td></tr>
+        <!-- <tr class="singleProduct">          
+       <td><label for="code">UPC/EAN (if any):</label></td>
+      <td><input type="text" id="code" name="code"></td>
+      <td><select name="codetype" id="codetype">
+      <option value="upc">UPC</option>
+      <option value="ean">EAN</option>
+      </select></td>
+      </tr> -->
+      <tr class="singleProduct">
+      <td><label >Product SKU: <span class="required">*</span></label></td>
+
+      <td><input type="text" name="sku" required></td>
+      </tr>
+
+      <tr>
+        <td><label for="productname">Product name:<span class="required">*</span></label></td>
+
+      <td><input type="text" id="productname" name="productname" required></td>
+      </tr>
+
+      <tr>
+      <td><label for="brand">Brand name:</label></td>
+      <td><input type="text" id="brand" name="brand"></td>
+  </tr>
+
+      <tr>
+        <td><label for="isbrand">No brand name</label></td>
+      <td><input type="checkbox" id="isbrand" name="isbrand" value="1" onclick="EnableTextbox('isbrand','brand','false')"></td>
+
+      </tr>
+
+      <tr class="singleProduct">
+      <td><label for="image">Image:<span class="required">*</span> </label></td>
+      <td><input class="no-border" type="file" id="image" name="image" required></td>
+      </tr>
+
+      <tr class="singleProduct">
+        <td><label for="units">Units:<span class="required">*</span></label></td>
+        <td><input type="text" id="units" name="units"></td>
+    </tr>
+
+    <tr class="singleProduct">
+      <td><label for="price">Price:<span class="required">*</span></label></td>
+      <td><input type="text" id="price" name="price"></td>
+  </tr>
+
+  <tr class="singleProduct">
+    <td><label>Condition:<span class="required">*</span></label></td>
+    <td><select name="condition" required>
+      <option selected value="new">New</option>
+      <option value="old">Old</option>
+    </select></td>
+    
+</tr>
+
+    </table>
+</div>
+
+<!-- variations tab -->
+<!-- if variations are not allowed -->
+<div id="noVariations" class="tabcontent" >
+  <p>Variations not allowed. Go to Product information tab to add variations</p>
+
+</div>
+
+<!-- if variations are allowed to  yes -->
+<div id="variations" class="tabcontent" >
+
+  <div style="border-bottom: 1px solid black;">
+  <div id="variation_type" >
+      <h3>Variation types:</h3>
+  </div>
+  <p>You can change these variations in the product information tab</p>
+
+</div>
+
+
+
+<div id="autoCont">
+<!-- div for javscript content -->
+</div>
+
+<button style="margin-top: 20px;" type="button" class="btn btn-primary" onclick="createVariations()">Create variations</button>
+
+<div style="display: none; padding: 20% 0;" class="table-responsive" id="varTableDiv">
+  <button type="button" onclick="deleteSelectedRows()">Delete Selected Rows</button>
+
+  <table class="table" id="varTable">
+    <thead>
+      <tr id="varHead">
+        <th scope="col"></th>
+        <th scope="col">#</th>
+        <th scope="col">Seller SKU <span class="required">*</span></th>
+        <th scope="col">Units <span class="required">*</span></th>
+        <th scope="col">Condition <span class="required">*</span></th>
+        <th scope="col">Price/unit(Rs) <span class="required">*</span></th>
+        <th scope="col">Main Page<span class="required">*</span></th>
+        <th scope="col">image <span class="required">*</span></th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr>
+        
+        <td><input type="checkbox" onclick="selectRow(this)"/></td>
+        <th scope="row">1</th>
+        <td><input name="sku" type="text" required></td>
+        <td><input name="units" type="text" required></td>
+        <td><select name="condition" class="form-select" aria-label="Default select example" required>
+          <option selected value="new">New</option>
+          <option value="old">Old</option>
+        </select></td>
+        <td><input name="price" type="text" required></td>
+        <td><input name="image" type="file" required ></td>
+        <td><input type="radio" name="mainPage" value="no" checked></td>
+
+      </tr> -->
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+<div id="Description" class="tabcontent">
+
+  <table>
+    <tr id="descriptionRow">
+      <td><label for="descriptionPara">Description<span class="required">*</span></label></td>
+      <td><textarea name="descriptionPara" id="descriptionPara" maxlength="500" rows="4" cols="50"></textarea>
+    </tr>
+    <tr id="bulletsRow">
+      <td valign="top"><label>Bullet points</label></td>
+      <td ><input type="text" name="points">
+        <input type="text"  name="points">
+        <input type="text" name="points">
+        <input type="text" name="points">
+        <input type="text" name="points"></td>
+    </tr>
+  </table>
+</div>
+
+
+<div id="information" class="tabcontent">
+  <table>
+    <tr>
+      <td><label for="manufacturer">Manufacturer :<span class="required">*</span></label></td>
+      <td><input type="text" id="manufacturer" name="manufacturer" required></td>
+    </tr>
+    <tr>
+      <td><label for="expireDate">Expire date :</label></td>
+      <td><input type="date" id="expireDate" name="expireDate"></td>
+    </tr>
+    <tr>
+      <td valign="top"><label >Product dimensions <span class="required">*</span></label></td>
+      <td valign="top">
+        <table>
+        <tr>
+          <td><label for="length">Length(cm): </label></td>
+          <td><input type="text" id="length" name="length"required></td>      
+        </tr>
+        <tr>
+          <td><label for="width">Width(cm): </label></td>
+          <td><input type="text" id="width" name="width" required></td>      
+        </tr>
+        <tr>
+          <td><label for="height">height(cm): </label></td>
+          <td><input type="text" id="height" name="height" required></td>      
+        </tr>
+        </table>  
+      </td>
+    </tr>
+    <tr>
+      <td><label for="weight">Weight :<span class="required">*</span></label></td>
+      <td><input type="text" id="weight" name="weight" required></td>
+    </tr>
+  </table>
+</div>
+
+<!-- end -->
+
+<button style="float: right;margin-top: 20px;"  id="submit-form" type="submit" class="btn btn-success">Save and continue</button>
+    </form>
+
+</div>
+
+
+<!--<script type="text/javascript" src="add_product.js"></script>-->
+  <script type="text/javascript" src="{% static 'js/add_product.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</body>
+  </html>

@@ -1,0 +1,15 @@
+form {
+    margin: 50px 10%;
+    background-color: #ebeff5;
+    padding: 5% 10%;
+}
+
+label{
+    font-weight: 700;
+}
+
+.headingtop{
+    margin-top: 50px ;
+    text-align: center;
+}
+

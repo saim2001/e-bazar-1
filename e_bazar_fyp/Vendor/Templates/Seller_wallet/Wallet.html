@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <!-- CSS CUSTOM -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Select Category</title>
+    
+</head>
+<body>
+{% block content %}
+<main class="mt-3  mb-3">
+
+<div class="container pt-5">
+        <div class="col-sm-6">
+            <p class="h1">Seller wallet</p>
+        </div>
+            
+     
+           
+    
+        <div class="container my-5">
+
+            <div class="row my-4">
+              <div class="col-md-3">
+                <div class="card text-center">
+                  <div class="card-body">
+                    <h5 class="card-title">Net Proceeds</h5>
+                    <p class="card-text">01/01/2022 - 12/31/2022</p>
+                    <p class="card-text fw-bold">Rs.95,000</p>
+                    <hr>
+                    <p class="card-text fw-bold">Beginning Balance</p>
+                    <p class="card-text">Rs.0.00</p>
+                    <hr>
+                    <p class="card-text fw-bold">Sales</p>
+                    <p class="card-text text-primary">Rs.100,000</p>
+                    <hr>
+                    <p class="card-text fw-bold">Expenses</p>
+                    <p class="card-text text-danger">Rs.5,000.00</p>
+                   
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card text-center h-50">
+                  <div class="card-body h-50">
+                    <h5 class="card-title">Recent Payouts</h5>
+                    <hr>
+                    <div class="card-text d-flex text-center">
+                        <p class=" ms-3 me-3 mb-0">01/15/2023</p>
+                        <p class=" ms-1 mb-0">Rs.2,500.00</p>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card text-center h-50">
+                  <div class="card-body h-50">
+                    <h5 class="card-title">Funds Available</h5>
+                    <hr>
+                    <p class="card-text">Rs.7,500.00</p>
+                    <a href='{% url "Vendor:renpayout"  %}' class="btn btn-warning bg-gradient btn-outline-dark">Request Payment</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card text-center h-50">
+                  <div class="card-body h-50">
+                    <h5 class="card-title">Total Balance</h5>
+                    <hr>
+                    <p class="card-text">Rs.10,000.00</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+</main>
+{% endblock %}
+<script src="https://code.jquery.com/jquery-3.5.1.j"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" src="{% static 'js/paginator.js' %}"></script>
+</body>
+</html>

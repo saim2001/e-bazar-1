@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,45 @@
     <title>Select Category</title>
 </head>
 <body>
-<div class="div_class">
+  {% block content %}
+  <main>
+  
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center ">
+      <div class="row justify-content-center ">
+        <div class="column ">
+            <p class="h1">
+              Select a product category
+            </p>
+            <br><br>
+          
+  
+          <div class="input-group w-100">
+          
+            <input type="text" class="form-control" placeholder="Category" aria-label="Caregory" aria-describedby="button-addon2" width="100">
+            <button class="btn btn bg-success bg-gradient text-white btn-outline-dark" type="button" id="button-addon2">Button</button>
+            <button class="btn bg-success bg-gradient text-white btn-outline-dark" type="submit" id="button-addon3" onclick="location.href='{% url 'Vendor:selectcategory' %}'">Show All</button>
+          </div>
+          <br><br>
+          <div class=" border border-1 align-items-center" style="overflow: auto;
+          height: 300px;">
+              {% for leafcat in leafcats %}
+              <form action='{% url "Vendor:leafcat" %}' method="POST">
+                {% csrf_token %}
+                  <div class="container p-1 border border-1" style="display: inline-flex;">
+                  <p style="flex: 1;">{{leafcat.name}}</p> <button  class="btn btn-outline-secondary fixed-left" name="category" type="submit" value="{{leafcat.category}}">select</button>
+                </div>
+              </form>
+              {% endfor %}
+          </div>  
+      </div>
+      </div> 
+     
+       
+    </div> 
+   
+  </main>
+  {% endblock %}
+<!-- <div class="div_class">
 <h1 style="  padding: 60px;
   text-align: center;
   background: #1abc9c;
@@ -55,7 +94,7 @@
     </div>
 
 
-</div>
+</div> -->
 
 </body>
 </html>

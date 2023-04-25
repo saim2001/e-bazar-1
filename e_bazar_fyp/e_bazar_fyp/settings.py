@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Vendor.apps.VendorAppConfig',
     'AdminApp.apps.AdminappConfig',
     'Customer.apps.CustomerConfig',
+    'bootstrap5'
 
 ]
 
@@ -113,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-SESSION_COOKIE_AGE= 180
+SESSION_COOKIE_AGE= 1800
 SESSION_SAVE_EVERY_REQUEST=True
 
 # Internationalization

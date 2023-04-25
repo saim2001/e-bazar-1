@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <!-- CSS CUSTOM -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Select Category</title>
+    
+</head>
+<body>
+{% block content %}
+<main class="mt-3 p-5 mb-3">
+
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-sm-6">
+            <p class="h1">Manage Orders</p>
+        </div>
+        <div class="col-sm-6" style="align-items: flex-end;">
+            
+     
+           
+    
+        </div>
+       
+    </div>
+    <div class="row">
+        
+        <div class="container">
+            <div style="float: right;">
+            <form >
+                <div style="display: inline-flex;">
+                    
+                    <input type="text" class="form-control" style="width: 300px;"  placeholder="Search by order ID" aria-label="Search by order ID" aria-describedby="button-addon2" >
+                    <button class="btn bg-success bg-gradient text-white btn-outline-dark" type="button" id="button-addon3" style="width: 180px;">
+                      <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i> Search 
+                    </button>
+                </div>
+            </form>
+        </div>
+            <br><br>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="shipped-tab" data-bs-toggle="tab" data-bs-target="#shipped" type="button" role="tab" aria-controls="home" aria-selected="true"><p class="h6">Shipped</p></button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="unshipped-tab" data-bs-toggle="tab" data-bs-target="#unshipped" type="button" role="tab" aria-controls="profile" aria-selected="false"><p class="h6">Unshipped</p></button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="contact" aria-selected="false"><p class="h6">Pending</p></button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="cancelled-tab" data-bs-toggle="tab" data-bs-target="#cancelled" type="button" role="tab" aria-controls="contact" aria-selected="false"><p class="h6">Cancelled</p></button>
+                  </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="shipped" role="tabpanel" aria-labelledby="shipped-tab"> 
+                    <br><br>
+                    <table id="example" class="table">
+                    <thead class="table-light border border-1">
+                      <tr>
+                        <th>Order date</th>
+                        <th>Order details</th>
+                        <th>Image</th>
+                        <th>Product name</th>
+                        <th>Customer options</th>
+                        <th>Status</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody class="border border-1">
+                        
+                      <tr>
+                        <td>2/12/22</td>
+                        <td> <a href='{% url "Vendor:renorder_dtls"  %}'> xxx-xxxx-xxxxxx
+                          Buyer name:
+                          Maaz
+                          Fullfilment method : Seller
+                          Sales channel : E-bazar.com
+                        </a>
+                          
+                        </td>
+                        <td>T-shirt</td>
+                        <td>T-shirt</td>
+                        <td>Standard
+                          Ship by:
+                          7 july, 2022 to 8 july, 2022
+                          Deliver by:
+                          9 july, 2022 to 12 july, 2022</td>
+                        <td><p class="bg-success bg-gradient text-white">Shipped</p></td>
+                      </tr>
+                    
+                    </div>
+                         
+                    </tbody>
+                  </table></div>
+                <div class="tab-pane fade" id="unshipped" role="tabpanel" aria-labelledby="unshipped-tab"> 
+                    <br><br>
+                    <table id="example" class="table">
+                    <thead class="table-light border border-1">
+                      <tr>
+                        <th>Order date</th>
+                        <th>Order details</th>
+                        <th>Image</th>
+                        <th>Product name</th>
+                        <th>Customer options</th>
+                        <th>Status</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody class="border border-1">
+                      <tr>
+                        <td>2/12/22</td>
+                        <td><a href='{% url "Vendor:renorder_dtls"  %}'>xxx-xxxx-xxxxxx
+                          Buyer name:
+                          Maaz
+                          Fullfilment method : Seller
+                          Sales channel : E-bazar.com
+                        </a>
+                          
+                        </td>
+                        <td>T-shirt</td>
+                        <td>T-shirt</td>
+                        <td>Standard
+                          Ship by:
+                          7 july, 2022 to 8 july, 2022
+                          Deliver by:
+                          9 july, 2022 to 12 july, 2022</td>
+                        <td><p class="bg-warning bg-gradient text-white">Unshipped</p></td>
+                      </tr>
+                         
+                    </tbody>
+                  </table></div>
+                <div class="tab-pane fade" id="pending" role="tabpanel" aria-labelledby="pending-tab"> 
+                    <br><br>
+                    <table id="example" class="table">
+                    <thead class="table-light border border-1">
+                      <tr>
+                        <th>Order date</th>
+                        <th>Order details</th>
+                        <th>Image</th>
+                        <th>Product name</th>
+                        <th>Customer options</th>
+                        <th>Status</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody class="border border-1">
+                      <tr>
+                        <td>2/12/22</td>
+                        <td><a href='{% url "Vendor:renorder_dtls"  %}'>xxx-xxxx-xxxxxx
+                          Buyer name:
+                          Maaz
+                          Fullfilment method : Seller
+                          Sales channel : E-bazar.com
+                        </a>
+                          
+                        </td>
+                        <td>T-shirt</td>
+                        <td>T-shirt</td>
+                        <td>Standard
+                          Ship by:
+                          7 july, 2022 to 8 july, 2022
+                          Deliver by:
+                          9 july, 2022 to 12 july, 2022</td>
+                        <td><p class="bg-secondary bg-gradient text-white">Pending</p></td>
+                      </tr>
+                         
+                    </tbody>
+                  </table></div>
+                <div class="tab-pane fade" id="cancelled" role="tabpanel" aria-labelledby="cancelled-tab"> <table id="example" class="table">
+                    <br><br>
+                    <thead class="table-light border border-1">
+                      <tr>
+                        <th>Order date</th>
+                        <th>Order details</th>
+                        <th>Image</th>
+                        <th>Product name</th>
+                        <th>Customer options</th>
+                        <th>Status</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody class="border border-1">
+                      <tr>
+                        <td>2/12/22</td>
+                        <td><a href='{% url "Vendor:renorder_dtls"  %}'>xxx-xxxx-xxxxxx
+                          Buyer name:
+                          Maaz
+                          Fullfilment method : Seller
+                          Sales channel : E-bazar.com
+                        </a>
+                          
+                        </td>
+                        <td>T-shirt</td>
+                        <td>T-shirt</td>
+                        <td>Standard
+                          Ship by:
+                          7 july, 2022 to 8 july, 2022
+                          Deliver by:
+                          9 july, 2022 to 12 july, 2022</td>
+                        <td><p class="bg-danger  text-white">Cancelled</p></td>
+                      </tr>
+                         
+                    </tbody>
+                  </table></div>
+              </div>
+              
+           
+          </div>
+        </div>
+
+</div>
+</main>
+{% endblock %}
+<script src="https://code.jquery.com/jquery-3.5.1.j"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" src="{% static 'js/paginator.js' %}"></script>
+</body>
+</html>

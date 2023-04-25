@@ -1,0 +1,45 @@
+:root {
+    --offcanvas-width: 270px;
+
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-nav {
+    width: var(--offcanvas-width);
+}
+
+::-webkit-scrollbar{
+    width: 0.7rem;
+}
+
+::-webkit-scrollbar-track{
+    background: rgb(245, 243, 243);
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgb(150, 149, 149);
+    background-clip: content-box;
+}
+
+
+
+.sidebar-header {
+    height: 100px;
+}
+
+.active-link {
+    border-right: 5px solid #212529;
+    border-radius: 1px;
+}
+
+.footer {
+    background-color: rgba(185, 185, 185, 0.815);
+    border-top: #212529;
+    border-radius: 5px;
+
+}

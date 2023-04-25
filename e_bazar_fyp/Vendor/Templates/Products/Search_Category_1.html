@@ -1,5 +1,6 @@
- <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
     {% load static %}
     <!-- CSS CUSTOM -->
@@ -9,7 +10,45 @@
     <title>Select Category</title>
 </head>
 <body>
-<div class="div_class">
+  {% block content %}
+  <main>
+  
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center ">
+      <div class="row justify-content-center ">
+        <div class="column ">
+            <p class="h1">
+              Select a product category
+            </p>
+            <br><br>
+          
+  
+          <div class="input-group w-100">
+          
+            <input type="text" class="form-control" placeholder="Category" aria-label="Caregory" aria-describedby="button-addon2" width="100">
+            <button class="btn bg-success bg-gradient text-white btn-outline-dark" type="button" id="button-addon2">Button</button>
+            <button class="btn bg-success bg-gradient text-white btn-outline-dark" type="submit" id="button-addon3" onclick="location.href='{% url 'Vendor:selectcategory' %}'">Show All</button>
+          </div>
+          <br><br>
+          <div class=" border border-1 align-items-center" style="overflow: auto;
+          height: 300px;">
+              {% for maincat in maincats %}
+              <form action='{% url "Vendor:selectsubcategory" %}' method="POST">
+                {% csrf_token %}
+                  <div class="container p-1 border border-1" style="display: inline-flex;">
+                  <p style="flex: 1;">{{maincat.name}}</p> <button  class="btn btn-outline-secondary fixed-left" name="category" type="submit" value="{{maincat.category}}">select</button>
+                </div>
+              </form>
+              {% endfor %}
+          </div>  
+      </div>
+      </div> 
+     
+       
+    </div> 
+   
+  </main>
+  {% endblock %}
+<!-- <div class="div_class">
 <h1 style="  padding: 60px;
   text-align: center;
   background: #1abc9c;
@@ -18,7 +57,7 @@
   Select a Product Caregory
 </h1>
 <div>
-    <label style="color: black;font-weight:500;font-size:30px" for="Category">Search Category</label><br><br>
+    <label style="color: black;font-weight:500;font-size:30px" for="Category">Search Category</label><br>
     <input style="border: 2px solid black;
   border-radius: 4px;" type="text" id="Category" name="Category">
   <button style=" background-color: #04AA6D;
@@ -27,19 +66,40 @@
   padding: 16px 32px;
   text-decoration: none;
   margin: 4px 2px;
-  cursor: pointer;" type="submit" class="registerbtn"> Search </button>
+  cursor: pointer;"   type="submit" class="registerbtn"> Search </button>
      <button style=" background-color: #04AA6D;
   border: none;
   color: white;
   padding: 16px 32px;
   text-decoration: none;
   margin: 4px 2px;
-  cursor: pointer;" type="submit" class="registerbtn" onclick="location.href='{% url 'Vendor:selectcategory' %}'"> Show All </button>
+  cursor: pointer;"   type="submit" class="registerbtn" onclick="location.href='{% url 'Vendor:selectcategory' %}'"> Show All </button>
   </div>
-        <br><br>
-
+    <br><br>
     <div>
-        {% for maincat in maincats %}
+        {% for leafcat in leafcats %}
+            <form action='{% url "Vendor:addpro" %}' method="POST">
+             {% csrf_token %}
+            <button style=" background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;"  name="category" type="submit" value="{{leafcat.category}}">{{leafcat.name}}</button>
+            </form>
+            <br><br>
+        {% endfor %}
+
+    </div>
+
+
+</div> -->
+
+</body>
+</html>
+
+<!-- {% for maincat in maincats %}
 
 
         <form action='{% url "Vendor:selectsubcategory" %}' method="POST">
@@ -53,11 +113,4 @@
   cursor: pointer;" name="category" type="submit" value="{{maincat.category}}">{{maincat.name}}</button>
     </form>
         <br><br>
-        {% endfor %}
-    </div>
-
-
-</div>
-
-</body>
-</html>
+        {% endfor %} -->

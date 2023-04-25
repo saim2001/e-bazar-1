@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seller center</title>
+    {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  <link rel="stylesheet" href="{% static 'css/sellercenter.css' %}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+  <script src="https://kit.fontawesome.com/84c4b7b95b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-gradient ">
+
+  <div class="container-fluid ">
+    <button class="navbar-toggler d-block " type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+          <span class="navbar-toggler-icon" data-bs-target="#offcanvasExample"></span>
+    </button>
+    <a class = "navbar-brand" href='{% url "Vendor:renDashbrd"  %}'>
+      <img src="{% static 'img/logo black.svg' %}" alt="logo" width="70" height="70">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li><a class="nav-link  fw-bold text-uppercase" aria-current="page" href="#">|</a></li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold  " aria-current="page" href="#">Seller Central</a>
+        </li>
+        <li><a class="nav-link fw-bold  text-uppercase" aria-current="page" href="#">|</a></li>
+        <li class="nav-item">
+          <a class="nav-link  fw-bold" href="#">Store name</a>
+        </li>
+
+
+      </ul>
+      <ul class="navbar-nav  mb-2 mb-lg-0">
+          <li class="nav-item">
+              <a class="nav-link  fw-bold" href="#">
+                  {% block name %}
+            {% endblock name %}
+              </a>
+
+          </li>
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle"
+             href="#" id="navbarDropdown" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="25" height="25" fill="currentColor"
+                 class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+            <path fill-rule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+
+            </svg>
+          </a>
+
+
+
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </ul>
+        </li>
+    </div>
+  </div>
+</nav>
+
+
+<div class="offcanvas offcanvas-start sidebar-nav bg-light  " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header sidebar-header bg-dark" >
+    <h5 class="offcanvas-title text-white" id="offcanvasExampleLabel">Manage store</h5>
+    <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-0  ">
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        Inventory
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" >
+      <div class="accordion-body p-0">
+        <div class="list-group">
+          <a href="{% url 'Vendor:reninvtry' %}" class="list-group-item list-group-item-action">Manage inventory</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+        Catalogue
+      </button>
+    </h2>
+    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" >
+      <div class="accordion-body p-0">
+        <div class="list-group">
+          <a href='{% url "Vendor:addproduct"  %}' class="list-group-item list-group-item-action">Add products</a>
+          <a href="#" class="list-group-item list-group-item-action">Complete drafts</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+        Orders
+      </button>
+    </h2>
+    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" >
+      <div class="accordion-body p-0">
+        <div class="list-group">
+          <a href='{% url "Vendor:renorders"  %}' class="list-group-item list-group-item-action active-link">Manage orders</a>
+          <a href='{% url "Vendor:renreturns"  %}'  class="list-group-item list-group-item-action">Manage returns</a>
+          <a href="#" class="list-group-item list-group-item-action">Order reports</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+        Wallet
+      </button>
+    </h2>
+    <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour" >
+      <div class="accordion-body p-0">
+        <div class="list-group">
+          <a href='{% url "Vendor:renwallet"  %}' class="list-group-item list-group-item-action active-link">Seller wallet</a>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+  {% block content %}
+  {% endblock %}
+
+
+<footer class=" text-white  pb-4 mt-auto footer" height="50" >
+  <div class="container text-center">
+      <img src="{% static 'img/logo black.svg' %}" alt="logo" width="100" height="100">
+    <br>
+    <small class="text-black-50">&copy; Copyright by SE07. All rights reserved</small>
+  </div>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.j"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" src="{% static 'js/sellercenter.js' %}"></script>
+</body>
+</html>

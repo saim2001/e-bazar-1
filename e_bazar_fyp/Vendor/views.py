@@ -34,7 +34,7 @@ class vendorRegister:
     #     return render(request, "Login/login.html")
 
     def check(self,request):
-        return render(request,"Vendor_registration/base.html")
+        return render(request,"Vendor_registration/base_c.html")
 
     #saim's function
     def logIn(self,request):

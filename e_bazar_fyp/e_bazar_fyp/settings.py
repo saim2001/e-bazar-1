@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'Vendor.apps.VendorAppConfig',
     'AdminApp.apps.AdminappConfig',
     'Customer.apps.CustomerConfig',
+    'bootstrap5',
+    'fontawesomefree'
 
 ]
 

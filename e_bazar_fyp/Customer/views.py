@@ -9,51 +9,62 @@ class Customer:
         pass
 
     def renHomePage(self,request):
-        database_list=utils.getAllVendors()
-        all_products=[]
-        for i in database_list:
-            con=utils.connect_database(i,'Products')
-            products=con.find({'Base_product': 'null'})
-            for j in products:
-                j['id'] = j.pop('_id')
-                j['vendor_id']= i
-                all_products.append(j)
+        # database_list=utils.getAllVendors()
+        all_products_lst =[]
+        # for i in database_list:
+        #     con=utils.connect_database(i,'Products')
+        #     products=con.find({'Base_product': 'null'})
+        #     for j in products:
+        #         j['id'] = j.pop('_id')
+        #         j['vendor_id']= i
+        #         all_products.append(j)
+        products = utils.connect_database("E-Bazar","Products")
+        all_products = products.find({})
+        for i in all_products:
+            i['id'] = i.pop('_id')
+            all_products_lst.append(i)
+        print(all_products_lst)
         context={
-            'products':all_products
+            'products': all_products_lst
         }
-        print(context)
+
         return render(request,"Homepage/Homepage.html",context)
 
 
     def productdetail(self,request,product_id):
-        print("ïn add products")
-        database_list = utils.getAllVendors()
-        variation = None
-        variation_values = {}
-        for i in database_list:
-            con = utils.connect_database(i, 'Products')
-            products = con.find({'_id': ObjectId(product_id)})
-            for k in products:
-                k['id'] = k.pop('_id')
-                product = k
-            if product['Base_product'] == 'null':
-                if product['Variation'] == True:
-                    print('in')
-
-                    variations = con.find({'Base_product': ObjectId(product_id)})
-                    for j in variations:
-                        j['id'] = j.pop('_id')
-                        variation = j
-                        for var in product['Variation_type']:
-                            variation_values[var] = j[var]
-
-        context = {'Product_details': product,
-                   'Variations': variation,
-                   'Caution': 'Note: ' + product["Caution_warning"],
-                   'var_values': variation_values,
-                   'range': range(1, int(product["Quantity"]) + 1)}
-
-        return render(request, 'Homepage/product_detail.html', context)
+        # database_list = utils.getAllVendors()
+        # variation = None
+        # variation_values = {}
+        # for i in database_list:
+        #     con = utils.connect_database(i, 'Products')
+        #     products = con.find({'_id': ObjectId(product_id)})
+        #     for k in products:
+        #         k['id'] = k.pop('_id')
+        #         product = k
+        #     if product['Base_product'] == 'null':
+        #         if product['Variation'] == True:
+        #             print('in')
+        #
+        #             variations = con.find({'Base_product': ObjectId(product_id)})
+        #             for j in variations:
+        #                 j['id'] = j.pop('_id')
+        #                 variation = j
+        #                 for var in product['Variation_type']:
+        #                     variation_values[var] = j[var]
+        #
+        # context = {'Product_details': product,
+        #            'Variations': variation,
+        #            'Caution': 'Note: ' + product["Caution_warning"],
+        #            'var_values': variation_values,
+        #            'range': range(1, int(product["Quantity"]) + 1)}
+        database = utils.connect_database("E-Bazar","Products")
+        product = database.find_one({'_id':ObjectId(product_id) })
+        for i in product:
+            print(i)
+        context = {
+            'product' : product
+        }
+        return render(request, 'Homepage/product_detail_1.html', context)
 
     def string_nested_list_to_list(self,string_cart):
         string_cart = string_cart[2:-2]

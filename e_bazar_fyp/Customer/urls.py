@@ -3,6 +3,7 @@ from .views import Customer
 customer=Customer()
 
 
+app_name = 'Customer'
 
 urlpatterns = [
 

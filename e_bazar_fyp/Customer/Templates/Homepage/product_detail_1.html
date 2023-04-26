@@ -1,0 +1,210 @@
+{% extends "base_c.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block link_css %}
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+  {% endblock link_css %}
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    {% block content %}
+    <main>
+        <div class = "main-wrapper">
+        <div class = "container">
+            <div class = "product-div">
+                <div class = "product-div-left">
+                    <div class = "img-container">
+                        <img src = {{product.variations.0.image}} alt = "image">
+                    </div>
+                    <div class = "hover-container">
+                        {% for product_img in product.variations %}
+                        <div><img src = {{product_img.image}}></div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <div class = "product-div-right">
+                    <span class = "product-name">{{product.brand}}</span>
+                    <span class = "product-price">{{product.variations.0.price}}</span>
+                    <div class = "product-rating">
+                        <span><i class = "fas fa-star"></i></span>
+                        <span><i class = "fas fa-star"></i></span>
+                        <span><i class = "fas fa-star"></i></span>
+                        <span><i class = "fas fa-star"></i></span>
+                        <span><i class = "fas fa-star-half-alt"></i></span>
+                        <span>(350 ratings)</span>
+                    </div>
+                    <p class = "product-description">{{product.description}}</p>
+                    <div class = "btn-groups">
+                        <button type = "button" class = "add-cart-btn"><i class = "fas fa-shopping-cart"></i>add to cart</button>
+                        <button type = "button" class = "buy-now-btn"><i class = "fas fa-wallet"></i>buy now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class = "product-div-right">
+        <span class = "product-name">Recommended products</span>
+    </div>
+    <style type="text/css">
+
+
+        *{
+         margin: 0px;
+         padding: 0px;
+        }
+        body{
+         font-family: arial;
+        }
+
+
+        .card{
+             max-width: 200px;
+             max-height: 300px;
+             display: inline-block;
+             box-shadow: 2px 2px 20px rgb(173, 156, 156);
+             border-radius: 5px;
+             margin: 1%;
+            }
+
+        .image img{
+          width: 100%;
+          border-top-right-radius: 5px;
+          border-top-left-radius: 5px;
+
+
+
+         }
+
+        .title{
+
+
+          text-align: center;
+          padding: 10px;
+
+         }
+
+        h1{
+          font-size: 20px;
+         }
+
+        .des{
+          padding: 3px;
+          text-align: center;
+
+          padding-top: 10px;
+                border-bottom-right-radius: 5px;
+          border-bottom-left-radius: 5px;
+        }
+        button{
+          margin-top: 40px;
+          margin-bottom: 10px;
+          background-color: white;
+          border: 1px solid black;
+          border-radius: 5px;
+          padding:10px;
+        }
+        button:hover{
+          background-color: black;
+          color: white;
+          transition: .5s;
+          cursor: pointer;
+        }
+
+        </style>
+        <div class="main">
+
+         <!--cards -->
+
+        <div class="card">
+
+        <div class="image">
+           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Gfp-missouri-st-louis-clubhouse-pond-and-scenery.jpg/1199px-Gfp-missouri-st-louis-clubhouse-pond-and-scenery.jpg">
+        </div>
+        <div class="title">
+         <h1>
+        Write title Here</h1>
+        </div>
+        <div class="des">
+         <p>You can Add Desccription Here...</p>
+        <button>Read More...</button>
+        </div>
+        </div>
+        <!--cards -->
+
+
+        <div class="card">
+
+        <div class="image">
+           <img src="https://cdn.pixabay.com/photo/2018/01/09/03/49/the-natural-scenery-3070808_1280.jpg">
+        </div>
+        <div class="title">
+         <h1>
+        Write title Here</h1>
+        </div>
+        <div class="des">
+         <p>You can Add Desccription Here...</p>
+        <button>Read More...</button>
+        </div>
+        </div>
+        <!--cards -->
+
+
+        <div class="card">
+
+        <div class="image">
+           <img src="https://cdn.pixabay.com/photo/2018/01/09/03/49/the-natural-scenery-3070808_1280.jpg">
+        </div>
+        <div class="title">
+         <h1>
+        Write title Here</h1>
+        </div>
+        <div class="des">
+         <p>You can Add Desccription Here...</p>
+        <button>Read More...</button>
+        </div>
+        </div>
+        <!--cards -->
+
+
+        <div class="card">
+
+        <div class="image">
+           <img src="https://cdn.pixabay.com/photo/2018/01/09/03/49/the-natural-scenery-3070808_1280.jpg">
+        </div>
+        <div class="title">
+         <h1>
+        Write title Here</h1>
+        </div>
+        <div class="des">
+         <p>You can Add Desccription Here...</p>
+        <button>Read More...</button>
+        </div>
+        </div>
+        <!--cards -->
+
+
+        <div class="card">
+
+        <div class="image">
+           <img src="https://cdn.pixabay.com/photo/2018/01/09/03/49/the-natural-scenery-3070808_1280.jpg">
+        </div>
+        <div class="title">
+         <h1>
+        Write title Here</h1>
+        </div>
+        <div class="des">
+         <p>You can Add Desccription Here...</p>
+        <button>Read More...</button>
+        </div>
+        </div>
+    </main>
+
+
+     <script src = "{% static 'js/detail.js' %}"></script>
+            {% endblock %}
+</body>
+</html>

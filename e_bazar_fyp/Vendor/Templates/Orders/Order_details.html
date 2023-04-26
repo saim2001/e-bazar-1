@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <!-- CSS CUSTOM -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Select Category</title>
+    
+</head>
+<body>
+{% block content %}
+<main class=" p-0 mb-3">
+
+<div class="container pt-3">
+    <div class="row" >
+            <div class="container"  >
+                <p class="h1">Order details</p>
+                
+            </div>
+            <div class="container"  >
+                <p class="h3">Order ID: xxx-xxxx-xxxxxx</p>
+                
+            </div>
+            
+        
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <br>
+
+            <button type="button" class="btn btn-success bg-gradient text-white btn-outline-dark" style="width: 230px
+            ;" onclick="location.href='{% url 'Vendor:renorders' %}'">Back to order list</button>
+        </div>
+        <div class="col-sm-3">
+            <br>
+
+            <button type="button" class="btn btn-success bg-gradient text-white btn-outline-dark" style="width: 230px
+            ;">Print packaging slip</button>
+              </div>
+              <div class="col-sm-3">
+                <br>
+    
+                <button type="button" class="btn btn-danger bg-gradient text-white btn-outline-dark" style="width: 230px
+                ;">Cancel order</button>
+                  </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-7">
+            <br><br>
+            <div class="container border border-1">
+                <p class="h4 pt-1">Order summary</p>
+                <div class="row">
+                    <div class="col-sm-6 ">
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Ship by: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Shipping service: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                    </div>
+                    
+                    
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Deliver by: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Fullfilment: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                    </div>
+                    
+                    
+                </div> 
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Purchase date: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Sales channel: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                    </div>
+                    
+                    
+                </div>                
+            </div>
+
+        </div>
+        <div class="col-sm-5">
+            <br><br>
+            <div class="container border border-1">
+                <p class="h4 pt-1">Ship to</p>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <p class="fw-bold" style="text-align: left; float: left;">xxxx-x--xxx-----xxxxxxxxxxxxx</p>
+                    </div>
+                    <div class="col-sm-7">
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Address type: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                    </div>
+                    
+                    
+                </div>  
+                <div class="row">
+                        <div class="col-sm-12">
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Phone number: &nbsp;</p><p style="text-align: right; float: right;">11111111111111</p>
+                         </div>   
+                    </div>
+                    
+                    
+                </div>  
+            </div>
+            
+            
+              </div>
+              <div class="row">
+                
+                <div class="accordion" id="accordionExample">
+                    <br>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <p class="h4">Order contents<p>
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <table id="example" class="table">
+                                <thead class="table-light border border-1">
+                                  <tr>
+                                    <th>Status</th>
+                                    <th>Image</th>
+                                    <th>Product name</th>
+                                    <th>Qantity</th>
+                                    <th>Unit price</th>
+                                    <th>Proceed</th>
+                                    
+                                  </tr>
+                                </thead>
+                                <tbody class="border border-1">
+                                  <tr>
+                                    <td><p class="bg-warning bg-gradient text-white">Unshipped</p></td>
+                                    <td>Image</td>
+                                    <td>T-shirt</td>
+                                    <td>2</td>
+                                    <td>Rs.900</td>
+                                    <td> 
+                                        <div class="row">
+                                            <div class="column">
+                                                <p class="text-muted fw-bold" style="text-align: left; float: left;">Purchase subtotal: &nbsp;</p><p style="text-align: right; float: right;">Rs.900</p>
+                                            </div>
+                                            
+                                        </div>   
+                                        <div class="row">
+                                            <div class="column">
+                                                <p class="text-muted fw-bold" style="text-align: left; float: left;">Tax: &nbsp;</p><p style="text-align: right; float: right;">Rs.50</p>
+                                            </div>
+                                            
+                                        </div>  
+                                        <div class="row">
+                                            <div class="column">
+                                                <p class="text-muted fw-bold" style="text-align: left; float: left;">Item total: &nbsp;</p><p style="text-align: right; float: right;">Rs.950</p>
+                                            </div>
+                                            
+                                        </div>  
+                                    </td>
+                                  </tr>
+                                     
+                                </tbody>
+                              </table>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                
+             
+                    <div class="accordion" id="accordionExample">
+                        <br>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                                <p class="h4">Confirm shipment<p>
+                            </button>
+                          </h2>
+                          <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <form class="row gx-3 gy-2 align-items-center">
+                                    <div class="col-sm-3">
+                                        <label for="inputEmail4" class="form-label">Ship date</label>
+                                        <input type="date" class="form-control" id="inputEmail4">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="inputEmail4" class="form-label">Carrier</label>
+                                        <select class="form-select" id="specificSizeSelect">
+                                            <option selected>Choose...</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                          </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="inputEmail4" class="form-label">Shipping service</label>
+                                        <input type="text" class="form-control" id="inputEmail4">
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="inputEmail4" class="form-label">Tracking ID</label>
+                                        <input type="text" class="form-control" id="inputEmail4">
+                                    </div>
+                                    <div class="col-auto">
+                                      <button type="submit" class="btn btn-warning bg-gradient text-dark btn-outline-dark">Submit</button>
+                                    </div>
+                                  </form>
+                            </div>
+                          </div>
+                        </div>
+                       
+                      </div>
+           
+       
+</div>
+</main>
+{% endblock %}
+<script src="https://code.jquery.com/jquery-3.5.1.j"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" src="{% static 'js/paginator.js' %}"></script>
+</body>
+</html>

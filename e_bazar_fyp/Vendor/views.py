@@ -34,7 +34,7 @@ class vendorRegister:
     #     return render(request, "Login/login.html")
 
     def check(self,request):
-        return render(request,"Vendor_registration/base.html")
+        return render(request,"Vendor_registration/base_c.html")
 
     #saim's function
     def logIn(self,request):
@@ -179,6 +179,12 @@ class vendorRegister:
 
 
         return render(request, 'Vendor_registration/Registration.html')
+
+    def renWallet(self,request):
+        return render(request, 'Seller_wallet/Wallet.html')
+
+    def renPayout(self,request):
+        return render(request, 'Seller_wallet/Payout.html')
 class Category:
     connection_string = "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongodb.net/test"
     client = MongoClient(connection_string)
@@ -380,6 +386,25 @@ class Product:
         else:
             return "Some error"
 
+
+
+    def renInvtry(self,request):
+        return render(request,'Products/Inventory.html')
+
+
+
+class Order:
+    def __init__(self):
+        pass
+
+    def renOrders(self,request):
+        return render(request,'Orders/Manage_orders.html')
+
+    def renOrder_dtls(self, request):
+        return render(request, 'Orders/Order_details.html')
+
+    def renReturns(self,request):
+        return render(request, 'Orders/Manage_returns.html')
 
 
 

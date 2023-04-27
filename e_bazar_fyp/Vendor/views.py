@@ -48,7 +48,7 @@ class vendorRegister:
                 vendorDtbase = str(vendor["_id"])
                 print('vendorDtbase',vendorDtbase)
                 request.session["Vendor_Db"] = vendorDtbase
-                return redirect("Vendor:renDashbrd")
+                return redirect("Vendor:renDashbrd", vendor_id=vendorDtbase)
             else:
                 #change start
                 #return redirect("Vendor:renlogin")
@@ -219,12 +219,17 @@ class Product:
 
     @session_check
     def renselectCat(self,request):
-        return render(request, "Products/Search_Category.html")
+        id = request.session['Vendor_Db']
+        return render(request, "Products/Search_Category.html", context= {
+            "id" : id
+        })
 
     @session_check
     def selectCat(self,request):
+        id = request.session['Vendor_Db']
         main_categories=self.category.fetchAll(request)
         self.context['maincats']=main_categories
+        self.context["id"] = id
         return render(request,"Products/Search_Category_1.html",self.context)
 
     @session_check
@@ -233,21 +238,29 @@ class Product:
         print(2)
         sub_categories=self.category.fetchChild(request,category)
         self.context['subcats']=sub_categories
+
         return render(request,"Products/Search_Category_2.html",self.context)
 
     @session_check
     def selectLeafCat(self,request):
         category = request.POST['category']
         leaf_categories=self.category.fetchChild(request,category)
+
         print(3)
+        print(leaf_categories)
         self.context['leafcats']=leaf_categories
+        # nt(dictry) dictry = leaf_categories[0]
+        # pri
+        leaf_categories[0]["category"]=leaf_categories[0]['category'].replace('/',':')
         return render(request,"Products/Search_Category_3.html",self.context)
 
     @session_check
-    def renAddProduct(self,request):
+    def renAddProduct(self,request,category):
         self.product_category=request.POST['category']
+
         context={
-            "category" : self.product_category
+            "category_show" : category.replace(':','/')[1:],
+            'category' : category.replace(':','/')
         }
         return render(request, "Products/Add_Products.html",context)
 
@@ -389,7 +402,18 @@ class Product:
 
 
     def renInvtry(self,request):
-        return render(request,'Products/Inventory.html')
+        products_lst = []
+        database = utils.connect_database(request.session['Vendor_Db'])
+        con = database["Products"]
+        products = con.find({})
+        for i in products:
+            i["id"] = i.pop("_id")
+            products_lst.append(i)
+
+        print(products_lst)
+        return render(request,'Products/Inventory.html',context = {
+            "products" : products_lst
+        })
 
 
 

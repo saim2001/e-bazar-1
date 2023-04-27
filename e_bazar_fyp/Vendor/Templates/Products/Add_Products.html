@@ -1,11 +1,18 @@
-{% extends "VendorBase.html" %}
+{% extends "Base.html" %}
 {% load static %}    
 
-    {% block title %}Add Product{% endblock %}
 
+
+<html>
+
+<body>
+      
     {% block content %}
-    <br><br><br>
-<h2>{{category}}</h2>
+ 
+<main class="mt-5 ms-5">
+  <p class="h1 text-black">Add product</p>
+  <br>
+<p class="h2 text-black">{{category_show}}</p>
 <div class="tabs">
 <button class="tablink" onclick="openPage('Product_identity', this, 'white', 'inside')" id="default">Product</button>
 <button class="tablink" onclick="openPage('variations', this, 'white', 'inside'); createVarhtml()">Variations</button>
@@ -13,8 +20,8 @@
 <button class="tablink" onclick="openPage('Description', this, 'white', 'inside')">description</button>
 
 </div>
-<br><br>
-
+<br>
+<hr>
 <form action="{% url 'Vendor:insertpro' %}" id="formMain" method="post" enctype="multipart/form-data">
 <div id="Product_identity" class="tabcontent">
      {% csrf_token %}
@@ -23,23 +30,37 @@
         <tr>
        <td><label >Variations:</label></td>
        <td>
-        <div id="variations_div" >
-        <div class="radio_variation">
-        <p>Does the product have variations ?</p>
-        <div class="radio">
-        <label for="var_yes">Yes</label>
-<input type="radio" id="var_yes" name="options" value="yes" onclick="showVar()"> 
+   
+          <div id="variations_div" >
+            <div class="radio_variation">
+            <p>Does the product have variations ?</p>
+           
+            
+            <div class="radio">
+            <label for="var_yes">Yes</label>
+    <input  type="radio" class="m-1"  id="var_yes" name="options" value="yes" onclick="showVar()"> 
+    
+    <label for="var_no">No</label>
+    <input class="m-1" type="radio" id="var_no" name="options" value="no" checked onclick="hideVar()">
+   
+    </div>
+    <button type="button" class="btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Variations could like size, colors, style etc"  style="color: transparent;">
+      <i class="fa-regular fa-circle-question fa-lg" style="color: #000000;"></i>
+    </button>
+    </div>
+    
+    </div>
+   
+        
+       
 
-<label for="var_no">No</label>
-<input type="radio" id="var_no" name="options" value="no" checked onclick="hideVar()">
-</div>
-</div>
-
-</div>
-<p id="var_p" style="display:none;">Which of these attributes are different across the product variant ? You can add custom also.</p>
 </td>
 </tr>
+
 <tr><td colspan="2">
+  <p id="var_p" style="display:none;"><button type="button" class="btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Which of these attributes are different across the product variant ? You can add custom also.  "  style="color: transparent;">
+    <i class="fa-regular fa-circle-question fa-lg" style="color: #000000;"></i>
+  </button></p>
 <div id="variations_enable" >
 
 
@@ -68,6 +89,8 @@
     <input class="varValue" name="varname" type="text" maxlength="20" disabled>
       </div> 
 
+    
+
 </div>
 
 </td></tr>
@@ -85,9 +108,12 @@
         <td>
           <div id="b2bsingle" class="radio">
             <label for="b2b_yes">Yes</label>
-            <input type="radio" id="b2b_yes" name="B2Boptions" value="yes" onclick="showB2B()">     
+            <input class="m-1" type="radio" id="b2b_yes" name="B2Boptions" value="yes" onclick="showB2B()">     
             <label for="b2b_no">No</label>
-            <input type="radio" id="b2b_no" name="B2Boptions" value="no" checked onclick="hideB2B()">
+            <input  type="radio"  id="b2b_no" name="B2Boptions" value="no" checked onclick="hideB2B()">
+            <button type="button" class="btn" data-bs-toggle="tooltip" data-bs-placement="top" title="You can enable it if you are offering products to businesses"  style="color: transparent;">
+              <i class="fa-regular fa-circle-question fa-lg" style="color: #000000;"></i>
+            </button>
     </div>
         </td>
     </tr>
@@ -112,8 +138,12 @@
 
       <tr>
         <td><label for="isbrand">No brand name</label></td>
-      <td><input type="checkbox" id="isbrand" name="isbrand" value="1" onclick="EnableTextbox('isbrand','brand','false')"></td>
-
+      <td><input type="checkbox" id="isbrand" name="isbrand" value="1" onclick="EnableTextbox('isbrand','brand','false')">
+      
+        <button type="button" class="btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Product you sell can be of other brand or your own products"  style="color: transparent;">
+          <i class="fa-regular fa-circle-question fa-lg" style="color: #000000;"></i>
+        </button>      </td>
+      
       </tr>
 
       <tr class="singleProduct">
@@ -303,15 +333,17 @@
 
 <!-- end -->
 
-<button style="float: right;margin-top: 20px;"  id="submit-form" type="submit" class="btn btn-success">Save and continue</button>
+<button style="float: right;margin-top: 20px;"  id="submit-form" type="submit" class="btn btn-success bg-gradient text-white btn-outline-dark">Save and continue</button>
     </form>
 
 </div>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+</main>
 <link rel="stylesheet" href="{% static 'css/add_product.css' %}">
+
 <script type="text/javascript" src="{% static 'js/add_product.js' %}"></script>
-
-
+  
+    
+    
 {% endblock %}
-
+</body>
+</html>

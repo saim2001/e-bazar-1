@@ -12,7 +12,7 @@
 <main class="mt-5 ms-5">
   <p class="h1 text-black">Add product</p>
   <br>
-<p class="h2 text-black">{{category_show}}</p>
+<p class="h2 text-black">{{category}}</p>
 <div class="tabs">
 <button class="tablink" onclick="openPage('Product_identity', this, 'white', 'inside')" id="default">Product</button>
 <button class="tablink" onclick="openPage('variations', this, 'white', 'inside'); createVarhtml()">Variations</button>
@@ -27,6 +27,12 @@
      {% csrf_token %}
 
       <table >
+        <tr>
+          <td><label >Category:</label></td>
+          <td>
+            <input type="text" name="category" value="{{category}}" readonly>
+          </td>
+        </tr>
         <tr>
        <td><label >Variations:</label></td>
        <td>
@@ -146,19 +152,25 @@
       
       </tr>
 
+
       <tr class="singleProduct">
-      <td><label for="image">Image:<span class="required">*</span> </label></td>
-      <td><input class="no-border" type="file" id="imageSingle" name="imageSingle" ></td>
-      </tr>
+      <td><label>Image:</label></td>
+        <td><input class="no-border" type="file" name="imageSingle" ></td>
+        </tr>
+
+      <tr class="singleProduct">
+        <td><label>Image: </label></td>
+        <td><input class="no-border" type="file" name="imageSingle" ></td>
+        </tr>
 
       <tr class="singleProduct">
         <td><label for="units">Units:<span class="required">*</span></label></td>
-        <td><input type="text" id="unitsSingle" name="unitsSingle"></td>
+        <td><input type="number" id="unitsSingle" name="unitsSingle"></td>
     </tr>
 
     <tr class="singleProduct">
       <td><label for="price">Price:<span class="required">*</span></label></td>
-      <td><input type="text" id="priceSingle" name="priceSingle"></td>
+      <td><input type="number" id="priceSingle" name="priceSingle"></td>
   </tr>
 
   <tr class="singleProduct">
@@ -173,32 +185,32 @@
 
 <tr class="b2bBatches" style="display: none;">
   <td><label for="batchUnits1">Batch 1 units:</label></td>
-  <td><input type="number" id="batchUnits1" name="batchUnits1" ></td>
+  <td><input type="number" id="batchUnits1" name="batchUnits1" value="0"></td>
 </tr>
 
 <tr class="b2bBatches" style="display: none;">
   <td><label for="batchPrice1">Batch 1 price/unit:</label></td>
-  <td><input type="number" id="batchPrice1" name="batchPrice1" ></td>
+  <td><input type="number" id="batchPrice1" name="batchPrice1" value="0"></td>
 </tr>
 
 <tr class="b2bBatches" style="display: none;">
   <td><label for="batchUnits2">Batch 2 units:</label></td>
-  <td><input type="number" id="batchUnits2" name="batchUnits2" ></td>
+  <td><input type="number" id="batchUnits2" name="batchUnits2" value="0"></td>
 </tr>
 
 <tr class="b2bBatches" style="display: none;">
   <td><label for="batchPrice2">Batch 2 price/unit:</label></td>
-  <td><input type="number" id="batchPrice2" name="batchPrice2" ></td>
+  <td><input type="number" id="batchPrice2" name="batchPrice2" value="0"></td>
 </tr>
 
 <tr class="b2bBatches" style="display: none;">
   <td><label for="batchUnits3">Batch 3 units:</label></td>
-  <td><input type="number" id="batchUnits3" name="batchUnits3" ></td>
+  <td><input type="number" id="batchUnits3" name="batchUnits3" value="0"></td>
 </tr>
 
 <tr class="b2bBatches" style="display: none;">
   <td><label for="batchPrice3">Batch 3 price/unit:</label></td>
-  <td><input type="number" id="batchPrice3" name="batchPrice3" ></td>
+  <td><input type="number" id="batchPrice3" name="batchPrice3" value="0"></td>
 </tr>
 
 
@@ -231,7 +243,7 @@
 
 <button style="margin-top: 20px;" type="button" class="btn btn-primary" onclick="createVariations()">Create variations</button>
 
-<div style="display: none; padding: 20% 0;" class="table-responsive" id="varTableDiv">
+<div style="display: none; margin-top: 40px;" class="table-responsive" id="varTableDiv">
   <button type="button" onclick="deleteSelectedRows()">Delete Selected Rows</button>
 
   <table class="table" id="varTable">
@@ -244,13 +256,6 @@
         <th scope="col">Condition <span class="required">*</span></th>
         <th scope="col">Price/unit(Rs) <span class="required">*</span></th>
         <th scope="col">Main Page<span class="required">*</span></th>
-        <th scope="col">Batch 1 Minimum units</th>
-        <th scope="col">Batch 1 Price/unit</th>
-        <th scope="col">Batch 2 Minimum units</th>
-        <th scope="col">Batch 2 Price/unit</th>
-        <th scope="col">Batch 3 Minimum units</th>
-        <th scope="col">Batch 3 Price/unit</th>
-        <th scope="col">image <span class="required">*</span></th>
         
       </tr>
     </thead>
@@ -272,6 +277,51 @@
       </tr> -->
     </tbody>
   </table>
+</div>
+
+<div id="imagesdiv" style="display: none; margin-top: 40px;">
+  <h3>Add Images</h3>
+  
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <input type="file" name="images" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+
 </div>
 
 </div>

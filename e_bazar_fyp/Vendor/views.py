@@ -9,34 +9,17 @@ from .decorators import *
 from django.views import View
 from . import utils
 from . import azureCon
+import uuid
 
-# class User_vw:
-#
-#
-#     @csrf_exempt
-#     def register(self,request):
-#
-#         user_mdl=User(user_Name=request.POST.get('user_name'),user_Password = request.POST.get('password'),user_email_phone = request.POST.get('Mob_or_Eml'))
-#
-#         user_mdl.save()
-#         print(request.POST.get('username'))
-#         return HttpResponse(request.POST.get('user_name'))
-#     # def post(self,request):
-#     #     user_creation=self.register(request)
-#     #     return user_creation
 
 class vendorRegister:
     def __init__(self):
      pass
 
-    #saim's function
-    # def renLogIn(self,request):
-    #     return render(request, "Login/login.html")
 
     def check(self,request):
         return render(request,"Vendor_registration/base_c.html")
 
-    #saim's function
     def logIn(self,request):
         if request.method == "POST":
             email = request.POST["Email"]
@@ -46,20 +29,12 @@ class vendorRegister:
             vendor = vendors.find_one({"email":email,"password":password})
             if vendor:
                 vendorDtbase = str(vendor["_id"])
-                print('vendorDtbase',vendorDtbase)
                 request.session["Vendor_Db"] = vendorDtbase
-                return redirect("Vendor:renDashbrd", vendor_id=vendorDtbase)
+                return redirect("Vendor:renDashbrd")
             else:
-                #change start
-                #return redirect("Vendor:renlogin")
-
-                #change new
                 return render(request, 'Login/login.html', {
                     'error_message': "Email or password is incorrect !",})
-
-        return render(request, "Login/login.html")
-                #change end
-
+        return sessionFunc(request)
     def getUser(self,request):
         dataBase = utils.connect_database(request.session["Vendor_Db"])
         print(request.session["Vendor_Db"])
@@ -67,7 +42,6 @@ class vendorRegister:
         info = vendor.find_one({})
         return info
 
-    #saim's function
     @session_check
     def renDashboard(self,request):
             info=self.getUser(request)
@@ -205,70 +179,55 @@ class Category:
         return subcategoriesList
 
 
-    # def fetchSubCat(self,request):
-
-
 class Product:
     category=Category()
     def __init__(self):
         self.context={}
         self.product_category=None
 
-    # def storeContext(self,name,value):
-    #     self.context[name]=value
-
     @session_check
     def renselectCat(self,request):
-        id = request.session['Vendor_Db']
-        return render(request, "Products/Search_Category.html", context= {
-            "id" : id
-        })
+        return render(request, "Products/Search_Category.html",)
 
     @session_check
     def selectCat(self,request):
-        id = request.session['Vendor_Db']
         main_categories=self.category.fetchAll(request)
-        self.context['maincats']=main_categories
-        self.context["id"] = id
-        return render(request,"Products/Search_Category_1.html",self.context)
+        context={}
+        context['maincats']=main_categories
+        return render(request,"Products/Search_Category_1.html",context)
 
     @session_check
-    def selectSubCat(self,request):
-        category= request.POST['category']
-        print(2)
+    def selectSubCat(self,request,category1):
+        context={}
+        category= "/"+category1
         sub_categories=self.category.fetchChild(request,category)
-        self.context['subcats']=sub_categories
-
-        return render(request,"Products/Search_Category_2.html",self.context)
+        context['subcats']=sub_categories
+        context["category1"]= category1
+        return render(request,"Products/Search_Category_2.html",context)
 
     @session_check
-    def selectLeafCat(self,request):
-        category = request.POST['category']
+    def selectLeafCat(self,request,category1,category2):
+        context={}
+        category= "/"+category1+"/"+category2
         leaf_categories=self.category.fetchChild(request,category)
-
-        print(3)
-        print(leaf_categories)
-        self.context['leafcats']=leaf_categories
-        # nt(dictry) dictry = leaf_categories[0]
-        # pri
-        leaf_categories[0]["category"]=leaf_categories[0]['category'].replace('/',':')
-        return render(request,"Products/Search_Category_3.html",self.context)
+        context['leafcats']=leaf_categories
+        context["category1"]= category1
+        context["category2"]= category2
+        return render(request,"Products/Search_Category_3.html",context)
 
     @session_check
-    def renAddProduct(self,request,category):
-        self.product_category=request.POST['category']
-
-        context={
-            "category_show" : category.replace(':','/')[1:],
-            'category' : category.replace(':','/')
-        }
+    def renAddProduct(self,request,category1,category2,category3):
+        context={"category":"/"+category1+"/"+category2+"/"+category3}
         return render(request, "Products/Add_Products.html",context)
 
     @session_check
     def addProduct(self,request):
         if request.method == 'POST':
             productDict={}
+            isb2b = request.POST.get("B2Boptions")
+            isvar= request.POST.get("options")
             vartype= request.POST.getlist("varname")
+            category= request.POST.get("category")
             productname = request.POST.get("productname")
             manufacturer = request.POST.get("manufacturer")
             length = request.POST.get("length")
@@ -286,8 +245,8 @@ class Product:
                 productDict["expireDate"] = expireDate
 
 
-            productDict.update({"manufacturer": manufacturer,"length":length,"width":width,"height":height
-                ,"weight":weight,"description":description})
+            productDict.update({"name":productname,"category":category,"manufacturer": manufacturer,"length":length,"width":width,"height":height
+                ,"weight":weight,"description":description,"isVariation":isvar,"isb2b":isb2b})
 
 
             if len(vartype)==0:
@@ -295,32 +254,46 @@ class Product:
                 units = request.POST.get("unitsSingle")
                 price = request.POST.get("priceSingle")
                 condition = request.POST.get("conditionSingle")
-                isb2b = request.POST.get("B2Boptions")
 
+                batches = {}
                 if isb2b =="yes":
-                    batches= []
+
                     for i in range(1,4):
                         batchUnits = request.POST.get("batchUnits"+str(i))
                         batchPrice = request.POST.get("batchPrice"+str(i))
+                        if int(batchUnits)!=0 and int(batchPrice)!=0:
+                            batches[i]={"MinUnits":batchUnits,"Price":batchPrice}
 
-                        if batchUnits is not None and batchPrice is not None:
-                            batches.append({"MinUnits":int(batchUnits),"Price":batchPrice})
-
-                image = request.FILES.get('image')
-                img_url = azureCon.uploadimg(image)
-                productDict.update({'sku':sku , 'productname':productname, 'units':units, 'price':price,'condition':condition,"image":img_url})
-                productDict["reviews"] = []
-                productDict["batches"]=batches
+                images = request.FILES.getlist('imageSingle')
+                imagesList=[]
+                for img in images:
+                    if img.content_type.startswith('image/'):
+                        img_url = azureCon.uploadimg(img)
+                        imagesList.append(img_url)
+                productDict.update({'sku':sku , 'units':units, 'price':price,'condition':condition,'images':imagesList})
+                reviews= {}
+                reviews["reviewDetail"]={}
+                reviews["count"]=0
+                productDict["reviews"] = reviews
+                if len(batches) != 0:
+                    productDict["batches"]=batches
+                print(productDict)
+                return HttpResponse("product uploaded")
 
             else:
-                variations=[]
+                variations={}
                 sku= request.POST.getlist("sku")
                 units = request.POST.getlist("units")
                 price = request.POST.getlist("price")
                 condition = request.POST.getlist("condition")
-                image = request.FILES.getlist('image')
+                images = request.FILES.getlist('images')
+                imagesList=[]
+                for img in images:
+                    if img.content_type.startswith('image/'):
+                        img_url = azureCon.uploadimg(img)
+                        imagesList.append(img_url)
+                productDict["images"]=imagesList
                 mainpage= request.POST.get("mainpage")
-                isb2b = request.POST.get("B2Boptions")
                 if isb2b == "yes":
                     batch1MinUnit = request.POST.getlist("batch1MinUnit")
                     batch1price = request.POST.getlist("batch1price")
@@ -332,66 +305,67 @@ class Product:
                 if len(vartype)==1:
                     varatt = request.POST.getlist("var")
                     for index in range(0,len(varatt)):
-                        img_url = azureCon.uploadimg(image[index])
-                        tempVar= {'vartype':varatt[index] ,'sku':sku[index] , 'units':units[index], 'price':price[index],'condition':condition[index],"image":img_url}
+                        tempVar= {'vartype':varatt[index] ,'sku':sku[index] , 'units':units[index], 'price':price[index],'condition':condition[index]}
                         if mainpage == varatt[index]:
                             tempVar['mainpage']=True
 
 
                         if isb2b == "yes":
-                            batches = []
-                            if batch1MinUnit[index] is not None and batch1price[index] is not None:
-                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
-                            if batch2MinUnit[index] is not None and batch2price[index] is not None:
-                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
-                            if batch3MinUnit[index] is not None and batch3price[index] is not None:
-                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
+                            batches = {}
+                            if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
+                                batches[0]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
+                            if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
+                                batches[1]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
+                            if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
+                                batches[2]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
 
                             if len(batches)!=0:
                                 tempVar["batches"]=batches
-                        variations.append(tempVar)
+                        variations[index]=tempVar
 
                 else:
                     mainpage= mainpage.split("-")
                     varatt1 = request.POST.getlist("var1")
                     varatt2 = request.POST.getlist("var2")
                     for index in range(0, len(varatt1)):
-                        img_url = azureCon.uploadimg(image[index])
                         tempVar= {'vartype1': varatt1[index],'vartype2': varatt2[index], 'sku': sku[index],
                              'units': units[index], 'price': price[index], 'condition': condition[index],
-                             "image": img_url}
+                             }
 
                         if mainpage[0] == varatt1[index] and mainpage[1]== varatt2[index]:
                             tempVar['mainpage']=True
 
                         if isb2b == "yes":
-                            batches = []
+                            batches = {}
                             if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
-                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
+                                batches[0]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
                             if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
-                                batches.append({"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])})
+                                batches[1]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
                             if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
-                                batches.append({"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])})
+                                batches[2]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
 
                             if len(batches)!=0:
                                 tempVar["batches"]=batches
-                        variations.append(tempVar)
+                        variations[index]=tempVar
 
 
                 productDict['variations']=variations
-                productDict["reviews"]=[]
+                reviews= {}
+                reviews["reviewDetail"]={}
+                reviews["count"]=0
+                productDict["reviews"]=reviews
                 productDict['status']="enabled"
 
-            vendorId= request.session.get('Vendor_Db')
-            vendorDatabase= utils.connect_database(vendorId)
-            ebazarDatabase= utils.connect_database("E-Bazar")
-            allProducts= ebazarDatabase["Products"]
-            vendorProducts= vendorDatabase["Products"]
-            productDict["vendorId"]= vendorId
-            vendorProductInsert= vendorProducts.insert_one(productDict)
-            insertId= vendorProductInsert.inserted_id
-            productDict["_id"]= insertId
-            allProducts.insert_one(productDict)
+            # vendorId= request.session.get('Vendor_Db')
+            # vendorDatabase= utils.connect_database(vendorId)
+            # ebazarDatabase= utils.connect_database("E-Bazar")
+            # allProducts= ebazarDatabase["Products"]
+            # vendorProducts= vendorDatabase["Products"]
+            # productDict["vendorId"]= vendorId
+            # vendorProductInsert= vendorProducts.insert_one(productDict)
+            # insertId= vendorProductInsert.inserted_id
+            # productDict["_id"]= insertId
+            # allProducts.insert_one(productDict)
 
             print(productDict)
             return HttpResponse("Product uploaded")

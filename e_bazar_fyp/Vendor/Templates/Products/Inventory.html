@@ -42,7 +42,7 @@
     
         </div>
         <div class="col-sm-4" style="display: flex; justify-content: flex-end">
-            <button type="button" class="btn btn-success bg-gradient text-white btn-outline-dark" style="width: 230px
+            <button type="button" class="btn btn-success bg-gradient text-white btn-outline-dark" onclick="location.href='{% url 'Vendor:addproduct' %}'" style="width: 230px
             ;">Add product</button>
         </div>
     </div>
@@ -64,10 +64,9 @@
                 </tr>
               </thead>
               <tbody class="border border-1">
-              {% for product in products %}
+
                 <tr>
                   <td><input type="checkbox"></td>
-                  <td>{{}}</td>
                   <td>clth-10102</td>
                   <td>T-shirt</td>
                   <td>2/12/22</td>

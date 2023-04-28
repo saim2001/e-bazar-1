@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +33,7 @@
           <div class=" border border-1 align-items-center" style="overflow: auto;
           height: 300px;">
               {% for subcat in subcats %}
-              <form action='{% url "Vendor:leafcat"  %}' method="POST">
+              <form action='{% url "Vendor:leafcat" category1 subcat.name %}' method="POST">
                 {% csrf_token %}
                   <div class="container p-1 border border-1" style="display: inline-flex;">
                   <p style="flex: 1;">{{subcat.name}}</p> <button  class="btn btn-outline-secondary fixed-left" name="category" type="submit" value="{{subcat.category}}">select</button>

@@ -1,6 +1,5 @@
-from django.shortcuts import redirect
 import functools
-from .utils import verify_login
+from django.shortcuts import render,redirect
 
 
 #prev
@@ -33,3 +32,10 @@ def session_check(function):
             return redirect(login_url)
 
     return wrapper
+
+def sessionFunc(request):
+    session_key= "Vendor_Db"
+    if session_key in request.session:
+        return redirect("Vendor:renDashbrd")
+    else:
+        return render(request, "Login/login.html")

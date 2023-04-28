@@ -252,6 +252,8 @@ var initialContent=[];
       i--;
     }
     //"End" delete previous javascript
+    const imagesdiv= document.getElementById("imagesdiv");
+    imagesdiv.style.display="none";
     const tableDiv= document.getElementById("varTableDiv");//variation table
     tableDiv.style.display="none";//hide table at start
     initialContent=[];
@@ -375,18 +377,57 @@ function createTable(variationList){
 var varSize= variationList.length;
 var tableVar= document.getElementById("varTable");
 var tbody = tableVar.getElementsByTagName("tbody")[0];
+var b2byes= document.getElementById("b2b_yes");
+if (b2byes.checked){
+  const tableHead= document.getElementById("varHead");
+  var batch1 = document.createElement("th");
+  batch1.setAttribute("scope", "col");
+  batch1.textContent = "Batch 1 Minimum units";
+  batch1.classList.add('js_create');
+
+  var batch1price = document.createElement("th");
+  batch1price.setAttribute("scope", "col");
+  batch1price.textContent = "Batch 1 Price/unit";
+  batch1price.classList.add('js_create');
+
+  var batch2 = document.createElement("th");
+  batch2.setAttribute("scope", "col");
+  batch2.textContent = "Batch 2 Minimum units";
+  batch2.classList.add('js_create');
+
+  var batch2price = document.createElement("th");
+  batch2price.setAttribute("scope", "col");
+  batch2price.textContent = "Batch 2 Price/unit";
+  batch2price.classList.add('js_create');
+
+  var batch3 = document.createElement("th");
+  batch3.setAttribute("scope", "col");
+  batch3.textContent = "Batch 3 Minimum units";
+  batch3.classList.add('js_create');
+
+  var batch3price = document.createElement("th");
+  batch3price.setAttribute("scope", "col");
+  batch3price.textContent = "Batch 3 Price/unit";
+  batch3price.classList.add('js_create');
+  
+  tableHead.appendChild(batch1);
+  tableHead.appendChild(batch1price);
+  tableHead.appendChild(batch2);
+  tableHead.appendChild(batch2price);
+  tableHead.appendChild(batch3);
+  tableHead.appendChild(batch3price);
+}
 if (varSize==1){
 
 
   for (let j=0; j< variationList[0].length;j++){
     let newRow = tbody.insertRow(-1);
-    var b2byes= document.getElementById("b2b_yes");
     if (b2byes.checked){
-      let htmlRowwithb2b='<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+(j+1)+'</th> <td><input name="var" value="'+variationList[0][j]+'" readonly> </td> <td><input name="sku" type="text" required> </td> <td> <input name="units" type="text" required> </td> <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> <td><input name="price" type="text" required> </td> <td> <input type="radio" name="mainpage" value="'+variationList[0][j]+'" checked> </td> <td> <input name="batch1MinUnit" type="number" value="0" > </td> <td>  <input name="batch1price" type="number" value="0"> </td> <td><input name="batch2MinUnit" type="number" value="0" > </td> <td> <input name="batch2price" type="number" value="0"> </td> <td><input name="batch3MinUnit" type="number" value="0"> </td> <td> <input name="batch3price" type="number" value="0" > </td> <td> <input name="image" type="file" required > </td> </tr>'
+      let htmlRowwithb2b='<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+(j+1)+'</th> <td><input name="var" value="'+variationList[0][j]+'" readonly> </td> <td><input name="sku" type="text" required> </td> <td> <input name="units" type="number" required> </td> <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> <td><input name="price" type="number" required> </td> <td> <input type="radio" name="mainpage" value="'+variationList[0][j]+'" checked> </td> <td> <input name="batch1MinUnit" type="number" value="0" > </td> <td>  <input name="batch1price" type="number" value="0"> </td> <td><input name="batch2MinUnit" type="number" value="0" > </td> <td> <input name="batch2price" type="number" value="0"> </td> <td><input name="batch3MinUnit" type="number" value="0"> </td> <td> <input name="batch3price" type="number" value="0" > </td> </tr>'
       newRow.innerHTML= htmlRowwithb2b;
     }
     else{
-    let htmlRow= '<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+(j+1)+'</th> <td><input name="var" value="'+variationList[0][j]+'" readonly> </td> <td><input name="sku" type="text" required> </td> <td> <input name="units" type="text" required> </td> <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> <td><input name="price" type="text" required> </td> <td> <input type="radio" name="mainpage" value="'+variationList[0][j]+'" checked> </td> <td> <input name="image" type="file" required > </td> </tr>'
+    let htmlRow= '<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+(j+1)+'</th> <td><input name="var" value="'+variationList[0][j]+'" readonly> </td> <td><input name="sku" type="text" required> </td> <td> <input name="units" type="number" required> </td> <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> <td><input name="price" type="number" required> </td> <td> <input type="radio" name="mainpage" value="'+variationList[0][j]+'" checked> </td> </tr>'
     newRow.innerHTML= htmlRow;
   }
     newRow.classList.add('js_create');
@@ -398,13 +439,12 @@ else{
     for (let j=0; j< variationList[1].length;j++){
       count++;
       let newRow = tbody.insertRow(-1);
-      var b2byes= document.getElementById("b2b_yes");
       if (b2byes.checked){
-        let htmlRowwithb2b= '<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+count+' </th> <td> <input name="var1" readonly value="'+variationList[0][i]+'" > </td> <td> <input name="var2" readonly value="'+variationList[1][j]+'" > </td> <td> <input name="sku" type="text" required> </td> <td> <input name="units" type="text" required> </td> <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> <td> <input name="price" type="text" required> </td> <td> <input type="radio" name="mainpage" value="'+variationList[0][i]+"-"+variationList[1][j]+'" checked> </td> <td> <input name="batch1MinUnit" type="number" value="0" > </td> <td>  <input name="batch1price" type="number" value="0"> </td> <td><input name="batch2MinUnit" type="number" value="0" > </td> <td> <input name="batch2price" type="number" value="0"> </td> <td><input name="batch3MinUnit" type="number" value="0" > </td> <td> <input name="batch3price" type="number" value="0"> </td> <td> <input name="image" type="file" required > </td> </tr>'
+        let htmlRowwithb2b= '<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+count+' </th> <td> <input name="var1" readonly value="'+variationList[0][i]+'" > </td> <td> <input name="var2" readonly value="'+variationList[1][j]+'" > </td> <td> <input name="sku" type="text" required> </td> <td> <input name="units" type="number" required> </td> <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> <td> <input name="price" type="number" required> </td> <td> <input type="radio" name="mainpage" value="'+variationList[0][i]+"-"+variationList[1][j]+'" checked> </td> <td> <input name="batch1MinUnit" type="number" value="0" > </td> <td>  <input name="batch1price" type="number" value="0"> </td> <td><input name="batch2MinUnit" type="number" value="0" > </td> <td> <input name="batch2price" type="number" value="0"> </td> <td><input name="batch3MinUnit" type="number" value="0" > </td> <td> <input name="batch3price" type="number" value="0"> </td> </tr>'
         newRow.innerHTML= htmlRowwithb2b;
       }
       else{
-      let htmlRow= '<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+count+' </th> <td> <input name="var1" readonly value="'+variationList[0][i]+'" > </td> <td> <input name="var2" readonly value="'+variationList[1][j]+'" > </td> <td> <input name="sku" type="text" required> </td> <td> <input name="units" type="text" required> </td> <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> <td> <input name="price" type="text" required> </td> <td> <input type="radio" name="mainpage" value="'+variationList[0][i]+"-"+variationList[1][j]+'" checked> </td> <td> <input name="image" type="file" required > </td> </tr>'
+      let htmlRow= '<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+count+' </th> <td> <input name="var1" readonly value="'+variationList[0][i]+'" > </td> <td> <input name="var2" readonly value="'+variationList[1][j]+'" > </td> <td> <input name="sku" type="text" required> </td> <td> <input name="units" type="number" required> </td> <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> <td> <input name="price" type="number" required> </td> <td> <input type="radio" name="mainpage" value="'+variationList[0][i]+"-"+variationList[1][j]+'" checked> </td> </tr>'
       newRow.innerHTML= htmlRow;
     }
       newRow.classList.add('js_create');
@@ -412,7 +452,8 @@ else{
   }
 }
 
-console.log("hello")
+const imagesdiv= document.getElementById("imagesdiv");
+imagesdiv.style.display="block";
 
 
 }

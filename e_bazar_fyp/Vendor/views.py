@@ -189,7 +189,7 @@ class Category:
     connection_string = "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongodb.net/test"
     client = MongoClient(connection_string)
     database = client["E-Bazar"]
-    dbConnection = database["Categories"]
+    dbConnection = database["test_categories"]
 
     def fetchAll(self,request):
         categories=self.dbConnection.find({"parent":"/"})
@@ -252,6 +252,8 @@ class Product:
         # nt(dictry) dictry = leaf_categories[0]
         # pri
         leaf_categories[0]["category"]=leaf_categories[0]['category'].replace('/',':')
+
+        print(leaf_categories[0]["category"])
         return render(request,"Products/Search_Category_3.html",self.context)
 
     @session_check
@@ -407,6 +409,7 @@ class Product:
         con = database["Products"]
         products = con.find({})
         for i in products:
+            print(i)
             i["id"] = i.pop("_id")
             products_lst.append(i)
 

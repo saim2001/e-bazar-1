@@ -10,6 +10,7 @@ from django.views import View
 from . import utils
 from . import azureCon
 import uuid
+import datetime
 
 
 class vendorRegister:
@@ -224,6 +225,7 @@ class Product:
     def addProduct(self,request):
         if request.method == 'POST':
             productDict={}
+            dateCreated= datetime.datetime.now()
             isb2b = request.POST.get("B2Boptions")
             isvar= request.POST.get("options")
             vartype= request.POST.getlist("varname")
@@ -246,7 +248,7 @@ class Product:
 
 
             productDict.update({"name":productname,"category":category,"manufacturer": manufacturer,"length":length,"width":width,"height":height
-                ,"weight":weight,"description":description,"isVariation":isvar,"isb2b":isb2b})
+                ,"weight":weight,"description":description,"isVariation":isvar,"isb2b":isb2b,"CreatedDateTime":dateCreated})
 
 
             if len(vartype)==0:
@@ -262,7 +264,7 @@ class Product:
                         batchUnits = request.POST.get("batchUnits"+str(i))
                         batchPrice = request.POST.get("batchPrice"+str(i))
                         if int(batchUnits)!=0 and int(batchPrice)!=0:
-                            batches[i]={"MinUnits":batchUnits,"Price":batchPrice}
+                            batches[str(uuid.uuid4())]={"MinUnits":batchUnits,"Price":batchPrice}
 
                 images = request.FILES.getlist('imageSingle')
                 imagesList=[]
@@ -278,7 +280,7 @@ class Product:
                 if len(batches) != 0:
                     productDict["batches"]=batches
                 print(productDict)
-                return HttpResponse("product uploaded")
+                return redirect("Vendor:reninvtry")
 
             else:
                 variations={}
@@ -313,15 +315,15 @@ class Product:
                         if isb2b == "yes":
                             batches = {}
                             if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
-                                batches[0]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
                             if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
-                                batches[1]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
                             if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
-                                batches[2]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
 
                             if len(batches)!=0:
                                 tempVar["batches"]=batches
-                        variations[index]=tempVar
+                        variations[str(uuid.uuid4())]=tempVar
 
                 else:
                     mainpage= mainpage.split("-")
@@ -338,15 +340,15 @@ class Product:
                         if isb2b == "yes":
                             batches = {}
                             if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
-                                batches[0]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
                             if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
-                                batches[1]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
                             if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
-                                batches[2]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
 
                             if len(batches)!=0:
                                 tempVar["batches"]=batches
-                        variations[index]=tempVar
+                        variations[str(uuid.uuid4())]=tempVar
 
 
                 productDict['variations']=variations
@@ -356,19 +358,19 @@ class Product:
                 productDict["reviews"]=reviews
                 productDict['status']="enabled"
 
-            # vendorId= request.session.get('Vendor_Db')
-            # vendorDatabase= utils.connect_database(vendorId)
-            # ebazarDatabase= utils.connect_database("E-Bazar")
-            # allProducts= ebazarDatabase["Products"]
-            # vendorProducts= vendorDatabase["Products"]
-            # productDict["vendorId"]= vendorId
-            # vendorProductInsert= vendorProducts.insert_one(productDict)
-            # insertId= vendorProductInsert.inserted_id
-            # productDict["_id"]= insertId
-            # allProducts.insert_one(productDict)
+            vendorId= request.session.get('Vendor_Db')
+            vendorDatabase= utils.connect_database(vendorId)
+            ebazarDatabase= utils.connect_database("E-Bazar")
+            allProducts= ebazarDatabase["Products"]
+            vendorProducts= vendorDatabase["Products"]
+            productDict["vendorId"]= vendorId
+            vendorProductInsert= vendorProducts.insert_one(productDict)
+            insertId= vendorProductInsert.inserted_id
+            productDict["_id"]= insertId
+            allProducts.insert_one(productDict)
 
             print(productDict)
-            return HttpResponse("Product uploaded")
+            return redirect("Vendor:reninvtry")
 
         else:
             return "Some error"

@@ -241,6 +241,7 @@ class Product:
             expireDate = request.POST.get("expireDate")
             productDict["points"] = request.POST.getlist("points")
 
+
             if brand:
                 productDict["brand"]= brand
             if expireDate:
@@ -273,14 +274,9 @@ class Product:
                         img_url = azureCon.uploadimg(img)
                         imagesList.append(img_url)
                 productDict.update({'sku':sku , 'units':units, 'price':price,'condition':condition,'images':imagesList})
-                reviews= {}
-                reviews["reviewDetail"]={}
-                reviews["count"]=0
-                productDict["reviews"] = reviews
                 if len(batches) != 0:
                     productDict["batches"]=batches
                 print(productDict)
-                return redirect("Vendor:reninvtry")
 
             else:
                 variations={}
@@ -352,13 +348,14 @@ class Product:
 
 
                 productDict['variations']=variations
-                reviews= {}
-                reviews["reviewDetail"]={}
-                reviews["count"]=0
-                productDict["reviews"]=reviews
-                productDict['status']="enabled"
 
+            reviews= {}
+            reviews["reviewDetail"]={}
+            reviews["count"] = {"rate":0,"length":0}
+            productDict["reviews"]=reviews
+            productDict['status']="enabled"
             vendorId= request.session.get('Vendor_Db')
+            print(vendorId,"vendor")
             vendorDatabase= utils.connect_database(vendorId)
             ebazarDatabase= utils.connect_database("E-Bazar")
             allProducts= ebazarDatabase["Products"]

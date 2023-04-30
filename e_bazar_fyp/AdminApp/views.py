@@ -17,7 +17,9 @@ class Verification:
             for status in status_items:
                 status_lst.append(status['name'])
 
-            return render(request, 'Verification/home.html', context={'status_home': status_lst})
+            return render(request, 'AdminPanel/Admin.html', context={'status_home': status_lst})
+
+
 
     def status_change(self,request,status_type):
         if request.method=='POST':

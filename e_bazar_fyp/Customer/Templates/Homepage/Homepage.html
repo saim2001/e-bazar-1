@@ -1,5 +1,6 @@
 {% extends "base_c.html" %}
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,102 +82,26 @@
         {% for product in products %}
         <div class="column">
           <div class="card">
-            <img src={{product.variations.0.image}} alt="" />
+            <img src={{product.image}} alt="" />
             <div class="card-caption">
+              {% for i in product.rating %}
+              {% if i == "shine" %}
               <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
+              {% else %}
               <i class="far fa-star"></i>
-              <a href="{% url 'Customer:productdetails' product.id %}"><h4><b>{{ product.brand }}</b></h4></a>
+              {% endif %}
+              {% endfor %}
+              <a href="{% url 'Customer:productdetails' product.id %}"><h4><b>{{ product.name }}</b></h4></a>
 
-              <p>
-               {{ product.description }}
-              </p>
+              <h3>
+               {{ product.price }}
+              </h3>
             </div>
           </div>
         </div>
         {% endfor %}
-        <div class="column">
-          <div class="card">
-            <img src="images/product6.png" alt="" />
-            <div class="card-caption">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-              <i class="far fa-star"></i>
-              <h4><b>Put Title Here</b></h4>
-              <p>
-               description
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="card">
-            <img src="images/product5.png" alt="" />
-            <div class="card-caption">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-              <h4><b>Put Title Here</b></h4>
-              <p>
-               description
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="card">
-            <img src="images/product4.png" alt="" />
-            <div class="card-caption">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-              <i class="far fa-star"></i>
-              <h4><b>Put Title Here</b></h4>
-              <p>
-                 description
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="card">
-            <img src="images/product3.png" alt="" />
-            <div class="card-caption">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-              <i class="far fa-star"></i>
-              <h4><b>Put Title Here</b></h4>
-              <p>
-            description
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="card">
-            <img src="images/product2 (1).png" alt="" />
-            <div class="card-caption">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <h4><b>Put Title Here</b></h4>
-              <p>
-                 description
-              </p>
-            </div>
-          </div>
-        </div>
+
+
       </div>
     </section>
     <!------------- Latest Product section end --------->

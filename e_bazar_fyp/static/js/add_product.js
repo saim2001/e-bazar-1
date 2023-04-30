@@ -243,6 +243,8 @@ autoCont.appendChild(newContainer)
 //"Start" function to create labels and headings for according to input
 // provided from product information tab
 
+
+
 var initialContent=[];
   function createVarhtml(){
     //"Start" delete previous javascript

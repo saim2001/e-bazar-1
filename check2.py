@@ -6,10 +6,13 @@ import json
 
 
 
-# connection_string= "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongodb.net/test"
-# client = MongoClient(connection_string)
-# databaseName = 'E-Bazar'
-# database= client[databaseName]
+connection_string= "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongodb.net/test"
+client = MongoClient(connection_string)
+databaseName = 'E-Bazar'
+database= client[databaseName]
+collection= database["Products"]
+result = collection.insert_one({"product":"hello"})
+
 # database= database['Orders']
 # order={
 #     'products':[{'product_id':'none','units':5},{'product_id':'none','units':5}],'total':1433

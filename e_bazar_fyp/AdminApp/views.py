@@ -77,3 +77,25 @@ class Verification:
     def verify(self,request):
         if request.method=="POST":
             pass
+
+    def verification(self,request):
+
+        ebazar = utils.connect_database("E-Bazar")
+        allvendorColl = ebazar["Vendors"]
+        allvendors = allvendorColl.find({})
+        allvendorsDict = {"verified": [], "notverified": [], "disputed": []}
+        for v in allvendors:
+            vendorDatabase = utils.connect_database(str(v["_id"]))
+            vendorInfoColl = vendorDatabase["Information"]
+            vendorInfo = vendorInfoColl.find_one({})
+            if v["status"] == "verified":
+                allvendorsDict["verified"].append(vendorInfo)
+            elif v["status"] == "notverified":
+                allvendorsDict["notverified"].append(vendorInfo)
+            elif v["status"] == "disputed":
+                allvendorsDict["disputed"].append(vendorInfo)
+        print(allvendorsDict)
+        return render(request, "AdminPanel/verification.html", {"vendors":allvendorsDict})
+
+
+

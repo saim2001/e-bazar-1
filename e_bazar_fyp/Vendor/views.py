@@ -30,9 +30,7 @@ class vendorRegister:
             vendor = vendors.find_one({"email":email,"password":password})
             if vendor:
                 vendorDtbase = str(vendor["_id"])
-                print(vendorDtbase)
                 request.session["Vendor_Db"] = vendorDtbase
-
                 return redirect("Vendor:renDashbrd")
             else:
                 return render(request, 'Login/login.html', {
@@ -162,12 +160,6 @@ class vendorRegister:
 
     def renPayout(self,request):
         return render(request, 'Seller_wallet/Payout.html')
-
-    def logout(self,request):
-        del request.session["Vendor_Db"]
-
-        return redirect("Vendor:renDashbrd")
-
 class Category:
     connection_string = "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongodb.net/test"
     client = MongoClient(connection_string)
@@ -249,6 +241,7 @@ class Product:
             expireDate = request.POST.get("expireDate")
             productDict["points"] = request.POST.getlist("points")
 
+
             if brand:
                 productDict["brand"]= brand
             if expireDate:
@@ -281,14 +274,10 @@ class Product:
                         img_url = azureCon.uploadimg(img)
                         imagesList.append(img_url)
                 productDict.update({'sku':sku , 'units':units, 'price':price,'condition':condition,'images':imagesList})
-                reviews= {}
-                reviews["reviewDetail"]={}
-                reviews["count"]=0
-                productDict["reviews"] = reviews
                 if len(batches) != 0:
                     productDict["batches"]=batches
                 print(productDict)
-                return redirect("Vendor:reninvtry")
+                #return redirect("Vendor:reninvtry")
 
             else:
                 variations={}
@@ -360,25 +349,23 @@ class Product:
 
 
                 productDict['variations']=variations
-                reviews= {}
-                reviews["reviewDetail"]={}
-                reviews["count"] = {"rate": 0, "lenght": 0}
-                productDict["reviews"]=reviews
-                productDict['status']="enabled"
 
-            vendorId= request.session['Vendor_Db']
-            print(vendorId)
+            reviews= {}
+            reviews["reviewDetail"]={}
+            reviews["count"] = {"rate":0,"length":0}
+            productDict["reviews"]=reviews
+            productDict['status']="enabled"
+            vendorId= request.session.get('Vendor_Db')
+            print(vendorId,"vendor")
             vendorDatabase= utils.connect_database(vendorId)
             ebazarDatabase= utils.connect_database("E-Bazar")
             allProducts= ebazarDatabase["Products"]
             vendorProducts= vendorDatabase["Products"]
             productDict["vendorId"]= vendorId
             vendorProductInsert= vendorProducts.insert_one(productDict)
-            print(vendorProductInsert.inserted_id)
             insertId= vendorProductInsert.inserted_id
             productDict["_id"]= insertId
-            all_products_insert = allProducts.insert_one(productDict)
-            print(all_products_insert.inserted_id)
+            allProducts.insert_one(productDict)
 
             print(productDict)
             return redirect("Vendor:reninvtry")
@@ -397,6 +384,7 @@ class Product:
             i["id"] = i.pop("_id")
             products_lst.append(i)
 
+        print(products_lst)
         return render(request,'Products/Inventory.html',context = {
             "products" : products_lst
         })

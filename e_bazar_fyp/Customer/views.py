@@ -20,9 +20,35 @@ class Customer:
         #         all_products.append(j)
         products = utils.connect_database("E-Bazar","Products")
         all_products = products.find({})
+
         for i in all_products:
-            i['id'] = i.pop('_id')
-            all_products_lst.append(i)
+            temp={"name":i["name"],"id":str(i["_id"])}
+            if i["isVariation"]=="yes":
+                variations= i["variations"]
+                for key,dic in variations.items():
+                    if "mainpage" in dic.keys():
+                        temp["price"]=dic["price"]
+            else:
+                temp["price"]=i["price"]
+            img= i["images"]
+            temp["image"]= img[0]
+            reviews= i["reviews"]
+            reviews_count= reviews["count"]
+            if int(reviews_count["rate"])==0:
+                temp["rating"] = ['dark'] * 5
+            else:
+                rating = int(reviews_count["rate"])/int(reviews_count["length"])
+                rating_lst=[]
+                for i in range(1,6):
+                    if i<= rating:
+                        rating_lst.append("shine")
+                    else:
+                        rating_lst.append("dark")
+
+                temp["rating"] = rating_lst
+
+
+            all_products_lst.append(temp)
         print(all_products_lst)
         context={
             'products': all_products_lst

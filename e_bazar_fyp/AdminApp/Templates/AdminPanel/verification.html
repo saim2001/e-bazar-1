@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for status,list in vendors.items %}
+    {% if status == "verified" %}
+        <h3>Verified</h3>
+    {% elif status == "notverified" %}
+        <h3>Not Verified</h3>
+    {% elif status == "disputed" %}
+        <h3>Disputed</h3>
+    {% endif %}
+    {% for v in list %}
+        <p>{{v}}</p>
+    {% endfor %}
+
+{% endfor %}
+</body>
+</html>

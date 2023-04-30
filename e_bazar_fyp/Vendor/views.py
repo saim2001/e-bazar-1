@@ -155,6 +155,10 @@ class vendorRegister:
 
         return render(request, 'Vendor_registration/Registration.html')
 
+    def logout(self,request):
+        del request.session["Vendor_Db"]
+        print("yes")
+        return redirect("Vendor:renDashbrd")
     def renWallet(self,request):
         return render(request, 'Seller_wallet/Wallet.html')
 

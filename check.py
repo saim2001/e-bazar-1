@@ -9,7 +9,59 @@ connection_string= "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongo
 client = MongoClient(connection_string)
 # print(client.list_database_names())
 database = client["E-Bazar"]
-dbConnection= database["Vendors"]
+dbConnection= database["text_cats"]
+result_1 = dbConnection.find({"name": ""})
+for i in result_1:
+    print(i)
+dbConnection.delete_many({"name": ""})
+result_2 = dbConnection.find({"name": ""})
+for i in result_2:
+    print(i)
+result_3 = dbConnection.find({"parent": ""})
+for i in result_3:
+    print(i)
+
+result_4 = dbConnection.find({"category": ""})
+for i in result_4:
+    print(i)
+# dbConnection.delete_many({})
+
+# categories=[{
+#     'name' : 'Exercise & Fitness',
+#     'parent' : '/Sports & Outdoors',
+#     'category' : '/Sports & Outdoors/Exercise & Fitness'
+# },
+#     {'name' : 'Supplements',
+#     'parent' : '/Sports & Outdoors',
+#     'category' : '/Sports & Outdoors/Supplements'},
+#     {'name' : 'Shoes & Clothing',
+#     'parent' : '/Sports & Outdoors',
+#     'category' : '/Sports & Outdoors/Shoes & Clothing'},
+#     {'name' : 'Team Sports',
+#     'parent' : '/Sports & Outdoors',
+#     'category' : '/Sports & Outdoors/Team Sports'},
+#     {'name' : 'Racket Sports',
+#     'parent' : '/Sports & Outdoors',
+#     'category' : '/Sports & Outdoors/Racket Sports'},
+#     {'name' : 'Outdoor Recreation',
+#     'parent' : '/Sports & Outdoors',
+#     'category' : '/Sports & Outdoors/Outdoor Recreation'},
+#     {'name' : 'Fitness Gadgets',
+#     'parent' : '/Sports & Outdoors',
+#     'category' : '/Sports & Outdoors/Fitness Gadgets'},
+#     {'name' : 'Fitness Trackers',
+#     'parent' : '/Sports & Outdoors',
+#     'category' : '/Sports & Outdoors/Fitness Trackers'}
+# ]
+# name='saim'
+# # dbConnection.insert_many(categories)
+# for i in range(12):
+#     print('badacyvac["' + name + '"]')
+#
+
+
+
+
 #cate=dbConnection.find({'parent':'/Electronics'})
 # for cat in cate:
 # #     print(cat)
@@ -118,5 +170,5 @@ dbConnection= database["Vendors"]
 
 
 # # {base:{categories:[kj,jkb,..],leaf:[id,name]]
-vendor = dbConnection.find_one({"email":"zain@gmail.com"})
-print(vendor["database_name"])
+# vendor = dbConnection.find_one({"email":"zain@gmail.com"})
+# print(vendor["database_name"])

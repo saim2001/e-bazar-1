@@ -277,6 +277,7 @@ class Product:
                 if len(batches) != 0:
                     productDict["batches"]=batches
                 print(productDict)
+                #return redirect("Vendor:reninvtry")
 
             else:
                 variations={}

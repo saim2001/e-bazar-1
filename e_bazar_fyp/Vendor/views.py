@@ -30,7 +30,9 @@ class vendorRegister:
             vendor = vendors.find_one({"email":email,"password":password})
             if vendor:
                 vendorDtbase = str(vendor["_id"])
+                print(vendorDtbase)
                 request.session["Vendor_Db"] = vendorDtbase
+
                 return redirect("Vendor:renDashbrd")
             else:
                 return render(request, 'Login/login.html', {
@@ -160,11 +162,17 @@ class vendorRegister:
 
     def renPayout(self,request):
         return render(request, 'Seller_wallet/Payout.html')
+
+    def logout(self,request):
+        del request.session["Vendor_Db"]
+
+        return redirect("Vendor:renDashbrd")
+
 class Category:
     connection_string = "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongodb.net/test"
     client = MongoClient(connection_string)
     database = client["E-Bazar"]
-    dbConnection = database["test_categories"]
+    dbConnection = database["Categories"]
 
     def fetchAll(self,request):
         categories=self.dbConnection.find({"parent":"/"})
@@ -354,20 +362,23 @@ class Product:
                 productDict['variations']=variations
                 reviews= {}
                 reviews["reviewDetail"]={}
-                reviews["count"]=0
+                reviews["count"] = {"rate": 0, "lenght": 0}
                 productDict["reviews"]=reviews
                 productDict['status']="enabled"
 
-            vendorId= request.session.get('Vendor_Db')
+            vendorId= request.session['Vendor_Db']
+            print(vendorId)
             vendorDatabase= utils.connect_database(vendorId)
             ebazarDatabase= utils.connect_database("E-Bazar")
             allProducts= ebazarDatabase["Products"]
             vendorProducts= vendorDatabase["Products"]
             productDict["vendorId"]= vendorId
             vendorProductInsert= vendorProducts.insert_one(productDict)
+            print(vendorProductInsert.inserted_id)
             insertId= vendorProductInsert.inserted_id
             productDict["_id"]= insertId
-            allProducts.insert_one(productDict)
+            all_products_insert = allProducts.insert_one(productDict)
+            print(all_products_insert.inserted_id)
 
             print(productDict)
             return redirect("Vendor:reninvtry")
@@ -383,11 +394,9 @@ class Product:
         con = database["Products"]
         products = con.find({})
         for i in products:
-            print(i)
             i["id"] = i.pop("_id")
             products_lst.append(i)
 
-        print(products_lst)
         return render(request,'Products/Inventory.html',context = {
             "products" : products_lst
         })

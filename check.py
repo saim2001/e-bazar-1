@@ -9,7 +9,7 @@ connection_string= "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongo
 client = MongoClient(connection_string)
 # print(client.list_database_names())
 database = client["E-Bazar"]
-dbConnection= database["test_categories"]
+dbConnection= database["text_cats"]
 result_1 = dbConnection.find({"name": ""})
 for i in result_1:
     print(i)
@@ -24,7 +24,7 @@ for i in result_3:
 result_4 = dbConnection.find({"category": ""})
 for i in result_4:
     print(i)
-
+# dbConnection.delete_many({})
 
 # categories=[{
 #     'name' : 'Exercise & Fitness',

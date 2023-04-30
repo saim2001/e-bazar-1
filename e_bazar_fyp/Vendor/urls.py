@@ -26,6 +26,7 @@ urlpatterns = [
     path('orderdetail/',orders.renOrder_dtls,name='renorder_dtls'),
     path('returns/',orders.renReturns,name='renreturns'),
     path('wallet/',vendor.renWallet,name='renwallet'),
-    path('Payout/',vendor.renPayout,name='renpayout')
+    path('Payout/',vendor.renPayout,name='renpayout'),
+    path('logout/',vendor.logout,name='logout')
 
 ]

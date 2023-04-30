@@ -12,7 +12,7 @@ from . import azureCon
 import uuid
 import datetime
 
-
+print("hi")
 class vendorRegister:
     def __init__(self):
      pass

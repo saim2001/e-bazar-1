@@ -99,15 +99,14 @@ class vendorRegister:
             cnicback = request.FILES.get('cnicback')
             bankstatement = request.FILES.get('bankstatement')
 
-            not_verified= db_status.find_one({"name":"not verified"})
-            not_verified= ObjectId(not_verified["_id"])
+
 
             vendor_login= {
                 "email": email,
                 "password":password,
                 "phone":phone,
                 "cnic":cnic,
-                'status':not_verified }
+                'status':"notverified" }
             newVendor= vendors.insert_one(vendor_login)
             vendorIdCreated= newVendor.inserted_id
 

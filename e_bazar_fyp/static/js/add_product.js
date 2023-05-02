@@ -485,5 +485,87 @@ function deleteSelectedRows(){
   }
 }
 
+
+
 //"End" delete selected rows
 
+window.onload = function () {
+  const data = JSON.parse(document.getElementById("my-data").textContent);
+  console.log(data)
+   const cat_name = document.getElementById("cat_name");
+   cat_name.readOnly = false;
+   cat_name.value = data.category;
+   if (data.isVariation == "yes"){
+    document.getElementById('var_yes').click();
+   }
+   const var_vals = Object.values(data.var_type);
+   const var_type = Object.keys(data.var_type);
+  //  console.log(var_type,length(var_type))
+  //  console.log(var_vals,length(var_vals))
+   for (const var_type in data.var_type ){
+    if (var_type == 'size'){
+      document.getElementById('var_size').checked = true;
+    }
+    else if (var_type == 'color'){
+      document.getElementById("var_color").checked = true;
+    }
+    else if (var_type == 'style'){
+      document.getElementById("var_style").checked = true;
+    }
+    else {
+      if (document.getElementById("ch_1").checked == false && document.getElementById('ch_2') == false){
+        let var_checkbox_1 = document.getElementById("ch_1");
+        var_checkbox_1.checked = true;
+        var_checkbox_1.nextSibling.value = var_type;
+      }
+      else if (document.getElementById("ch_1").checked == true){
+        let var_checkbox_2 = document.getElementById("ch_2");
+        var_checkbox_2.checked = true;
+        var_checkbox_2.nextSibling.value = var_type;
+      }
+    }
+
+   }
+   if (data.isb2b == 'yes'){
+    document.getElementById('b2b_yes').click();
+   }
+   document.getElementById("productname").value = data.name;
+   if (data.brand){
+    document.getElementById('brand').value = data.brand;
+   }
+   else{
+    document.getElementById("isbrand").checked = true;
+   }
+   const lst = document.querySelector('#variations').querySelectorAll("#autoCont");
+   console.log(lst);
+   for (var_cont of lst){
+    console.log(var_cont.querySelectorAll('.contAutoInput.js_create'));
+   }
+   for ( div=0; div<var_type.length; div++){
+    let div_elem = lst[div]
+    if (div_elem.firstChild.innerHTML == var_type[div] ){
+      let var_val = div_elem.querySelectorAll("[name='input[]']");
+      var_val[0].value = var_vals[div][0];
+      for (act_var of data.var_type[var_val[div]]){
+        if (act_var != var_vals[div][0]){
+          let button = div_elem.querySelector("button");
+
+
+        } 
+      }
+      let all_inpts = div_elem.querySelectorAll("[name='input[]']")
+      for (input=0; input<all_inpts.length;input++){
+        if (all_inpts[input] == ''){
+          all_inpts[input].value = var_type[div][input];
+        }
+      }
+
+
+    }
+  
+    
+
+   }
+
+
+}

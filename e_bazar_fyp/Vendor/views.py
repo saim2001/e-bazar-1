@@ -11,6 +11,7 @@ from . import utils
 from . import azureCon
 import uuid
 import datetime
+from json import dumps
 
 print("hi")
 class vendorRegister:
@@ -157,7 +158,6 @@ class vendorRegister:
 
     def logout(self,request):
         del request.session["Vendor_Db"]
-        print("yes")
         return redirect("Vendor:renDashbrd")
     def renWallet(self,request):
         return render(request, 'Seller_wallet/Wallet.html')
@@ -222,7 +222,8 @@ class Product:
 
     @session_check
     def renAddProduct(self,request,category1,category2,category3):
-        context={"category":"/"+category1+"/"+category2+"/"+category3}
+        context={"category":"/"+category1+"/"+category2+"/"+category3,
+                 "product":None}
         return render(request, "Products/Add_Products.html",context)
 
     @session_check
@@ -377,21 +378,69 @@ class Product:
         else:
             return "Some error"
 
+    @session_check
+    def edit_inv(self,request,product_id,var_id):
+        print("in")
+        if request.method == "POST":
+                print("in")
+                e_bazar_con = utils.connect_database("E-Bazar")
+                vendor_con = utils.connect_database(request.session["Vendor_Db"])
+                vendor_products = vendor_con["Products"]
+                e_bazar_products = e_bazar_con["Products"]
+                if vendor_products.find_one({"_id":ObjectId(product_id)})["isVariation"] == "yes":
+                    print("in1")
+                    vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"variations.{}.units".format(var_id):request.POST.get("units"),"variations.{}.price".format(var_id):request.POST.get("price")}})
+                    e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
+                        "$set": {"variations.{}.units".format(var_id): request.POST.get("units"),
+                                 "variations.{}.price".format(var_id): request.POST.get("price")}})
+                else:
+                    print("in2")
+                    vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"units":request.POST.get("units"),"price":request.POST.get("price")}})
+                    e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
+                        "$set": {"units": request.POST.get("units"), "price": request.POST.get("price")}})
+        return redirect("Vendor:reninvtry")
 
 
+
+
+
+    @session_check
     def renInvtry(self,request):
         products_lst = []
         database = utils.connect_database(request.session['Vendor_Db'])
         con = database["Products"]
         products = con.find({})
         for i in products:
-            i["id"] = i.pop("_id")
+            i["id"] = str(i.pop("_id"))
             products_lst.append(i)
+            if i["isVariation"] == "yes":
+                for j in i["variations"]:
+                    print((i["variations"][j]))
 
-        print(products_lst)
         return render(request,'Products/Inventory.html',context = {
-            "products" : products_lst
+            "products" : products_lst,
+            'range' : range(2)
         })
+
+    def del_produc(self,request,product_id):
+        if request.method == "POST":
+            database = utils.connect_database(request.session["Vendor_Db"])
+            con = database["Products"]
+
+
+    @session_check
+    def ren_upd_product(self,request,product_id):
+        database = utils.connect_database(request.session["Vendor_Db"])
+        con = database["Products"]
+        product = con.find_one({"_id":ObjectId(product_id)})
+        product["id"] = str(product["_id"])
+        product.pop("_id")
+        category = product["category"]
+        context = {'product':product}
+        return render(request,"Products/Add_Products.html",context=context)
+
+
+
 
 
 
@@ -399,12 +448,15 @@ class Order:
     def __init__(self):
         pass
 
+    @session_check
     def renOrders(self,request):
         return render(request,'Orders/Manage_orders.html')
 
+    @session_check
     def renOrder_dtls(self, request):
         return render(request, 'Orders/Order_details.html')
 
+    @session_check
     def renReturns(self,request):
         return render(request, 'Orders/Manage_returns.html')
 

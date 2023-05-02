@@ -30,7 +30,7 @@
         <tr>
           <td><label >Category:</label></td>
           <td>
-            <input type="text" name="category" value="{{category}}" readonly>
+            <input  id="cat_name" type="text" name="category" value="{{category}}" readonly>
           </td>
         </tr>
         <tr>
@@ -86,12 +86,12 @@
       </div>
 
   <div class="variations var_custom">
-    <input type="checkbox" >
+    <input  id='ch_1' type="checkbox" >
     <input class="varValue" name="varname" type="text" maxlength="20" disabled>
       </div>
   
   <div class="variations var_custom">
-    <input type="checkbox" >
+    <input id="ch_2" type="checkbox" >
     <input class="varValue" name="varname" type="text" maxlength="20" disabled>
       </div> 
 
@@ -391,8 +391,12 @@
 <link rel="stylesheet" href="{% static 'css/add_product.css' %}">
 
 <script type="text/javascript" src="{% static 'js/add_product.js' %}"></script>
-  
-    
+
+{% if product %}
+<!--  {{ product|json_script }}-->
+        {{ product|json_script:"my-data" }}
+
+    {% endif %}
     
 {% endblock %}
 </body>

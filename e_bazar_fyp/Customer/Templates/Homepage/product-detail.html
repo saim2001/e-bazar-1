@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Detail page</title>
+    <link rel="stylesheet" href="{% static 'css/customer_style.css' %}">
+    <script src="https://kit.fontawesome.com/7fd239ed36.js" crossorigin="anonymous"></script>
+
+
+    <script>
+      var product_js = JSON.parse('{{ product_js|escapejs }}');
+      if (product_js=="none"){
+        console.log("no var")
+      }
+      else{
+        var varList= [];
+        var var_type= product_js['var_type']
+        for (const [key, value] of Object.entries(var_type)){
+          varList.push(key)
+        }
+
+
+
+      }
+
+      function changeVarAtt(){
+        var selectlst= [];
+        const selectDropDown = document.getElementsByClassName("varDropDown");
+        for (let i=0; i<selectDropDown.length ;i++){
+          selectlst.push(selectDropDown[i].value)
+        }
+        console.log(selectlst)
+        console.log(varList[0])
+        console.log(product_js["variations"])
+
+        for (const [key, value] of Object.entries(product_js["variations"])){
+
+          if ( varList.length>1 && selectlst.includes(value[varList[0]]) &&  selectlst.includes(value[varList[1]])){
+            //console.log(key)
+            const price = document.getElementById("price");
+            console.log("price",value["price"])
+            price.textContent= "PKR "+value["price"];
+            var cartVarId = document.getElementById("cart");
+            cartVarId.value = product_js["id"]+"+"+ key;
+          }
+          else if ( varList.length==1 && selectlst.includes(value[varList[0]])){
+            const price = document.getElementById("price");
+            console.log("price",value["price"])
+            price.textContent= "PKR "+value["price"];
+            var cartVarId = document.getElementById("cart");
+            cartVarId.value = product_js["id"]+"+"+ key;
+          }
+        }
+      
+      }
+
+  </script>
+  </head>
+  <body>
+
+<section id="header">
+
+    <a href="#"><img src="{% static 'img/logo_black.svg' %}" class="logo" alt="" width="100" height="100"></a>
+    <div>
+        <ul id="navbar">
+            <li><a href="index.html">Home</a></li>
+            <li><a class="active" href="shop.html">Shop</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="{% url 'Customer:cart' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        </ul>
+    </div>
+
+</section>
+
+<form action="{% url 'Customer:cart' %}" method="post">
+  {% csrf_token %}
+<section id="product-details" class="section-p1">
+    <div class="single-product-img">
+        <img src="{{product.images.0}}" width="500" height="500" id="mainimg">
+    <div  class="small-img-group">
+      {% for img in product.images %}
+        <div class="small-img-col">
+            <img src="{{img}}" class="small-img" width="200" height="200">
+        </div>
+      {% endfor %}
+
+    </div>
+</div>
+    <div class="single-product-details">
+        <h6>{{product.category}}</h6>
+        <h4>{{product.name}}</h4>
+        <h2 id="price">PKR {{product.price}}</h2>
+        {% for varname,varlist in product.var_type.items %}
+        <div id="variationsSelect">
+          <span>Select {{varname}}</span>
+          <select class="varDropDown" name="varSelected" onchange="changeVarAtt()">
+            {% for v in varlist %}
+              <option value="{{v}}">{{v}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        {% endfor %}
+
+
+        <input type="number" name="units" value="1">
+        <button class="normal-button" id="cart" name="cart" value="{{product.id}}+{{product.varid}}" >Add to cart</button>
+        <h4>Product details</h4>
+        <span>{{product.description}}</span>
+    </div>
+</section>
+</form>
+
+
+<section id="featured-products" class="section-p1">
+    <h2>Featured Products</h2>
+    <p>Summer collection Latest design available</p>
+    <div class="fe-pro-cont">
+      <div class="fe-product">
+        <img src="img/products/n1.jpg">
+        <div class="des">
+        <span>adidas</span>
+        <h5>Cartoon astronut T-Shirts</h5>
+        <div class="reviews">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <h4>$50</h4>
+        </div>
+        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+      <div class="fe-product">
+        <img src="img/products/n2.jpg">
+        <div class="des">
+        <span>adidas</span>
+        <h5>Cartoon astronut T-Shirts</h5>
+        <div class="reviews">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <h4>$50</h4>
+        </div>
+        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+      <div class="fe-product">
+        <img src="img/products/n3.jpg">
+        <div class="des">
+        <span>adidas</span>
+        <h5>Cartoon astronut T-Shirts</h5>
+        <div class="reviews">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <h4>$50</h4>
+        </div>
+        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+      <div class="fe-product">
+        <img src="img/products/n4.jpg">
+        <div class="des">
+        <span>adidas</span>
+        <h5>Cartoon astronut T-Shirts</h5>
+        <div class="reviews">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <h4>$50</h4>
+        </div>
+        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+      
+    </div>
+  </section>
+
+<footer class="section-p1">
+  <div class="col">
+    <img src="img/logo.png" class="logo" width="100" height="100">
+    <h4>Contact</h4>
+    <p><strong>Address:</strong> Block 10, Gulistan-e-Jauhar, Karachi</p>
+    <p><strong>Phone:</strong> +92 3173452453, +92 3173453463</p>
+    <p><strong>Hours:</strong> 10:00 - 24:00, Mon-Sat </p>
+    <div class="follow">
+      <h4>Follow us</h4>
+      <div class="social-icons">
+        <i class="fab fa-facebook-f"></i>
+        <i class="fab fa-twitter"></i>
+        <i class="fab fa-instagram"></i>
+        <i class="fab fa-pinterest-p"></i>
+        <i class="fab fa-youtube"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <h4>About</h4>
+    <a href="#">About us</a>
+    <a href="#">Delivery information</a>
+    <a href="#">Privacy policy</a>
+    <a href="#">Terms and conditions</a>
+    <a href="#">Contact us</a>
+  </div>
+  <div class="col">
+    <h4>About</h4>
+    <a href="#">Sign in</a>
+    <a href="#">View cart</a>
+    <a href="#">My wishlist</a>
+    <a href="#">Track my order</a>
+    <a href="#">Help</a>
+  </div>
+  <div class="col install">
+    <h4>Intall app</h4>
+    <p>From app store or google play</p>
+    <div class="row">
+      <img src="img/pay/app.jpg">
+      <img src="img/pay/play.jpg">
+    </div>
+    <p>Secure payment gateways</p>
+    <img src="img/pay/pay.png">
+  </div>
+  <div class="copyright">
+    <p>© 2023, Maaz and saim - HTML CSS Javascript</p>
+  </div>
+</footer>
+
+<script>
+
+    var mainimg= document.getElementById("mainimg");
+    var smallimg= document.getElementsByClassName("small-img");
+
+    for (let i=0; i<5;i++){
+    smallimg[i].onclick= function(){
+        mainimg.src= smallimg[i].src;
+    }}
+</script>
+
+
+	<script src="index.js"></script>
+  </body>
+</html>

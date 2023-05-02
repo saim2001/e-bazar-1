@@ -4,25 +4,36 @@ from bson.objectid import ObjectId
 from django.http import HttpResponse
 from bson.objectid import ObjectId
 from datetime import datetime
+import json
 class Customer:
     def __init__(self):
         pass
 
+    def getRating(self,reviews):
+        reviews_count = reviews["count"]
+        if int(reviews_count["rate"]) == 0:
+            rat = ['dark'] * 5
+            return rat
+        else:
+            rating = int(reviews_count["rate"]) / int(reviews_count["length"])
+            rating_lst = []
+            for i in range(1, 6):
+                if i <= rating:
+                    rating_lst.append("shine")
+                else:
+                    rating_lst.append("dark")
+
+            return rating_lst
     def renHomePage(self,request):
-        # database_list=utils.getAllVendors()
         all_products_lst =[]
-        # for i in database_list:
-        #     con=utils.connect_database(i,'Products')
-        #     products=con.find({'Base_product': 'null'})
-        #     for j in products:
-        #         j['id'] = j.pop('_id')
-        #         j['vendor_id']= i
-        #         all_products.append(j)
         products = utils.connect_database("E-Bazar","Products")
         all_products = products.find({})
 
         for i in all_products:
-            temp={"name":i["name"],"id":str(i["_id"])}
+            name= i["name"]
+
+            name= name[:26] + "..." if len(name) > 26 else name
+            temp={"name":name,"id":str(i["_id"])}
             if i["isVariation"]=="yes":
                 variations= i["variations"]
                 for key,dic in variations.items():
@@ -33,64 +44,58 @@ class Customer:
             img= i["images"]
             temp["image"]= img[0]
             reviews= i["reviews"]
-            reviews_count= reviews["count"]
-            if int(reviews_count["rate"])==0:
-                temp["rating"] = ['dark'] * 5
-            else:
-                rating = int(reviews_count["rate"])/int(reviews_count["length"])
-                rating_lst=[]
-                for i in range(1,6):
-                    if i<= rating:
-                        rating_lst.append("shine")
-                    else:
-                        rating_lst.append("dark")
-
-                temp["rating"] = rating_lst
-
-
+            temp["rating"] = self.getRating(reviews)
             all_products_lst.append(temp)
         print(all_products_lst)
         context={
             'products': all_products_lst
         }
 
-        return render(request,"Homepage/Homepage.html",context)
+        return render(request,"Homepage/index.html",context)
 
 
     def productdetail(self,request,product_id):
-        # database_list = utils.getAllVendors()
-        # variation = None
-        # variation_values = {}
-        # for i in database_list:
-        #     con = utils.connect_database(i, 'Products')
-        #     products = con.find({'_id': ObjectId(product_id)})
-        #     for k in products:
-        #         k['id'] = k.pop('_id')
-        #         product = k
-        #     if product['Base_product'] == 'null':
-        #         if product['Variation'] == True:
-        #             print('in')
-        #
-        #             variations = con.find({'Base_product': ObjectId(product_id)})
-        #             for j in variations:
-        #                 j['id'] = j.pop('_id')
-        #                 variation = j
-        #                 for var in product['Variation_type']:
-        #                     variation_values[var] = j[var]
-        #
-        # context = {'Product_details': product,
-        #            'Variations': variation,
-        #            'Caution': 'Note: ' + product["Caution_warning"],
-        #            'var_values': variation_values,
-        #            'range': range(1, int(product["Quantity"]) + 1)}
         database = utils.connect_database("E-Bazar","Products")
         product = database.find_one({'_id':ObjectId(product_id) })
-        for i in product:
-            print(i)
+        product['id'] = product.pop('_id')
+        producthtml = dict(product)
+        del producthtml["reviews"]
+        if product["isVariation"] == "yes":
+            del producthtml["variations"]
+            variations = product["variations"]
+            for key, dic in variations.items():
+                if "mainpage" in dic.keys():
+                    producthtml["price"] = dic["price"]
+                    producthtml["varid"]= key
+                    producthtml["units"]=dic["units"]
+                    producthtml["condition"] = dic["condition"]
+                    vartypeDic= dict(producthtml["var_type"])
+                    for var in dic.keys():
+                        if var in vartypeDic.keys():
+                            indexOfVar = vartypeDic[var].index(dic[var])
+                            vartypeDic[var].insert(0, vartypeDic[var].pop(indexOfVar))
+                    producthtml["var_type"]= vartypeDic
+
+
+            product_js = dict(product)
+            product_js['id'] = str(product_js['id'])
+            del product_js["CreatedDateTime"]
+            product_js = json.dumps(product_js)
+        else:
+            #producthtml["price"] = product["price"]
+            product_js= "none"
+            product_js = json.dumps(product_js)
+
+        reviews = product["reviews"]
+        producthtml["rating"] = self.getRating(reviews)
+
+
+
         context = {
-            'product' : product
+            'product_js' : product_js,
+            'product':producthtml
         }
-        return render(request, 'Homepage/product_detail_1.html', context)
+        return render(request, 'Homepage/product-detail.html', context)
 
     def string_nested_list_to_list(self,string_cart):
         string_cart = string_cart[2:-2]
@@ -105,8 +110,13 @@ class Customer:
 
     def add_to_cart(self,request):
         if request.method=='POST':
-            quantity= request.POST['quantity']
-            print(quantity)
+            quantity= request.POST['units']
+            id= request.POST["cart"]
+            idLst= id.split("+")
+            productId= idLst[0]
+            varId= idLst[1]
+            print(productId,varId,quantity)
+            #return HttpResponse(productId)
             string_cart = request.COOKIES.get('cart')
 
             if string_cart==None:
@@ -116,7 +126,7 @@ class Customer:
 
 
             # flag=False
-            productid = request.POST['addtocart']
+            # productid = request.POST['addtocart']
             # for item in cart_list:
             #     if productid == item[0]:
             #         untis= int(item[1])
@@ -124,38 +134,54 @@ class Customer:
             #         item[1]= untis
             #         flag=True
             # if flag==False:
-            cart_list.append([productid,quantity])
+            cart_list.append([productId,quantity,varId])
 
-            rend= redirect('productdetails',product_id=productid)
+            rend= redirect('/customer/detail/'+productId)
             seconds= 30*60
             rend.set_cookie('cart',cart_list,max_age=seconds)
             return rend
         else:
             string_cart = request.COOKIES.get('cart')
-            print(string_cart)
+            #print(string_cart,"string cart")
             if string_cart==None:
                 cart_list='No items in cart'
-                return render(request, 'Homepage/cart.html', {'empty':cart_list})
+                print(cart_list,"cart list")
+                return HttpResponse(string_cart)
+                #return render(request, 'Homepage/cart.html', {'empty':cart_list})
+
+
             else:
+                cartItemLst=[]
                 cart_list= self.string_nested_list_to_list(string_cart)
-                print(cart_list)
-                cart_contextlist=[]
-                databaseName = 'vendor23423525252'
-                con = utils.connect_database(databaseName, 'Products')
-                total_amount= 0
-                for product in cart_list:
-                    productid= ObjectId(product[0])
-                    product_attributes = con.find({'_id': productid})
-                    for i in product_attributes:
-                        product_attributes=i
-                    product_attributes['units']=product[1]
-                    price= int(product_attributes['Price'])
-                    sub_total= int(product_attributes['units'])*price
-                    total_amount+=sub_total
-                    product_attributes['subtotal']=sub_total
-                    cart_contextlist.append(product_attributes)
-                    print(cart_contextlist)
-                return render(request,'Homepage/cart.html',{'Products':cart_contextlist,'total_amount':total_amount })
+                cart_list = [[item.strip() for item in inner_list] for inner_list in cart_list]
+                print(cart_list,"cart list")
+                database = utils.connect_database("E-Bazar", "Products")
+                for item in cart_list:
+                    product = database.find_one({'_id': ObjectId(item[0])})
+                    product['id'] = product.pop('_id')
+                    if "variations" in product.keys():
+                        var= product["variations"]
+                        print(var)
+                        varByid =var[str(item[2])]
+                        product["price"]= varByid["price"]
+                        del product["variations"]
+                    product["quantity"] = item[1]
+                    cartItemLst.append(product)
+
+                return render(request,"Homepage/cart.html",context={"products":cartItemLst})
+
+            #     cart_contextlist=[]
+            #     con = utils.connect_database("E-Bazar", "Products")
+            #     for product in cart_list:
+            #         productid= ObjectId(product[0])
+            #         product_attributes = con.find({'_id': productid})
+            #         for i in product_attributes:
+            #             product_attributes=i
+            #         product_attributes['units']=product[1]
+            #         price= int(product_attributes['Price'])
+            #         cart_contextlist.append(product_attributes)
+            #         print(cart_contextlist)
+            #     return render(request,'Homepage/cart.html',{'Products':cart_contextlist,'total_amount':total_amount })
 
     def register(self,request):
         if request.method == 'POST':

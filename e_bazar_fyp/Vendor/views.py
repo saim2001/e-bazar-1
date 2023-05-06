@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.urls import reverse
@@ -159,10 +160,12 @@ class vendorRegister:
         del request.session["Vendor_Db"]
         return redirect("Vendor:renDashbrd")
     def renWallet(self,request):
-        return render(request, 'Seller_wallet/Wallet.html')
+        info = self.getUser(request)
+        return render(request, 'Seller_wallet/Wallet.html',context=info)
 
     def renPayout(self,request):
-        return render(request, 'Seller_wallet/Payout.html')
+        info = self.getUser(request)
+        return render(request, 'Seller_wallet/Payout.html',context=info)
 class Category:
     connection_string = "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongodb.net/test"
     client = MongoClient(connection_string)
@@ -185,44 +188,54 @@ class Category:
 
 class Product:
     category=Category()
+    vendor = vendorRegister()
     def __init__(self):
         self.context={}
         self.product_category=None
 
     @session_check
     def renselectCat(self,request):
-        return render(request, "Products/Search_Category.html",)
+        info = self.vendor.getUser(request)
+        return render(request, "Products/Search_Category.html",context=info)
 
     @session_check
     def selectCat(self,request):
+        info = self.vendor.getUser(request)
         main_categories=self.category.fetchAll(request)
         context={}
         context['maincats']=main_categories
+        context['user_info'] = info
         return render(request,"Products/Search_Category_1.html",context)
 
     @session_check
     def selectSubCat(self,request,category1):
+        info = self.vendor.getUser(request)
         context={}
         category= "/"+category1
         sub_categories=self.category.fetchChild(request,category)
         context['subcats']=sub_categories
         context["category1"]= category1
+        context['user_info'] = info
         return render(request,"Products/Search_Category_2.html",context)
 
     @session_check
     def selectLeafCat(self,request,category1,category2):
+        info = self.vendor.getUser(request)
         context={}
         category= "/"+category1+"/"+category2
         leaf_categories=self.category.fetchChild(request,category)
         context['leafcats']=leaf_categories
         context["category1"]= category1
         context["category2"]= category2
+        context['user_info'] = info
         return render(request,"Products/Search_Category_3.html",context)
 
     @session_check
     def renAddProduct(self,request,category1,category2,category3):
         context={"category":"/"+category1+"/"+category2+"/"+category3,
                  "product":None}
+        info = self.vendor.getUser(request)
+        context['user_info'] = info
         return render(request, "Products/Add_Products.html",context)
 
     @session_check
@@ -382,21 +395,26 @@ class Product:
         print("in")
         if request.method == "POST":
                 print("in")
-                e_bazar_con = utils.connect_database("E-Bazar")
-                vendor_con = utils.connect_database(request.session["Vendor_Db"])
-                vendor_products = vendor_con["Products"]
-                e_bazar_products = e_bazar_con["Products"]
-                if vendor_products.find_one({"_id":ObjectId(product_id)})["isVariation"] == "yes":
-                    print("in1")
-                    vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"variations.{}.units".format(var_id):request.POST.get("units"),"variations.{}.price".format(var_id):request.POST.get("price")}})
-                    e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
-                        "$set": {"variations.{}.units".format(var_id): request.POST.get("units"),
-                                 "variations.{}.price".format(var_id): request.POST.get("price")}})
-                else:
-                    print("in2")
-                    vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"units":request.POST.get("units"),"price":request.POST.get("price")}})
-                    e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
-                        "$set": {"units": request.POST.get("units"), "price": request.POST.get("price")}})
+                try:
+                    e_bazar_con = utils.connect_database("E-Bazar")
+                    vendor_con = utils.connect_database(request.session["Vendor_Db"])
+                    vendor_products = vendor_con["Products"]
+                    e_bazar_products = e_bazar_con["Products"]
+                    if vendor_products.find_one({"_id":ObjectId(product_id)})["isVariation"] == "yes":
+                        print("in1")
+                        vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"variations.{}.units".format(var_id):request.POST.get("units"),"variations.{}.price".format(var_id):request.POST.get("price")}})
+                        e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
+                            "$set": {"variations.{}.units".format(var_id): request.POST.get("units"),
+                                     "variations.{}.price".format(var_id): request.POST.get("price")}})
+                    else:
+                        print("in2")
+                        vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"units":request.POST.get("units"),"price":request.POST.get("price")}})
+                        e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
+                            "$set": {"units": request.POST.get("units"), "price": request.POST.get("price")}})
+                    messages.success(request, "Product updated successfully")
+                except:
+                    messages.error(request,"Product update failed")
+
         return redirect("Vendor:reninvtry")
 
 
@@ -415,10 +433,12 @@ class Product:
             if i["isVariation"] == "yes":
                 for j in i["variations"]:
                     print((i["variations"][j]))
+        info = self.vendor.getUser(request)
 
         return render(request,'Products/Inventory.html',context = {
             "products" : products_lst,
-            'range' : range(2)
+            'range' : range(2),
+            'user_info' : info
         })
 
     def del_produc(self,request,product_id):
@@ -436,7 +456,158 @@ class Product:
         product.pop("_id")
         category = product["category"]
         context = {'product':product}
+        info = self.vendor.getUser(request)
+        context['user_info'] = info
         return render(request,"Products/Add_Products.html",context=context)
+    @session_check
+    def update(self,request,product_id):
+        if request.method == 'POST':
+            productDict={}
+            dateCreated= datetime.datetime.now()
+            isb2b = request.POST.get("B2Boptions")
+            isvar= request.POST.get("options")
+            vartype= request.POST.getlist("varname")
+            category= request.POST.get("category")
+            productname = request.POST.get("productname")
+            manufacturer = request.POST.get("manufacturer")
+            length = request.POST.get("length")
+            width = request.POST.get("width")
+            height = request.POST.get("height")
+            weight = request.POST.get("weight")
+            description = request.POST.get("descriptionPara")
+            brand = request.POST.get("brand")
+            expireDate = request.POST.get("expireDate")
+            productDict["points"] = request.POST.getlist("points")
+
+
+            if brand:
+                productDict["brand"]= brand
+            if expireDate:
+                productDict["expireDate"] = expireDate
+
+
+            productDict.update({"name":productname,"category":category,"manufacturer": manufacturer,"length":length,"width":width,"height":height
+                ,"weight":weight,"description":description,"isVariation":isvar,"isb2b":isb2b,"CreatedDateTime":dateCreated})
+
+
+            if len(vartype)==0:
+                sku= request.POST.get("skuSingle")
+                units = request.POST.get("unitsSingle")
+                price = request.POST.get("priceSingle")
+                condition = request.POST.get("conditionSingle")
+
+                batches = {}
+                if isb2b =="yes":
+
+                    for i in range(1,4):
+                        batchUnits = request.POST.get("batchUnits"+str(i))
+                        batchPrice = request.POST.get("batchPrice"+str(i))
+                        if int(batchUnits)!=0 and int(batchPrice)!=0:
+                            batches[str(uuid.uuid4())]={"MinUnits":batchUnits,"Price":batchPrice}
+
+                images = request.FILES.getlist('imageSingle')
+                imagesList=[]
+                for img in images:
+                    if img.content_type.startswith('image/'):
+                        img_url = azureCon.uploadimg(img)
+                        imagesList.append(img_url)
+                productDict.update({'sku':sku , 'units':units, 'price':price,'condition':condition,'images':imagesList})
+                if len(batches) != 0:
+                    productDict["batches"]=batches
+                print(productDict)
+                #return redirect("Vendor:reninvtry")
+
+            else:
+                variations={}
+                sku= request.POST.getlist("sku")
+                units = request.POST.getlist("units")
+                price = request.POST.getlist("price")
+                condition = request.POST.getlist("condition")
+                images = request.FILES.getlist('images')
+                imagesList=[]
+                for img in images:
+                    if img.content_type.startswith('image/'):
+                        img_url = azureCon.uploadimg(img)
+                        imagesList.append(img_url)
+                productDict["images"]=imagesList
+                mainpage= request.POST.get("mainpage")
+                if isb2b == "yes":
+                    batch1MinUnit = request.POST.getlist("batch1MinUnit")
+                    batch1price = request.POST.getlist("batch1price")
+                    batch2MinUnit = request.POST.getlist("batch2MinUnit")
+                    batch2price = request.POST.getlist("batch2price")
+                    batch3MinUnit = request.POST.getlist("batch3MinUnit")
+                    batch3price = request.POST.getlist("batch3price")
+
+                if len(vartype)==1:
+                    varatt = request.POST.getlist("var")
+                    for index in range(0,len(varatt)):
+                        tempVar= {'vartype':varatt[index] ,'sku':sku[index] , 'units':units[index], 'price':price[index],'condition':condition[index]}
+                        if mainpage == varatt[index]:
+                            tempVar['mainpage']=True
+
+
+                        if isb2b == "yes":
+                            batches = {}
+                            if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
+                            if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
+                            if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
+
+                            if len(batches)!=0:
+                                tempVar["batches"]=batches
+                        variations[str(uuid.uuid4())]=tempVar
+
+                else:
+                    mainpage= mainpage.split("-")
+                    varatt1 = request.POST.getlist("var1")
+                    varatt2 = request.POST.getlist("var2")
+                    for index in range(0, len(varatt1)):
+                        tempVar= {'vartype1': varatt1[index],'vartype2': varatt2[index], 'sku': sku[index],
+                             'units': units[index], 'price': price[index], 'condition': condition[index],
+                             }
+
+                        if mainpage[0] == varatt1[index] and mainpage[1]== varatt2[index]:
+                            tempVar['mainpage']=True
+
+                        if isb2b == "yes":
+                            batches = {}
+                            if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
+                            if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
+                            if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
+                                batches[str(uuid.uuid4())]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
+
+                            if len(batches)!=0:
+                                tempVar["batches"]=batches
+                        variations[str(uuid.uuid4())]=tempVar
+
+
+                productDict['variations']=variations
+
+            reviews= {}
+            reviews["reviewDetail"]={}
+            reviews["count"] = {"rate":0,"length":0}
+            productDict["reviews"]=reviews
+            productDict['status']="enabled"
+            vendorId= request.session.get('Vendor_Db')
+            print(vendorId,"vendor")
+            vendorDatabase= utils.connect_database(vendorId)
+            ebazarDatabase= utils.connect_database("E-Bazar")
+            allProducts= ebazarDatabase["Products"]
+            vendorProducts= vendorDatabase["Products"]
+            productDict["vendorId"]= vendorId
+            vendorProductupdate= vendorProducts.update_one({"_id":ObjectId(product_id)},{"$set":productDict})
+            allProducts.update_one({"_id":ObjectId(product_id)},{"$set":productDict})
+            return redirect("Vendor:reninvtry")
+        else:
+            return "some error"
+
+
+
 
 
 
@@ -444,20 +615,30 @@ class Product:
 
 
 class Order:
+    vendor = vendorRegister()
     def __init__(self):
         pass
 
     @session_check
     def renOrders(self,request):
-        return render(request,'Orders/Manage_orders.html')
+        context= {}
+        info = self.vendor.getUser(request)
+        context['user_info'] = info
+        return render(request,'Orders/Manage_orders.html',context)
 
     @session_check
     def renOrder_dtls(self, request):
-        return render(request, 'Orders/Order_details.html')
+        context = {}
+        info = self.vendor.getUser(request)
+        context['user_info'] = info
+        return render(request, 'Orders/Order_details.html',context)
 
     @session_check
     def renReturns(self,request):
-        return render(request, 'Orders/Manage_returns.html')
+        context = {}
+        info = self.vendor.getUser(request)
+        context['user_info'] = info
+        return render(request, 'Orders/Manage_returns.html',context)
 
 
 

@@ -495,68 +495,59 @@ window.onload = function () {
    const cat_name = document.getElementById("cat_name");
    cat_name.readOnly = false;
    cat_name.value = data.category;
+   
    if (data.isVariation == "yes"){
-    document.getElementById('var_yes').click();
-   }
-   const var_vals = Object.values(data.var_type);
+    const var_vals = Object.values(data.var_type);
    const var_type = Object.keys(data.var_type);
-  //  console.log(var_type,length(var_type))
-  //  console.log(var_vals,length(var_vals))
-   for (const var_type in data.var_type ){
-    if (var_type == 'size'){
-      document.getElementById('var_size').checked = true;
-    }
-    else if (var_type == 'color'){
-      document.getElementById("var_color").checked = true;
-    }
-    else if (var_type == 'style'){
-      document.getElementById("var_style").checked = true;
-    }
-    else {
-      if (document.getElementById("ch_1").checked == false && document.getElementById('ch_2') == false){
-        let var_checkbox_1 = document.getElementById("ch_1");
-        var_checkbox_1.checked = true;
-        var_checkbox_1.nextSibling.value = var_type;
+    document.getElementById('var_yes').click();
+    for (const var_type  in data.var_type ){
+      if (var_type == 'size'){
+        document.getElementById('var_size').checked = true;
       }
-      else if (document.getElementById("ch_1").checked == true){
-        let var_checkbox_2 = document.getElementById("ch_2");
-        var_checkbox_2.checked = true;
-        var_checkbox_2.nextSibling.value = var_type;
+      else if (var_type == 'color'){
+        document.getElementById("var_color").checked = true;
       }
-    }
-
-   }
-   if (data.isb2b == 'yes'){
-    document.getElementById('b2b_yes').click();
-   }
-   document.getElementById("productname").value = data.name;
-   if (data.brand){
-    document.getElementById('brand').value = data.brand;
-   }
-   else{
-    document.getElementById("isbrand").checked = true;
-   }
-   const lst = document.querySelector('#variations').querySelectorAll("#autoCont");
-   console.log(lst);
-   for (var_cont of lst){
-    console.log(var_cont.querySelectorAll('.contAutoInput.js_create'));
-   }
+      else if (var_type == 'style'){
+        document.getElementById("var_style").checked = true;
+      }
+      else {
+        if (document.getElementById("ch_1").checked == false && document.getElementById('ch_2') == false){
+          let var_checkbox_1 = document.getElementById("ch_1");
+          var_checkbox_1.checked = true;
+          var_checkbox_1.nextSibling.value = var_type;
+        }
+        else if (document.getElementById("ch_1").checked == true){
+          let var_checkbox_2 = document.getElementById("ch_2");
+          var_checkbox_2.checked = true;
+          var_checkbox_2.nextSibling.value = var_type;
+        }
+      }
+  
+     }
+     document.getElementById("var_btn").click();
+     const var_lst = document.querySelectorAll('.contAutoInput.js_create');
+   console.log(var_lst)
    for ( div=0; div<var_type.length; div++){
-    let div_elem = lst[div]
+    let div_elem = var_lst[div]
     if (div_elem.firstChild.innerHTML == var_type[div] ){
       let var_val = div_elem.querySelectorAll("[name='input[]']");
-      var_val[0].value = var_vals[div][0];
-      for (act_var of data.var_type[var_val[div]]){
-        if (act_var != var_vals[div][0]){
+      var_val[0].value = var_vals[0][0];
+      console.log(var_val[div])
+      console.log(var_vals[div])
+      for (act_var of var_vals[div]){
+        console.log(act_var)
+        if (act_var != var_vals[0][0]){
           let button = div_elem.querySelector("button");
+          button.click();
 
 
         } 
       }
       let all_inpts = div_elem.querySelectorAll("[name='input[]']")
+      console.log(all_inpts)
       for (input=0; input<all_inpts.length;input++){
-        if (all_inpts[input] == ''){
-          all_inpts[input].value = var_type[div][input];
+        if (all_inpts[input].value == ''){
+          all_inpts[input].value = var_vals[div][input];
         }
       }
 
@@ -566,6 +557,93 @@ window.onload = function () {
     
 
    }
+   document.querySelector("[onclick='createVariations()']").click();
+   let var_table = document.querySelector('#varTable');
+   let tbody = var_table.querySelector('tbody');
+   let rows = tbody.querySelectorAll('.js_create');
+   console.log(rows.length);
+   let variations = Object.keys(data.variations);
+   let var_data = Object.values(data.variations);
+   for (i=0; i<rows.length; i++){
+    console.log(i)
+    console.log(rows[i])
+    let sku = rows[i].querySelector("[name = 'sku']");
+    sku.value = var_data[i]["sku"];
+    let units = rows[i].querySelector("[name = 'units']");
+    units.value = var_data[i]["units"];
+    let price = rows[i].querySelector("[name = 'price']");
+    price.value = var_data[i]["price"];
+    let condition =   rows[i].querySelector("[name = 'condition']");  
+    condition.value = var_data[i]["condition"];
+  }
+  let images = document.querySelectorAll("[name = 'images']");
+  let pro_images = data.images
+  let image_divs = document.querySelectorAll('[class = "input-group mb-3"]')
 
+  for (i=0; i<pro_images.length; i++){
+    let image = document.createElement('img');
+    image.setAttribute('src',pro_images[i])
+    image.height = 200;
+    image.width = 200;
+    image_divs[i].appendChild(image)
+
+
+  }
+   }
+   else{
+    document.querySelector('[name = "skuSingle"]').value = data.sku;
+    document.querySelector('#productname').value = data.name;
+    let images  = data.images;
+    let image_feild = document.querySelectorAll("[name = 'imageSingle']")
+    for (i=0; i<images.length; i++){
+      let image = document.createElement('img');
+      image.setAttribute('src',images[i])
+      image.height = 200;
+      image.width = 200;
+      image_feild[i].parentNode.appendChild(image)
+    }
+    document.querySelector('#unitsSingle').value = data.units;
+    document.querySelector('#priceSingle').value = data.price;
+    document.querySelector("[name = 'conditionSingle']").value = data.condition
+
+
+   }
+
+  //  console.log(var_type,length(var_type))
+  //  console.log(var_vals,length(var_vals))
+
+   if (data.isb2b == 'yes'){
+    document.getElementById('b2b_yes').click();
+    let batches = Object.values(data.batches);
+    for (i=0; i<batches.length; i++){
+      document.querySelector(`#batchUnits${i+1}`).value = batches[i]["MinUnits"];
+      document.querySelector(`#batchPrice${i+1}`).value = batches[i]["Price"];
+
+    }
+   }
+   document.getElementById("productname").value = data.name;
+   if (data.brand){
+    document.getElementById('brand').value = data.brand;
+   }
+   else{
+    document.getElementById("isbrand").checked = true;
+   } 
+   
+  document.querySelector("#manufacturer").value  = data.manufacturer;
+  if (data.expiry){
+    document.querySelector('expireDate').value = data.expiry;
+
+  }
+  document.querySelector("#length").value = data.length;
+  document.querySelector("#width").value = data.width;
+  document.querySelector("#height").value = data.height;
+  document.querySelector("#weight").value = data.weight;
+  document.querySelector("#descriptionPara").value = data.description;
+  let point = document.querySelectorAll("[name = 'points']");
+  let pro_points = data.points;
+  for (i=0; i<pro_points.length; i++){
+    point[i].value = pro_points[i];
+  }
+  
 
 }

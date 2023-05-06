@@ -30,6 +30,7 @@ urlpatterns = [
     path('logout/',vendor.logout,name='logout'),
     path('update/<str:product_id>/<str:var_id>/',product.edit_inv,name="edit_pr_am"),
     path('update/<str:product_id>/',product.edit_inv,{"var_id":None},name="edit_pr_am"),
-    path('ren_update/<str:product_id>/',product.ren_upd_product,name="ren_upd")
+    path('ren_update/<str:product_id>/',product.ren_upd_product,name="ren_upd"),
+    path('updateproduct/<str:product_id>/',product.update,name="update_product")
 
 ]

@@ -1,38 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Cart</title>
-</head>
-<body>
-{% if empty %}
-<h1>Your cart is empty</h1>
-{% else %}
-<form action='{% url "logIn" %}'>
-     {% csrf_token %}
-      <button type="submit">
-         Back to home </button>
-    </form>
+{% extends 'baseCus.html' %}
+{% load static %}
 
 
-    {% for product in Products %}
-<form >
-    <fieldset>
-    <label>Name: </label><label>{{product.name}}</label><br><br>
-    <label>Units buyed: </label><label>{{product.units}}</label><br><br>
-    <label>Per unit price: </label><label>{{product.Price}}</label><br><br>
-    <label>Sub total: </label><label>{{product.subtotal}}</label><br><br>
+    {% block title %}
+    Cart
+{% endblock %}
 
-    </fieldset>
-</form>
-{% endfor %}
-  <label>Total amount: </label><label>{{total_amount}}</label><br><br>
+{% block content %}
 
-    <form action="{% url 'order' %}">
-        <button type="submit" > Order</button>
-    </form>
+<section style="background-image: url('{% static 'img/b1.jpg' %}');" id="shop-header">
+  <h2>#BigDiscounts</h2>
+  <p>Use coupons and get upto 70% discount on all products</p>
 
-{% endif %}
+</section>
 
-</body>
-</html>
+<section id="cart" class="section-p1">
+    <table width="100%">
+        <thead>
+            <tr>
+                <td>Remove</td>
+                <td>Images</td>
+                <td>Product</td>
+                <td>Price</td>
+                <td>Available Units</td>
+                <td>Quantity</td>
+                <td>Subtotal</td>
+            </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+            <tr class="cartItems">
+                <td><i class="far fa-times-circle" id="removeItem{{ forloop.counter0 }}"></i></td>
+                <td><img src="{{product.images.0}}"></td>
+                <td>{{product.name}}</td>
+                <td class="price">{{product.price}}</td>
+                <td>{{product.units}}</td>
+                <td><input class="units" type="number" value="{{product.quantity}}" max="{{product.unitsava}}" oninput="calSubtot()"></td>
+                <td class="itemSubtotal">0</td>
+            </tr>
+            {% endfor %}
+            
+
+        </tbody>
+    </table>
+</section>
+
+<section id="cart-final" class="section-p1">
+    <div id="coupon">
+        <h3>Apply coupon</h3>
+        <div>
+            <input type="text" placeholder="Enter your coupon">
+            <button class= "normal-button" >Apply</button>
+        </div>
+    </div>
+        <div id="subtotal">
+            <h3>Cart totals</h3>
+            <table>
+                <tr>
+                    <td >Cart subtotal</td>
+                    <td class="subtotalCom"></td>
+
+                </tr>
+                <tr>
+                    <td>Shipping</td>
+                    <td>Free</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td class="subtotalCom"><strong></strong></td>
+                </tr>
+                
+            </table>
+            <button class= "normal-button" ><a style="text-decoration: none;color: white;" href="{% url 'Customer:order' %}" class="button">Proceed to checkout</a></button>
+        </div>
+    
+</section>
+<script>
+  var cart_js = JSON.parse('{{ cart_js|escapejs }}');
+  const cart= document.getElementsByClassName("cartItems");
+for (var i = 0; i < cart.length; i++ ){
+    var removeButton=document.getElementById("removeItem"+i);
+    removeButton.addEventListener('click', function(event) {
+    let item = event.target;
+    let itemId = item.id;
+    let idInt = itemId.substring(10);
+    var remove_cart_item=document.getElementById(itemId);
+    cart_js.splice(parseInt(idInt),1);
+    item.parentElement.parentElement.remove();
+    calSubtot();
+
+  })
+}
+calSubtot("start");
+function calSubtot(onstart="none"){
+  const varItems= document.getElementsByClassName("cartItems");
+for (let i=0; i<varItems.length;i++){  
+  price= varItems[i].querySelector(".price").innerHTML;
+  units= varItems[i].querySelector(".units").value;
+  cart_js[i][1]=parseInt(units);
+  itemSubtotal= varItems[i].querySelector(".itemSubtotal");
+  var sub= parseInt(price)* parseInt(units);
+  itemSubtotal.innerHTML= sub;
+  }
+  const subtotal=  document.getElementsByClassName("itemSubtotal");
+  var subtotalCom= 0;
+  for (let i=0; i<subtotal.length;i++){
+    sub= subtotal[i].innerHTML;
+    subtotalCom+=parseInt(sub);
+  }
+  const subTotDiv= document.getElementsByClassName("subtotalCom");
+  for (let i=0; i<subTotDiv.length;i++){
+    subTotDiv[i].innerHTML= subtotalCom
+  }
+  if (onstart=="none"){
+  updateCartCookies()
+}
+}
+
+
+function updateCartCookies(){
+  if (cart_js.length==0){
+    var cookieValue = "";
+  }
+  else{
+    var cookieValue = JSON.stringify(cart_js);
+  }
+const cookieName = 'cart';
+const url = "{% url 'Customer:cart' %}";
+const expirationDate = new Date(Date.now() + 100000); // expires in 10 min
+const cookieString = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/;`;
+document.cookie = cookieString;
+}
+
+</script>
+
+{% endblock %}

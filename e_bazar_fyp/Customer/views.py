@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from bson.objectid import ObjectId
 from datetime import datetime
 import json
+from django.http import JsonResponse
+import ast
 class Customer:
     def __init__(self):
         pass
@@ -46,7 +48,6 @@ class Customer:
             reviews= i["reviews"]
             temp["rating"] = self.getRating(reviews)
             all_products_lst.append(temp)
-        print(all_products_lst)
         context={
             'products': all_products_lst
         }
@@ -82,7 +83,6 @@ class Customer:
             del product_js["CreatedDateTime"]
             product_js = json.dumps(product_js)
         else:
-            #producthtml["price"] = product["price"]
             product_js= "none"
             product_js = json.dumps(product_js)
 
@@ -97,17 +97,6 @@ class Customer:
         }
         return render(request, 'Homepage/product-detail.html', context)
 
-    def string_nested_list_to_list(self,string_cart):
-        string_cart = string_cart[2:-2]
-        string_cart = string_cart.split('], [')
-        #print(string_cart)
-        cart_list = []
-        for item in string_cart:
-            item = item.replace("'", "")
-            item = item.split(",")
-            cart_list.append(item)
-        return cart_list
-
     def add_to_cart(self,request):
         if request.method=='POST':
             quantity= request.POST['units']
@@ -115,73 +104,65 @@ class Customer:
             idLst= id.split("+")
             productId= idLst[0]
             varId= idLst[1]
-            print(productId,varId,quantity)
-            #return HttpResponse(productId)
             string_cart = request.COOKIES.get('cart')
-
             if string_cart==None:
                 cart_list=[]
             else:
-                cart_list= self.string_nested_list_to_list(string_cart)
+                cart_list= ast.literal_eval(string_cart)
 
-
-            # flag=False
-            # productid = request.POST['addtocart']
-            # for item in cart_list:
-            #     if productid == item[0]:
-            #         untis= int(item[1])
-            #         untis+=1
-            #         item[1]= untis
-            #         flag=True
-            # if flag==False:
             cart_list.append([productId,quantity,varId])
 
             rend= redirect('/customer/detail/'+productId)
-            seconds= 30*60
+            seconds= 10*60
             rend.set_cookie('cart',cart_list,max_age=seconds)
             return rend
         else:
             string_cart = request.COOKIES.get('cart')
-            #print(string_cart,"string cart")
-            if string_cart==None:
-                cart_list='No items in cart'
-                print(cart_list,"cart list")
-                return HttpResponse(string_cart)
+            if string_cart is None or len(string_cart)==0:
+                return HttpResponse("no items in cart")
                 #return render(request, 'Homepage/cart.html', {'empty':cart_list})
 
 
             else:
                 cartItemLst=[]
-                cart_list= self.string_nested_list_to_list(string_cart)
-                cart_list = [[item.strip() for item in inner_list] for inner_list in cart_list]
-                print(cart_list,"cart list")
+                cart_list= ast.literal_eval(string_cart)
+                cart_js = json.dumps(cart_list)
                 database = utils.connect_database("E-Bazar", "Products")
                 for item in cart_list:
                     product = database.find_one({'_id': ObjectId(item[0])})
                     product['id'] = product.pop('_id')
+                    name =product['name']
+                    product['name'] = name[:40] + "..." if len(name) > 40 else name
                     if "variations" in product.keys():
                         var= product["variations"]
-                        print(var)
                         varByid =var[str(item[2])]
                         product["price"]= varByid["price"]
+                        product["units"]= varByid["units"]
                         del product["variations"]
                     product["quantity"] = item[1]
                     cartItemLst.append(product)
 
-                return render(request,"Homepage/cart.html",context={"products":cartItemLst})
 
-            #     cart_contextlist=[]
-            #     con = utils.connect_database("E-Bazar", "Products")
-            #     for product in cart_list:
-            #         productid= ObjectId(product[0])
-            #         product_attributes = con.find({'_id': productid})
-            #         for i in product_attributes:
-            #             product_attributes=i
-            #         product_attributes['units']=product[1]
-            #         price= int(product_attributes['Price'])
-            #         cart_contextlist.append(product_attributes)
-            #         print(cart_contextlist)
-            #     return render(request,'Homepage/cart.html',{'Products':cart_contextlist,'total_amount':total_amount })
+
+                return render(request,"Homepage/cart.html",context={"products":cartItemLst,"cart_js":cart_js})
+
+    def session_check(self,request):
+        if "Customer_verify" in request.session:
+            return request.session["Customer_verify"]
+    def login(self,request):
+        if self.session_check(request):
+            return redirect("Customer:home")
+        elif request.method == 'POST':
+            email = request.POST['email']
+            password = request.POST['password']
+            database = utils.connect_database("E-Bazar", "Customer")
+            customer= database.find_one({"email":email.strip(),"password":password.strip()})
+            if customer:
+                request.session["Customer_verify"] = str(customer['_id'])
+                return redirect("Customer:home")
+            else:
+                return render(request, 'register/signin.html',context={"error_message": "Your email or password is incorrect!"})
+        return render(request,"register/signin.html")
 
     def register(self,request):
         if request.method == 'POST':
@@ -193,16 +174,15 @@ class Customer:
 
 
             customer_database= utils.connect_database("E-Bazar","Customer")
-            customers_find= customer_database.find({"email":email})
+            customers_find= customer_database.find_one({"email":email})
 
 
-            if customers_find.count()==0:
-                customer_detail={'name':full_name,'email':email,'password':password,'phone':phone,'address':address}
+            if customers_find is None:
+                customer_detail={'name':full_name,'email':email,'password':password,'phone':phone,'address':address,"orders":[]}
                 customer_id= customer_database.insert_one(customer_detail)
                 customer_id= customer_id.inserted_id
-                rend= redirect('cart')
-                rend.set_cookie('customer_id', customer_id, max_age=120)
-                return rend
+                request.session["Customer_verify"] = str(customer_id)
+                return redirect("Customer:home")
             else:
                 return render(request, 'register/register.html', {
                     'error_message': "Email is already taken, use different email !",
@@ -211,51 +191,112 @@ class Customer:
         return render(request, 'register/register.html')
 
     def order(self,request):
-        customer_id=request.COOKIES.get('customer_id')
-        print(customer_id)
+        customer_id= self.session_check(request)
         if customer_id is None:
-            return render(request,'register/register.html')
+            return redirect("Customer:login")
         else:
-
-            customer_id= customer_id
-            order_database= utils.connect_database("E-Bazar","Orders")
-
             string_cart = request.COOKIES.get('cart')
             if string_cart==None:
                 cart_list='No items in cart'
                 return render(request, 'Homepage/cart.html', {'empty':cart_list})
             else:
-                cart_list= self.string_nested_list_to_list(string_cart)
-                cart_contextlist=[]
-                order_dict={}
-                order_dict['Products']=[]
-                databaseName = 'vendor23423525252'
-                con = utils.connect_database(databaseName, 'Products')
-                total_amount= 0
+                cart_list= ast.literal_eval(string_cart)
+                order={}
+                con = utils.connect_database("E-Bazar", 'Products')
+                orderProducts=[]
+                vendorOrder=[]
+                totalAmount= 0
+
                 for product in cart_list:
-                    productid= ObjectId(product[0])
-                    product_attributes = con.find({'_id': productid})
-                    for i in product_attributes:
-                        product_attributes=i
-                    units= int(product[1])
-                    product_attributes['units']=units
-                    price= int(product_attributes['Price'])
-                    sub_total= int(product_attributes['units'])*price
-                    total_amount+=sub_total
-                    productid = str(productid)
-                    order_dict['Products'].append({productid:units,'subtotal':sub_total})
+                    subTotal=0
+                    tempOrder={}
+                    tempVendorOrder={}
+                    findProduct= con.find_one({'_id':ObjectId(product[0])})
+                    if findProduct:
+                        vendorId=findProduct["vendorId"]
+                        if findProduct["isVariation"]=="yes":
+                            getVariation= findProduct["variations"]
+                            if product[2] in getVariation.keys():
+                                unitsava= int(getVariation[product[2]]['units'])
+                                if unitsava>= int(product[1]):
+                                    price= getVariation[product[2]]['price']
+                                    subTotal+= int(price)*int(product[1])
+                                    tempVendorOrder.update({"productId": findProduct['_id'],'varId':product[2],'units': product[1],'vendorId':vendorId,'updUnits':int(unitsava)-int(product[1]),'subtotal':subTotal})
+                                    vendorOrder.append(tempVendorOrder)
+                                    tempOrder.update(
+                                        {"productId": findProduct['_id'],'varId':product[2],'units': product[1], 'vendorId': vendorId,'subtotal':subTotal})
+                                else:
+                                    return HttpResponse("Available units are less than required")
+                            else:
+                                return HttpResponse("No such variation available")
+                        else:
+                            unitsava= int(findProduct["units"])
+                            if unitsava >= int(product[1]):
+                                price = findProduct['price']
+                                subTotal += int(price) * int(product[1])
+                                tempVendorOrder.update(
+                                    {"productId": findProduct['_id'], 'units': product[1],'vendorId':vendorId,'updUnits':int(unitsava)-int(product[1]),'subtotal':subTotal})
+                                vendorOrder.append(tempVendorOrder)
+                                tempOrder.update({"productId":findProduct['_id'],'units':product[1],'vendorId':vendorId,'subtotal':subTotal})
+                            else:
+                                return HttpResponse("Available units are less than required")
 
-                now = datetime.now()
-                order_dict['total']= total_amount
-                order_dict['customer_id']=customer_id
-                order_dict['cluster_id']=None
-                order_dict['date']= now
+                    totalAmount+=subTotal
+                    orderProducts.append(tempOrder)
 
-                order_database.insert_one(order_dict)
 
-                return redirect('logIn')
+                now = datetime.now().replace(microsecond=0)
+                order['orderCreated'] = now
+                order["products"]= orderProducts
+                order['customerId'] = customer_id
+                order['totalAmount']=totalAmount
+                order['status']='pending'
+                allOrders = utils.connect_database("E-Bazar", 'Orders')
+                orderId=allOrders.insert_one(order)
 
-# Create your views here.
+                for VendOrder in vendorOrder:
+                    VendOrder["orderCreated"]=now
+                    VendOrder['orderId']=orderId.inserted_id
+                    VendOrder['customerId']= customer_id
+                    VendOrder['status']='pending'
+
+
+
+                    allProducts = utils.connect_database("E-Bazar", 'Products')
+                    specVendorProducts = utils.connect_database(str(VendOrder["vendorId"]), 'Products')
+                    if "varId" in VendOrder.keys():
+                        query = {"_id": ObjectId(VendOrder['productId'])}
+                        update = {"$set": {"variations."+VendOrder['varId']+".units": int(VendOrder['updUnits'])}}
+                        allOrderUpd = allProducts.update_one(query, update)
+                        vendorOrderUpd = specVendorProducts.update_one(query, update)
+
+                    else:
+                        query = {"_id": ObjectId(VendOrder['productId'])}
+                        update = {"$set": {"units": int(VendOrder['updUnits'])}}
+                        allOrderUpd = allProducts.update_one(query, update)
+                        vendorOrderUpd = specVendorProducts.update_one(query, update)
+
+                    specVendorOrders = utils.connect_database(str(VendOrder["vendorId"]), 'Orders')
+                    del VendOrder['vendorId']
+                    del VendOrder['updUnits']
+                    specVendorOrders.insert_one(VendOrder)
+
+                print("All order")
+                print(order)
+                print("Vendor order")
+                print(vendorOrder)
+                response = HttpResponse("Order Succesfull")
+                response.delete_cookie('cart')
+                return response
+
+
+
+                #
+                # order_database.insert_one(order_dict)
+                # return redirect('logIn')
+
+
+
 
 
 

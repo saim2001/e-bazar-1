@@ -18,9 +18,6 @@ class vendorRegister:
      pass
 
 
-    def check(self,request):
-        return render(request,"Vendor_registration/base_c.html")
-
     def logIn(self,request):
         if request.method == "POST":
             email = request.POST["Email"]

@@ -543,7 +543,7 @@ window.onload = function () {
         else if (document.getElementById("ch_1").checked == true){
           let var_checkbox_2 = document.getElementById("ch_2");
           var_checkbox_2.checked = true;
-          var_checkbox_2.nextSibling.value = var_type;
+          var_checkbox_2.nextSibling.nextSibling.value = var_type;
         }
       }
   

@@ -14,11 +14,12 @@
             <p>Actions
             </p>
         </div>
+        {% for vendor in vendors %}
         <div class="pendingData">
-            <p>1/11/2022 </p>
-            <p>Indiviual</p>
-            <p>Alisportscenter</p>
-            <p>Karachi</p>
+            <p>{{vendor.dto}}</p>
+            <p>{{vendor.businessType}}</p>
+            <p>{{vendor.storename}}</p>
+            <p>{{vendor.city}}</p>
             <p>Pending</p>
             <p class="pButton">
                 <a href="{% url 'avPendingDetails' %}">   <button id='accVPDId' >View details</button></a>
@@ -27,6 +28,7 @@
             </p>
 
         </div>
+        {% endfor %}
 
 
 

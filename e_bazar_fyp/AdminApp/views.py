@@ -15,8 +15,25 @@ class Verification:
         return render(request,'Verification/orderOption.html')
 
     def avPending(self,request):
+        ebazar = utils.connect_database("E-Bazar")
+        allvendorColl = ebazar["Vendors"]
+        allvendors = allvendorColl.find({})
+        allvendorsDict = {"verified": [], "notverified": [], "disputed": []}
+        notverified=[]
+        for v in allvendors:
+            vendorDatabase = utils.connect_database(str(v["_id"]))
+            vendorInfoColl = vendorDatabase["Information"]
+            vendorInfo = vendorInfoColl.find_one({})
+            if v["status"] == "notverified":
+                notverified.append(vendorInfo)
+            # elif v["status"] == "notverified":
+            #     allvendorsDict["notverified"].append(vendorInfo)
+            # elif v["status"] == "disputed":
+            #     allvendorsDict["disputed"].append(vendorInfo)
+        print(notverified)
+        #return render(request, "AdminPanel/verification.html", {"vendors":notverified})
       
-        return render(request,'Verification/avPending.html')
+        return render(request,'Verification/avPending.html', {"vendors":notverified})
     def avDisputed(self,request):
        
         return render(request,'Verification/avDisputed.html')

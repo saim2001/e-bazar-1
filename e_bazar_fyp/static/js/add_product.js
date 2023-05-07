@@ -243,10 +243,26 @@ autoCont.appendChild(newContainer)
 //"Start" function to create labels and headings for according to input
 // provided from product information tab
 
+var prevVarList=[];
+
+function changePrevVarList(varLst){
+  console.log(varLst,"changes")
+  prevVarList= varLst
+
+}
+
+function getPrevVarList(){
+ return prevVarList
+}
 
 
 var initialContent=[];
   function createVarhtml(){
+    var typeList= getVar();
+    var preVarCheck= JSON.stringify(getPrevVarList());
+    var typeListCheck= JSON.stringify(getVar());
+    if (preVarCheck != typeListCheck){
+      changePrevVarList(typeList);
     //"Start" delete previous javascript
     var inputContRemove= document.getElementsByClassName("js_create")
     for (let i=0; i<inputContRemove.length;i++){
@@ -259,7 +275,6 @@ var initialContent=[];
     const tableDiv= document.getElementById("varTableDiv");//variation table
     tableDiv.style.display="none";//hide table at start
     initialContent=[];
-    var typeList= getVar();
     const varNo= document.getElementById("var_no");
     const varNotAllowed= document.getElementById("noVariations");
     const varAllowed= document.getElementById("variations");
@@ -288,6 +303,8 @@ var initialContent=[];
     }
 
   inputEventList();
+
+}
   }
 
  //"End" function to create labels and headings for according to input

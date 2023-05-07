@@ -6,6 +6,12 @@
 <html>
 
 <body>
+{% block name %}
+<p> {{user_info.firstName}} {{user_info.middleName}} {{user_info.lastName}}</p>
+{% endblock name %}
+{% block storename %}
+<p> {{user_info.storename}}</p>
+{% endblock storename %}
       
     {% block content %}
  
@@ -15,14 +21,19 @@
 <p class="h2 text-black">{{category}}</p>
 <div class="tabs">
 <button class="tablink" onclick="openPage('Product_identity', this, 'white', 'inside')" id="default">Product</button>
-<button class="tablink" onclick="openPage('variations', this, 'white', 'inside'); createVarhtml()">Variations</button>
+<button class="tablink" id="var_btn" onclick="openPage('variations', this, 'white', 'inside'); createVarhtml()">Variations</button>
 <button class="tablink" onclick="openPage('information', this, 'white', 'inside')" >Information</button>
 <button class="tablink" onclick="openPage('Description', this, 'white', 'inside')">description</button>
 
 </div>
 <br>
 <hr>
-<form action="{% url 'Vendor:insertpro' %}" id="formMain" method="post" enctype="multipart/form-data">
+  {% if product %}
+  <form action="{% url 'Vendor:update_product' product.id %}" id="formMain" method="post" enctype="multipart/form-data">
+  {% else %}
+ <form action="{% url 'Vendor:insertpro' %}" id="formMain" method="post" enctype="multipart/form-data">
+  {% endif %}
+
 <div id="Product_identity" class="tabcontent">
      {% csrf_token %}
 
@@ -30,7 +41,7 @@
         <tr>
           <td><label >Category:</label></td>
           <td>
-            <input type="text" name="category" value="{{category}}" readonly>
+            <input  id="cat_name" type="text" name="category" value="{{category}}" readonly>
           </td>
         </tr>
         <tr>
@@ -86,12 +97,12 @@
       </div>
 
   <div class="variations var_custom">
-    <input type="checkbox" >
+    <input  id='ch_1' type="checkbox" >
     <input class="varValue" type="text" maxlength="20" disabled>
       </div>
   
   <div class="variations var_custom">
-    <input type="checkbox" >
+    <input id="ch_2" type="checkbox" >
     <input class="varValue" type="text" maxlength="20" disabled>
       </div> 
 
@@ -382,8 +393,11 @@
 </div>
 
 <!-- end -->
-
-<button style="float: right;margin-top: 20px;"  id="submit-form" type="submit" class="btn btn-success bg-gradient text-white btn-outline-dark">Save and continue</button>
+{% if product %}
+  <button style="float: right;margin-top: 20px;"  id="submit-form" type="submit" class="btn btn-success bg-gradient text-white btn-outline-dark">Update</button>
+  {% else %}
+  <button style="float: right;margin-top: 20px;"  id="submit-form" type="submit" class="btn btn-success bg-gradient text-white btn-outline-dark">Save and continue</button>
+  {% endif %}
     </form>
 
 </div>
@@ -391,8 +405,12 @@
 <link rel="stylesheet" href="{% static 'css/add_product.css' %}">
 
 <script type="text/javascript" src="{% static 'js/add_product.js' %}"></script>
-  
-    
+
+{% if product %}
+<!--  {{ product|json_script }}-->
+        {{ product|json_script:"my-data" }}
+
+    {% endif %}
     
 {% endblock %}
 </body>

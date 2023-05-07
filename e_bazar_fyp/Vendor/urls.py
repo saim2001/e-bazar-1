@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,re_path
 from .views import vendorRegister,Product,Category,Order
 from .decorators import user_login_required
 
@@ -27,6 +27,10 @@ urlpatterns = [
     path('returns/',orders.renReturns,name='renreturns'),
     path('wallet/',vendor.renWallet,name='renwallet'),
     path('Payout/',vendor.renPayout,name='renpayout'),
-    path('logout/',vendor.logout,name='logout')
+    path('logout/',vendor.logout,name='logout'),
+    path('update/<str:product_id>/<str:var_id>/',product.edit_inv,name="edit_pr_am"),
+    path('update/<str:product_id>/',product.edit_inv,{"var_id":None},name="edit_pr_am"),
+    path('ren_update/<str:product_id>/',product.ren_upd_product,name="ren_upd"),
+    path('updateproduct/<str:product_id>/',product.update,name="update_product")
 
 ]

@@ -10,6 +10,12 @@
     <title>Select Category</title>
 </head>
 <body>
+{% block name %}
+<p> {{user_info.firstName}} {{user_info.middleName}} {{user_info.lastName}}</p>
+{% endblock name %}
+{% block storename %}
+<p> {{user_info.storename}}</p>
+{% endblock storename %}
   {% block content %}
   <main>
   

@@ -9,21 +9,46 @@ connection_string= "mongodb+srv://fypecommerce:maazali786@cluster0.ycmix0k.mongo
 client = MongoClient(connection_string)
 # print(client.list_database_names())
 database = client["E-Bazar"]
-dbConnection= database["text_cats"]
-result_1 = dbConnection.find({"name": ""})
-for i in result_1:
-    print(i)
-dbConnection.delete_many({"name": ""})
-result_2 = dbConnection.find({"name": ""})
-for i in result_2:
-    print(i)
-result_3 = dbConnection.find({"parent": ""})
-for i in result_3:
-    print(i)
+dbConnection= database["Products"]
+vendor_lst = []
+def numbers(arg):
 
-result_4 = dbConnection.find({"category": ""})
-for i in result_4:
-    print(i)
+    arg = arg+1
+
+    print(arg)
+
+dbConnection.update_one({"_id": ObjectId('644d749a85744f352f9da05b')}, {
+                        "$set": {"variations.ecd04c68-426b-4cc2-a746-99fa05e571fb.units": 10,
+                                 "variations.ecd04c68-426b-4cc2-a746-99fa05e571fb.price": 10}})
+# for i in vendors:
+#     vendor_lst.append(str(i["_id"]))
+# print(vendor_lst)
+#
+# for vendor in vendor_lst:
+#     vendor_db = client[vendor]
+#     vendor_con = vendor_db["Products"]
+#     products = vendor_con.find({})
+#     main_prod_con = database["Products"]
+#     for product in products:
+#         main_prod_con.insert_one(product)
+
+
+
+
+# result_1 = dbConnection.find({"name": ""})
+# for i in result_1:
+#     print(i)
+# dbConnection.delete_many({"name": ""})
+# result_2 = dbConnection.find({"name": ""})
+# for i in result_2:
+#     print(i)
+# result_3 = dbConnection.find({"parent": ""})
+# for i in result_3:
+#     print(i)
+#
+# result_4 = dbConnection.find({"category": ""})
+# for i in result_4:
+#     print(i)
 # dbConnection.delete_many({})
 
 # categories=[{

@@ -52,9 +52,7 @@ p {
   margin: 40px 0;
 }
 
-body {
 
-}
 
 /*boiler plate end */
 
@@ -249,6 +247,9 @@ td {
   padding: 8px;
 }
 
+input .bold {
+  font-weight:700;
+}
 
 
 

@@ -20,9 +20,6 @@ class vendorRegister:
      pass
 
 
-    def check(self,request):
-        return render(request,"Vendor_registration/base_c.html")
-
     def logIn(self,request):
         if request.method == "POST":
             email = request.POST["Email"]
@@ -293,8 +290,7 @@ class Product:
                 productDict.update({'sku':sku , 'units':units, 'price':price,'condition':condition,'images':imagesList})
                 if len(batches) != 0:
                     productDict["batches"]=batches
-                print(productDict)
-                #return redirect("Vendor:reninvtry")
+
 
             else:
                 variations={}
@@ -304,6 +300,7 @@ class Product:
                 condition = request.POST.getlist("condition")
                 images = request.FILES.getlist('images')
                 imagesList=[]
+                varList= []
                 for img in images:
                     if img.content_type.startswith('image/'):
                         img_url = azureCon.uploadimg(img)
@@ -320,8 +317,10 @@ class Product:
 
                 if len(vartype)==1:
                     varatt = request.POST.getlist("var")
+                    varRemoveDuplicate= set(varatt)
+                    varList.append(list(varRemoveDuplicate))
                     for index in range(0,len(varatt)):
-                        tempVar= {'vartype':varatt[index] ,'sku':sku[index] , 'units':units[index], 'price':price[index],'condition':condition[index]}
+                        tempVar= {vartype[0]:varatt[index] ,'sku':sku[index] , 'units':units[index], 'price':price[index],'condition':condition[index]}
                         if mainpage == varatt[index]:
                             tempVar['mainpage']=True
 
@@ -343,8 +342,12 @@ class Product:
                     mainpage= mainpage.split("-")
                     varatt1 = request.POST.getlist("var1")
                     varatt2 = request.POST.getlist("var2")
+                    varRemoveDuplicate1 = set(varatt1)
+                    varRemoveDuplicate2 = set(varatt2)
+                    varList.append(list(varRemoveDuplicate1))
+                    varList.append(list(varRemoveDuplicate2))
                     for index in range(0, len(varatt1)):
-                        tempVar= {'vartype1': varatt1[index],'vartype2': varatt2[index], 'sku': sku[index],
+                        tempVar= {vartype[0]: varatt1[index],vartype[1]: varatt2[index], 'sku': sku[index],
                              'units': units[index], 'price': price[index], 'condition': condition[index],
                              }
 
@@ -365,7 +368,14 @@ class Product:
                         variations[str(uuid.uuid4())]=tempVar
 
 
+
+
                 productDict['variations']=variations
+                varNamesTypes={}
+                for v in range(len(vartype)):
+                    varNamesTypes[vartype[v]]= varList[v]
+                productDict["var_type"] = varNamesTypes
+
 
             reviews= {}
             reviews["reviewDetail"]={}
@@ -373,7 +383,6 @@ class Product:
             productDict["reviews"]=reviews
             productDict['status']="enabled"
             vendorId= request.session.get('Vendor_Db')
-            print(vendorId,"vendor")
             vendorDatabase= utils.connect_database(vendorId)
             ebazarDatabase= utils.connect_database("E-Bazar")
             allProducts= ebazarDatabase["Products"]

@@ -79,7 +79,7 @@ a:visited {
 </head>
 <body>
 
-<form action='{% url "register" %}' method="post">
+<form action="{% url 'Customer:register' %}" method="post">
     {% csrf_token %}
   <div class="container">
     <h1>Register</h1>

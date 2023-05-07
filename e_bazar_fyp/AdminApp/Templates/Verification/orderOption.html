@@ -1,0 +1,262 @@
+{% extends 'Verification/main.html' %}
+{% block content %}
+
+<div class="avContainer" id="oContainerid">
+
+    <a href="{% url 'oUnfulfilled' %}">  <span class='active' id='unfulfilledId'>Unfulfilled</span></a>
+    <a href="{% url 'oFulfilled' %}"> <span class='active' id='fulfilledId'>Fulfilled</span></a>
+    <a href="{% url 'oReturned' %}"> <span class='active' id='returnedId'>Returned </span></a>
+    <a href="{% url 'oClusters' %}"> <span class='active' id='clustersId'>Clusters</span></a>
+
+
+    {% block subContent %}
+               
+    {{ block.super }}
+
+    {% endblock %}
+
+    <!-- Unfulfilled -->
+    {% comment %} <div class="content" id="unfulfilledId">
+
+        <div class="pending">
+            <div class="pendingAttributes">
+                <p>Order ID </p>
+                <p>Buyer </p>
+                <p>Date</p>
+                <p>Items</p>
+                <p>Status</p>
+                <p>Actions</p>
+            </div>
+            <div class="pendingData">
+                <p>#123 </p>
+                <p>Saim</p>
+                <p>1/11/2022</p>
+                <p>2</p>
+                <p>Not ready</p>
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
+                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
+                </p>
+
+            </div>
+           
+            <div class="pendingData">
+                <p>#123 </p>
+                <p>Saim</p>
+                <p>1/11/2022</p>
+                <p>2</p>
+                <p>Not ready</p>
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
+                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
+                </p>
+
+            </div>
+           
+            <div class="pendingData">
+                <p>#123 </p>
+                <p>Saim</p>
+                <p>1/11/2022</p>
+                <p>2</p>
+                <p>Not ready</p>
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
+                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
+                </p>
+
+            </div>
+           
+            <div class="pendingData">
+                <p>#123 </p>
+                <p>Saim</p>
+                <p>1/11/2022</p>
+                <p>2</p>
+                <p>Not ready</p>
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
+                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
+                </p>
+
+            </div>
+           
+            <div class="pendingData">
+                <p>#123 </p>
+                <p>Saim</p>
+                <p>1/11/2022</p>
+                <p>2</p>
+                <p>Not ready</p>
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
+                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
+                </p>
+
+            </div>
+           
+            <div class="pendingData">
+                <p>#123 </p>
+                <p>Saim</p>
+                <p>1/11/2022</p>
+                <p>2</p>
+                <p>Not ready</p>
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
+                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
+                </p>
+
+            </div>
+           
+
+
+        </div>
+
+    </div> {% endcomment %}
+
+    <!-- Fulfilled -->
+    {% comment %} <div class="content" id="fulfilledId">
+
+        <div class="pending">
+            <div class="pendingAttributes">
+                <p>Order ID </p>
+                <p>Buyer </p>
+                <p>Date</p>
+                <p>Items</p>
+
+                <p>Actions</p>
+            </div>
+            <div class="pendingData">
+                <p>#123 </p>
+                <p>Saim</p>
+                <p>1/11/2022</p>
+                <p>2</p>
+
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oFVDId`)">View details</button>
+
+                </p>
+
+
+            </div>
+            <div class="pendingData">
+                <p>#123 </p>
+                <p>Ali</p>
+                <p>1/11/2022</p>
+                <p>3</p>
+
+                <p class="pButton">
+
+                    <button >View details</button>
+
+                </p>
+
+
+            </div>
+
+
+
+
+        </div>
+
+    </div> {% endcomment %}
+
+    <!-- Returned -->
+    {% comment %} <div class="content" id="returnedId">
+
+        <div class="pending">
+            <div class="pendingAttributes">
+                <p>Product details </p>
+                <p>Amount </p>
+                <p>Vendor</p>
+                <p>Proceeds</p>
+                <p>Actions</p>
+            </div>
+            <div class="pendingData">
+                <p>SKU: Telstar2018 </p>
+                <p>2</p>
+                <p>Alisportscenter</p>
+                <p>Item subtotal: $100 </p>
+
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oRVDId`)">View details</button>
+                    <button >Cancel return</button>
+
+                </p>
+
+
+            </div>
+
+
+
+
+        </div>
+
+    </div> {% endcomment %}
+
+
+    <!-- Clusters -->
+
+    {% comment %} <div class="content" id="clustersId">
+
+        <div class="pending">
+            <div class="pendingAttributes">
+                <p>Cluster ID </p>
+                <p>Order</p>
+                <p>Status</p>
+
+
+                <p>Actions</p>
+            </div>
+            <div class="pendingData">
+                <p>#111 </p>
+                <p>50</p>
+                <p>Unshipped</p>
+
+
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oCVDId`)">View details</button>
+                    <button>Shipment</button>
+
+                </p>
+
+
+            </div>
+            <div class="pendingData">
+                <p>#112 </p>
+                <p>30</p>
+                <p>Shipped</p>
+
+
+                <p class="pButton">
+
+                    <button onclick="OrderViewDetails(`oCVDId`)">View details</button>
+                    <button>Shipment</button>
+
+                </p>
+
+
+            </div>
+            <button onclick="OrderViewDetails(`oCCVDId`)">Create Cluster</button>
+
+
+
+
+
+        </div>
+
+    </div> {% endcomment %}
+
+
+
+
+</div>
+
+{% endblock %}
+

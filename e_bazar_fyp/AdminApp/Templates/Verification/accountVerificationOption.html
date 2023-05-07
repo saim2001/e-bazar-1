@@ -1,0 +1,27 @@
+
+{% extends 'Verification/main.html' %}
+{% block content %}
+  <div class="avContainer" id="avContainerid">
+
+              
+                <a  href="{% url 'avPending' %}">  <span class='active'  id='pendingId'>Pending</span></a>
+                <a href="{% url 'avDisputed' %}">  <span class='active' id='disputedId'>Disputed</span></a>
+              
+                {% comment %} <span class='active' onclick="AccountVerification('disputedId')">Disputed</span> {% endcomment %}
+                {% block subContent %}
+               
+                {{ block.super }}
+
+                {% endblock %}
+
+                
+
+  </div>
+
+  {% block scripts %}
+
+{% endblock %}
+
+
+
+{% endblock %}

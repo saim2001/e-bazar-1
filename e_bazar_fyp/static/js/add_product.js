@@ -497,10 +497,13 @@ window.onload = function () {
    cat_name.value = data.category;
    
    if (data.isVariation == "yes"){
+    console.log(data.var_type)
     const var_vals = Object.values(data.var_type);
-   const var_type = Object.keys(data.var_type);
+   const var_types = Object.keys(data.var_type);
+   console.log(var_types)
     document.getElementById('var_yes').click();
-    for (const var_type  in data.var_type ){
+    for (const var_type  of var_types ){
+      console.log(var_type)
       if (var_type == 'size'){
         document.getElementById('var_size').checked = true;
       }
@@ -511,10 +514,11 @@ window.onload = function () {
         document.getElementById("var_style").checked = true;
       }
       else {
-        if (document.getElementById("ch_1").checked == false && document.getElementById('ch_2') == false){
+        if (document.getElementById("ch_1").checked == false && document.getElementById('ch_2').checked == false){
           let var_checkbox_1 = document.getElementById("ch_1");
           var_checkbox_1.checked = true;
-          var_checkbox_1.nextSibling.value = var_type;
+          var_checkbox_1.nextSibling.nextSibling.value = var_type;
+          console.log(var_checkbox_1.nextSibling.nextSibling)
         }
         else if (document.getElementById("ch_1").checked == true){
           let var_checkbox_2 = document.getElementById("ch_2");
@@ -527,16 +531,18 @@ window.onload = function () {
      document.getElementById("var_btn").click();
      const var_lst = document.querySelectorAll('.contAutoInput.js_create');
    console.log(var_lst)
-   for ( div=0; div<var_type.length; div++){
+   for ( div=0; div<var_types.length; div++){
     let div_elem = var_lst[div]
-    if (div_elem.firstChild.innerHTML == var_type[div] ){
+    console.log(div_elem);
+    if (div_elem.firstChild.innerHTML == var_types[div] ){
       let var_val = div_elem.querySelectorAll("[name='input[]']");
-      var_val[0].value = var_vals[0][0];
+      console.log(div_elem.firstChild.innerHTML)
+      var_val[0].value = var_vals[div][0];
       console.log(var_val[div])
       console.log(var_vals[div])
       for (act_var of var_vals[div]){
         console.log(act_var)
-        if (act_var != var_vals[0][0]){
+        if (act_var != var_vals[div][0]){
           let button = div_elem.querySelector("button");
           button.click();
 
@@ -564,7 +570,9 @@ window.onload = function () {
    console.log(rows.length);
    let variations = Object.keys(data.variations);
    let var_data = Object.values(data.variations);
+   console.log(var_data)
    for (i=0; i<rows.length; i++){
+
     console.log(i)
     console.log(rows[i])
     let sku = rows[i].querySelector("[name = 'sku']");
@@ -609,8 +617,6 @@ window.onload = function () {
 
    }
 
-  //  console.log(var_type,length(var_type))
-  //  console.log(var_vals,length(var_vals))
 
    if (data.isb2b == 'yes'){
     document.getElementById('b2b_yes').click();

@@ -503,21 +503,23 @@ window.onload = function () {
     const var_vals = Object.values(data.var_type);
    const var_type = Object.keys(data.var_type);
     document.getElementById('var_yes').click();
-    for (const var_type  in data.var_type ){
-      if (var_type == 'size'){
+    console.log(var_type,'wow')
+    for (const vari  of var_type ){
+      if (vari== 'size'){
         document.getElementById('var_size').checked = true;
       }
-      else if (var_type == 'color'){
+      else if (vari == 'color'){
         document.getElementById("var_color").checked = true;
       }
-      else if (var_type == 'style'){
+      else if (vari== 'style'){
         document.getElementById("var_style").checked = true;
       }
       else {
-        if (document.getElementById("ch_1").checked == false && document.getElementById('ch_2') == false){
+        if (document.getElementById("ch_1").checked == false && document.getElementById('ch_2').checked == false){
           let var_checkbox_1 = document.getElementById("ch_1");
           var_checkbox_1.checked = true;
-          var_checkbox_1.nextSibling.value = var_type;
+          console.log(var_checkbox_1.nextSibling,'next sib')
+          var_checkbox_1.nextSibling.nextSibling.value = vari;
         }
         else if (document.getElementById("ch_1").checked == true){
           let var_checkbox_2 = document.getElementById("ch_2");
@@ -529,7 +531,8 @@ window.onload = function () {
      }
      document.getElementById("var_btn").click();
      const var_lst = document.querySelectorAll('.contAutoInput.js_create');
-   console.log(var_lst)
+   console.log(var_lst,'list')
+   console.log(var_type,'type')
    for ( div=0; div<var_type.length; div++){
     let div_elem = var_lst[div]
     if (div_elem.firstChild.innerHTML == var_type[div] ){
@@ -567,20 +570,21 @@ window.onload = function () {
    console.log(rows.length);
    let variations = Object.keys(data.variations);
    let var_data = Object.values(data.variations);
-   for (i=0; i<rows.length; i++){
-    console.log(i)
-    console.log(rows[i])
-    let sku = rows[i].querySelector("[name = 'sku']");
-    sku.value = var_data[i]["sku"];
-    let units = rows[i].querySelector("[name = 'units']");
-    units.value = var_data[i]["units"];
-    let price = rows[i].querySelector("[name = 'price']");
-    price.value = var_data[i]["price"];
-    let condition =   rows[i].querySelector("[name = 'condition']");  
-    condition.value = var_data[i]["condition"];
-  }
+//   for (i=0; i<rows.length; i++){
+//    console.log(i)
+//    console.log(rows[i])
+//    let sku = rows[i].querySelector("[name = 'sku']");
+//    sku.value = var_data[i]["sku"];
+//    let units = rows[i].querySelector("[name = 'units']");
+//    units.value = var_data[i]["units"];
+//    let price = rows[i].querySelector("[name = 'price']");
+//    price.value = var_data[i]["price"];
+//    let condition =   rows[i].querySelector("[name = 'condition']");
+//    condition.value = var_data[i]["condition"];
+//  }
   let images = document.querySelectorAll("[name = 'images']");
   let pro_images = data.images
+  console.log('pro',pro_images)
   let image_divs = document.querySelectorAll('[class = "input-group mb-3"]')
 
   for (i=0; i<pro_images.length; i++){
@@ -589,6 +593,7 @@ window.onload = function () {
     image.height = 200;
     image.width = 200;
     image_divs[i].appendChild(image)
+    console.log('imgin');
 
 
   }

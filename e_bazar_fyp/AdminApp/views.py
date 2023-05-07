@@ -75,10 +75,6 @@ class Verification:
      
         return render(request, 'Verification/main.html')
 
-
-    
-          
-
     def home(self,request):
         if request.method=='POST':
             status= request.POST['status']

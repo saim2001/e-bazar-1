@@ -4,9 +4,10 @@ from .views import Verification
 
 obj= Verification()
 urlpatterns = [
-    #path('', obj.home, name='home'),
+    # path('', obj.home, name='home'),
     #path('statuschange/<str:status_type>', obj.status_change, name='status_change'),
-    path('',obj.verification,name="verification"),
+    # path('',obj.verification,name="verification"),
+     path('',obj.admin,name="admin"),
      path('AccountVerifications/', obj.AccountVerifications, name='AccountVerifications'),
      path('Orders/', obj.Orders, name='Orders'),
      path('avPending/', obj.avPending, name='avPending'),

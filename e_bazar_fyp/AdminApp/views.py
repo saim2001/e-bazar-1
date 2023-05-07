@@ -68,7 +68,7 @@ class Verification:
     def oCreateCluster(self,request):
        
         return render(request,'Verification/oCreateCluster.html')
-        
+
     def home(self,request):
         if request.method=='POST':
             status= request.POST['status']
@@ -81,7 +81,8 @@ class Verification:
             for status in status_items:
                 status_lst.append(status['name'])
 
-            return render(request, 'AdminPanel/Admin.html', context={'status_home': status_lst})
+            # return render(request, 'AdminPanel/Admin.html', context={'status_home': status_lst})
+            return render(request, 'Verification/main.html', context={'status_home': status_lst})
 
 
 

@@ -5,6 +5,93 @@ from django.http import HttpResponse
 from . import utils
 from bson import ObjectId
 class Verification:
+
+     # xxxx-xxxxx
+    def AccountVerifications(self,request):
+ 
+        return render(request,'Verification/accountVerificationOption.html')
+    def Orders(self,request):
+        
+        return render(request,'Verification/orderOption.html')
+
+    def avPending(self,request):
+        ebazar = utils.connect_database("E-Bazar")
+        allvendorColl = ebazar["Vendors"]
+        allvendors = allvendorColl.find({})
+        allvendorsDict = {"verified": [], "notverified": [], "disputed": []}
+        notverified=[]
+        for v in allvendors:
+            vendorDatabase = utils.connect_database(str(v["_id"]))
+            vendorInfoColl = vendorDatabase["Information"]
+            vendorInfo = vendorInfoColl.find_one({})
+            if v["status"] == "notverified":
+                notverified.append(vendorInfo)
+            # elif v["status"] == "notverified":
+            #     allvendorsDict["notverified"].append(vendorInfo)
+            # elif v["status"] == "disputed":
+            #     allvendorsDict["disputed"].append(vendorInfo)
+        print(notverified)
+        #return render(request, "AdminPanel/verification.html", {"vendors":notverified})
+      
+        return render(request,'Verification/avPending.html', {"vendors":notverified})
+    def avDisputed(self,request):
+       
+        return render(request,'Verification/avDisputed.html')
+
+    def avPendingDetails(self,request):
+       
+        return render(request,'Verification/avPendingDetails.html')
+    def avPendingConfirmation(self,request):
+       
+        return render(request,'Verification/avPendingConfirmation.html')
+
+    def avDisputedDetails(self,request):
+       
+        return render(request,'Verification/avDisputedDetails.html')
+
+    def oUnfulfilled(self,request):
+       
+        return render(request,'Verification/oUnfulfilled.html')
+
+    def oFulfilled(self,request):
+       
+        return render(request,'Verification/oFulfilled.html')
+    def oReturned(self,request):
+       
+        return render(request,'Verification/oReturned.html')
+
+    def oClusters(self,request):
+       
+        return render(request,'Verification/oClusters.html')
+
+    def oUnfulfilledDetails(self,request):
+       
+        return render(request,'Verification/oUnfulfilledDetails.html')
+
+    def oUnfulfilledUpdate(self,request):
+       
+        return render(request,'Verification/oUnfulfilledUpdate.html')
+    def oFulfilledDetails(self,request):
+       
+        return render(request,'Verification/oFulfilledDetails.html')
+    def oReturnedDetails(self,request):
+       
+        return render(request,'Verification/oReturnedDetails.html')
+
+    def oClusterDetails(self,request):
+       
+        return render(request,'Verification/oClusterDetails.html')
+
+    def oCreateCluster(self,request):
+       
+        return render(request,'Verification/oCreateCluster.html')
+
+
+    def admin(self,request):
+       
+     
+        return render(request, 'Verification/main.html')
+
     def home(self,request):
         if request.method=='POST':
             status= request.POST['status']
@@ -18,6 +105,7 @@ class Verification:
                 status_lst.append(status['name'])
 
             return render(request, 'AdminPanel/Admin.html', context={'status_home': status_lst})
+            return render(request, 'Verification/main.html', context={'status_home': status_lst})
 
 
 

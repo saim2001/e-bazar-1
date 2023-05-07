@@ -1,0 +1,57 @@
+{% extends 'Verification/orderOption.html' %}
+{% block  subContent %}
+<div class="content" id="clustersId">
+
+    <div class="pending">
+        <div class="pendingAttributes">
+            <p>Cluster ID </p>
+            <p>Order</p>
+            <p>Status</p>
+
+
+            <p>Actions</p>
+        </div>
+        <div class="pendingData">
+            <p>#111 </p>
+            <p>50</p>
+            <p>Unshipped</p>
+
+
+            <p class="pButton">
+                <a href="{% url 'oClusterDetails' %}">  <button id='oCVDId'>View details</button></a>
+
+               
+                <button>Shipment</button>
+
+            </p>
+
+
+        </div>
+        <div class="pendingData">
+            <p>#112 </p>
+            <p>30</p>
+            <p>Shipped</p>
+
+
+            <p class="pButton">
+
+                <button onclick="OrderViewDetails(`oCVDId`)">View details</button>
+                <button>Shipment</button>
+
+            </p>
+
+
+        </div>
+        <a href="{% url 'oCreateCluster' %}"><button id='oCCVDId'>Create Cluster</button></a>
+      
+
+
+
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}

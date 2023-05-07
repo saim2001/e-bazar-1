@@ -1,0 +1,38 @@
+{% extends 'Verification/orderOption.html' %}
+{% block  subContent %}
+<div class="content" id="returnedId">
+
+    <div class="pending">
+        <div class="pendingAttributes">
+            <p>Product details </p>
+            <p>Amount </p>
+            <p>Vendor</p>
+            <p>Proceeds</p>
+            <p>Actions</p>
+        </div>
+        <div class="pendingData">
+            <p>SKU: Telstar2018 </p>
+            <p>2</p>
+            <p>Alisportscenter</p>
+            <p>Item subtotal: $100 </p>
+
+            <p class="pButton">
+                <a href="{% url 'oReturnedDetails' %}">   <button id='oRVDId'>View details</button></a>
+
+  
+                <button >Cancel return</button>
+
+            </p>
+
+
+        </div>
+
+
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}

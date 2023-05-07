@@ -243,10 +243,26 @@ autoCont.appendChild(newContainer)
 //"Start" function to create labels and headings for according to input
 // provided from product information tab
 
+var prevVarList=[];
+
+function changePrevVarList(varLst){
+  console.log(varLst,"changes")
+  prevVarList= varLst
+
+}
+
+function getPrevVarList(){
+ return prevVarList
+}
 
 
 var initialContent=[];
   function createVarhtml(){
+    var typeList= getVar();
+    var preVarCheck= JSON.stringify(getPrevVarList());
+    var typeListCheck= JSON.stringify(getVar());
+    if (preVarCheck != typeListCheck){
+      changePrevVarList(typeList);
     //"Start" delete previous javascript
     var inputContRemove= document.getElementsByClassName("js_create")
     for (let i=0; i<inputContRemove.length;i++){
@@ -259,7 +275,6 @@ var initialContent=[];
     const tableDiv= document.getElementById("varTableDiv");//variation table
     tableDiv.style.display="none";//hide table at start
     initialContent=[];
-    var typeList= getVar();
     const varNo= document.getElementById("var_no");
     const varNotAllowed= document.getElementById("noVariations");
     const varAllowed= document.getElementById("variations");
@@ -288,6 +303,8 @@ var initialContent=[];
     }
 
   inputEventList();
+
+}
   }
 
  //"End" function to create labels and headings for according to input
@@ -506,14 +523,14 @@ window.onload = function () {
    console.log(var_types)
     document.getElementById('var_yes').click();
     for (const var_type  of var_types ){
-      console.log(var_type)
       if (var_type == 'size'){
+
         document.getElementById('var_size').checked = true;
       }
       else if (var_type == 'color'){
         document.getElementById("var_color").checked = true;
       }
-      else if (var_type == 'style'){
+      else if (var_type== 'style'){
         document.getElementById("var_style").checked = true;
       }
       else {
@@ -521,7 +538,7 @@ window.onload = function () {
           let var_checkbox_1 = document.getElementById("ch_1");
           var_checkbox_1.checked = true;
           var_checkbox_1.nextSibling.nextSibling.value = var_type;
-          console.log(var_checkbox_1.nextSibling.nextSibling)
+
         }
         else if (document.getElementById("ch_1").checked == true){
           let var_checkbox_2 = document.getElementById("ch_2");
@@ -533,7 +550,6 @@ window.onload = function () {
      }
      document.getElementById("var_btn").click();
      const var_lst = document.querySelectorAll('.contAutoInput.js_create');
-   console.log(var_lst)
    for ( div=0; div<var_types.length; div++){
     let div_elem = var_lst[div]
     console.log(div_elem);
@@ -573,9 +589,7 @@ window.onload = function () {
    console.log(rows.length);
    let variations = Object.keys(data.variations);
    let var_data = Object.values(data.variations);
-   console.log(var_data)
    for (i=0; i<rows.length; i++){
-
     console.log(i)
     console.log(rows[i])
     let sku = rows[i].querySelector("[name = 'sku']");
@@ -589,6 +603,7 @@ window.onload = function () {
   }
   let images = document.querySelectorAll("[name = 'images']");
   let pro_images = data.images
+  console.log('pro',pro_images)
   let image_divs = document.querySelectorAll('[class = "input-group mb-3"]')
 
   for (i=0; i<pro_images.length; i++){
@@ -597,6 +612,7 @@ window.onload = function () {
     image.height = 200;
     image.width = 200;
     image_divs[i].appendChild(image)
+    console.log('imgin');
 
 
   }

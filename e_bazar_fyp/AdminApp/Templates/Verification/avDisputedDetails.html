@@ -1,0 +1,146 @@
+{% extends 'Verification/main.html' %}
+{% block content %}
+
+
+<div class="tableContainer" id="accVDDId">
+    <h4>Primary information</h4>
+    <table class="table">
+
+        <tr>
+
+            <td>Name</td>
+            <td>Saim Mehmood Rao</td>
+        </tr>
+        <tr>
+
+            <td>Date of birth</td>
+            <td>24 Aug 2001</td>
+        </tr>
+        <tr>
+
+            <td>Country of birth</td>
+            <td>Pakistan</td>
+        </tr>
+        <tr>
+
+            <td>Country of citizenship</td>
+            <td>Pakistan</td>
+        </tr>
+        <tr>
+
+            <td>Identity data</td>
+            <td>National ID # : xxx-xxxxx-xxxx
+                Expiration date : 05 Mar 2024.</td>
+
+        </tr>
+
+        <tr>
+
+            <td>Phone number</td>
+            <td>123456789</td>
+        </tr>
+        <tr>
+
+            <td>Residential address</td>
+            <td>PK, 75000,Sindh, Karachi, house 23 sheet 26, Model colony</td>
+        </tr>
+        <tr>
+
+            <td>Country of birth</td>
+            <td>Pakistan</td>
+        </tr>
+    </table>
+
+    <h4>Credit card information
+    </h4>
+    <table class="table">
+
+        <tr>
+
+            <td>Credir card number</td>
+            <td>xxx-xxx-xxxxxx</td>
+        </tr>
+
+    </table>
+    <h4>Primary information
+    </h4>
+    <table class="table">
+
+        <tr>
+
+            <td>Credit card number </td>
+            <td>xxx-xxx-xxxxxx</td>
+        </tr>
+        <tr>
+
+            <td>Expires on </td>
+            <td>27 july 2024</td>
+        </tr>
+        <tr>
+
+            <td>Billing address</td>
+            <td>PK, 75000,Sindh, Karachi, house 23 sheet 26, Model colony</td>
+        </tr>
+
+    </table>
+
+
+    <h4>Store information
+    </h4>
+    <table class="table">
+
+        <tr>
+
+            <td>Store name </td>
+            <td>Alisportscenter</td>
+        </tr>
+        <tr>
+
+            <td>UPC (Universal Product Code)</td>
+            <td>No</td>
+        </tr>
+        <tr>
+
+            <td>Brand owne</td>
+            <td>No</td>
+        </tr>
+
+
+    </table>
+    <h4>Documents
+
+    </h4>
+    <table class="table">
+
+        <tr>
+
+            <td>National identity document </td>
+            <td>
+                <img src="https://parepjeddah.b-cdn.net/wp-content/uploads/2021/09/Logo-NADRA.png"
+                    alt="Document">
+
+                <button class="btn">Download</button>
+            </td>
+        </tr>
+        <tr>
+
+            <td>National identity document </td>
+            <td>
+                <img src="https://propakistani.pk/how-to/wp-content/uploads/2022/03/Screenshot-2022-03-25-112840-e1648294844943.png"
+                    alt="Document">
+
+                <button class="btn">Download</button>
+            </td>
+        </tr>
+
+
+
+    </table>
+    
+     <a href="{% url 'avDisputed' %}"><button id='disputedId'>Back to List</button></a>
+   
+
+
+</div>
+
+{% endblock %}

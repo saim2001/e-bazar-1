@@ -1,0 +1,39 @@
+{% extends 'Verification/main.html' %}
+{% block content %}
+<div class="tableContainer" id="oUpId">
+
+    <div class="pending">
+        <div class="pendingAttributes">
+            <p>Product details</p>
+            <p>Amount </p>
+            <p>Vendor</p>
+            <p>Proceeds</p>
+            <p>Received</p>
+            <p>Actions</p>
+        </div>
+        <div class="pendingData">
+            <p>SKU: Telstar2018 </p>
+            <p> 2</p>
+            <p>Alisportscenter</p>
+            <p>Item subtotal: $100 </p>
+            <p><input type="checkbox"> </p>
+
+            <p class="pButton">
+
+               
+                <a href="{% url 'oUnfulfilled' %}">  <button id='unfulfilledId'>Update</button></a>
+                <a href="{% url 'oUnfulfilled' %}">  <button id='unfulfilledId'>Back to List</button></a>
+    
+
+            </p>
+
+
+        </div>
+
+
+
+
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'Verification/orderOption.html' %}
+{% block  subContent %}
+<div class="content" id="fulfilledId">
+
+    <div class="pending">
+        <div class="pendingAttributes">
+            <p>Order ID </p>
+            <p>Buyer </p>
+            <p>Date</p>
+            <p>Items</p>
+
+            <p>Actions</p>
+        </div>
+        <div class="pendingData">
+            <p>#123 </p>
+            <p>Saim</p>
+            <p>1/11/2022</p>
+            <p>2</p>
+
+            <p class="pButton">
+                <a href="{% url 'oFulfilledDetails' %}">  <button id='oFVDId'>View details</button></a>
+
+              
+
+            </p>
+
+
+        </div>
+        <div class="pendingData">
+            <p>#123 </p>
+            <p>Ali</p>
+            <p>1/11/2022</p>
+            <p>3</p>
+
+            <p class="pButton">
+
+                <button >View details</button>
+
+            </p>
+
+
+        </div>
+
+
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+

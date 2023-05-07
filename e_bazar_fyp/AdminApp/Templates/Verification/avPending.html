@@ -1,0 +1,41 @@
+
+{% extends 'Verification/accountVerificationOption.html' %}
+{% block  subContent %}
+
+<div class="content" >
+
+    <div class="pending">
+        <div class="pendingAttributes">
+            <p>Date applied </p>
+            <p>Buisness type</p>
+            <p>Store name</p>
+            <p>City</p>
+            <p>Status</p>
+            <p>Actions
+            </p>
+        </div>
+        <div class="pendingData">
+            <p>1/11/2022 </p>
+            <p>Indiviual</p>
+            <p>Alisportscenter</p>
+            <p>Karachi</p>
+            <p>Pending</p>
+            <p class="pButton">
+                <a href="{% url 'avPendingDetails' %}">   <button id='accVPDId' >View details</button></a>
+               
+             
+            </p>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}
+

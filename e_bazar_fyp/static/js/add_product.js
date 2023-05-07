@@ -343,7 +343,9 @@ function createVariations(){
   if (allInputField[i].value.length != 0) {
     inputValues.push(allInputField[i].value)
   }
+  
 }
+
 if (inputValues.length >1){
   varList.push(inputValues);
   flag=true;
@@ -351,7 +353,6 @@ if (inputValues.length >1){
 }
 
 if (flag==true){
-  console.log(varList,'varList')
   return createTable(varList);
 }
 
@@ -371,10 +372,12 @@ function createTable(variationList){
   tableDiv.style.display="block";
   var tableHead= document.getElementById("varHead");
   for (let i=0; i<variationList.length;i++){
-    tableHead.insertCell(2).outerHTML = "<th scope='col' class='js_create'>"+variationList[i][0]+"</th>";
+    tableHead.insertCell(2+i).outerHTML = "<th scope='col' class='js_create'>"+variationList[i][0]+"<input name='varname' type='hidden' value='"+variationList[i][0]+"' >"+"</th>";
+//  <input name='var1' readonly value='"+variationList[i][0]+"' >
     variationList[i].splice(0,1);
 
   }
+
 
 var varSize= variationList.length;
 var tableVar= document.getElementById("varTable");

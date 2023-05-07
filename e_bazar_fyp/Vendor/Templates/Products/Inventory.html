@@ -8,6 +8,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Select Category</title>
+    {% block extracss %}
+    <link rel="stylesheet" href="{% static 'DataTables-1.13.4/datatables.css' %}">
+{% endblock extracss %}
     
 </head>
 <body>
@@ -57,7 +60,7 @@
         
         <div class="container">
             <br><br>
-            <table id="example" class="table" >
+            <table id="Inventorytable" class="table" >
               <thead class="table-light border border-1">
                 <tr>
                   <th>Status</th>
@@ -317,9 +320,16 @@
 </div>
 </main>
 {% endblock %}
-<script src="https://code.jquery.com/jquery-3.5.1.j"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-<script type="text/javascript" src="{% static 'js/paginator.js' %}"></script>
+{% block extrajs %}
+<script src="{% static 'DataTables-1.13.4/datatables.js' %}"></script>
+<script src="
+https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js
+"></script>
+<script type="text/javascript">
+  let table = new DataTable('#myTable', {
+    // options
+});
+</script>
+{% endblock extrajs %}
 </body>
 </html>

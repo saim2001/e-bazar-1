@@ -631,13 +631,55 @@ class Order:
     @session_check
     def renOrders(self,request):
         context= {}
+        orders_lst = []
         info = self.vendor.getUser(request)
         context['user_info'] = info
+        database = utils.connect_database(request.session["Vendor_Db"])
+        e_bazar_database = utils.connect_database("E-Bazar")
+        customer_db = e_bazar_database['Customer']
+        products_db = database['Products']
+        orders = database['Orders']
+        orders_data = orders.find({})
+        for order in orders_data:
+            cust_id = order["customerId"]
+            order["id"] = order.pop("_id")
+            customer = customer_db.find_one({"_id": ObjectId(cust_id)})
+            customer["id"] = customer.pop("_id")
+            product = products_db.find_one(order["productId"])
+            product["id"] = product.pop("_id")
+            order["product"] = product
+            order["customer"] = customer
+            orders_lst.append(order)
+        context['orders'] = orders_lst
+        print(context)
         return render(request,'Orders/Manage_orders.html',context)
 
     @session_check
-    def renOrder_dtls(self, request):
+    def renOrder_dtls(self, request,order_id):
         context = {}
+        info = self.vendor.getUser(request)
+        context['user_info'] = info
+        database = utils.connect_database(request.session["Vendor_Db"])
+        e_bazar_database = utils.connect_database("E-Bazar")
+        customer_db = e_bazar_database['Customer']
+        products_db = database['Products']
+        orders = database['Orders']
+        orders_data = orders.find_one({"_id":ObjectId(order_id)})
+
+        cust_id = orders_data["customerId"]
+        customer = customer_db.find_one({"_id": ObjectId(cust_id)})
+        customer["id"] = customer.pop("_id")
+        product = products_db.find_one(orders_data["productId"])
+        product["id"] = product.pop("_id")
+        if 'varId' in orders_data:
+          context['varid'] = orders_data['varId']
+          context['var_prod'] = product['variations'][orders_data['varId']]
+        orders_data["product"] = product
+        orders_data["customer"] = customer
+        orders_data['id'] = orders_data.pop('_id')
+        context['order'] = orders_data
+
+        print('/n','/n',context)
         info = self.vendor.getUser(request)
         context['user_info'] = info
         return render(request, 'Orders/Order_details.html',context)
@@ -647,6 +689,7 @@ class Order:
         context = {}
         info = self.vendor.getUser(request)
         context['user_info'] = info
+
         return render(request, 'Orders/Manage_returns.html',context)
 
 

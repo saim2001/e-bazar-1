@@ -123,6 +123,7 @@ class vendorRegister:
                 "address2": area,
                 "postalCode": zipCode,
                 "cnic": cnic,
+                "phoneNo": int(phone),
                 "creditCard": cardNo,
                 "cardHolder": cardHolder,
                 "billingAddress": billingAddress,

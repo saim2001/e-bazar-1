@@ -99,18 +99,47 @@ class Customer:
 
     def add_to_cart(self,request):
         if request.method=='POST':
-            quantity= request.POST['units']
+            quantity= int(request.POST['units'])
             id= request.POST["cart"]
             idLst= id.split("+")
+            print("new item in cart", idLst)
             productId= idLst[0]
             varId= idLst[1]
             string_cart = request.COOKIES.get('cart')
-            if string_cart==None:
+            print("cookies string cart",string_cart)
+            if string_cart==None or string_cart=="":
                 cart_list=[]
+                if varId!="":
+                    cart_list.append([productId, quantity])
+                else:
+                    cart_list.append([productId, quantity, varId])
             else:
+                existsFlag= False
                 cart_list= ast.literal_eval(string_cart)
+                if varId=="":
+                    for index in range(0,len(cart_list)):
+                        if productId== cart_list[index][0]:
+                            quantity+= int(cart_list[index][1])
+                            existsFlag=True
+                            cart_list[index] = [productId, quantity]
+                            break
 
-            cart_list.append([productId,quantity,varId])
+
+                    if existsFlag==False:
+                        cart_list.append([productId, quantity, varId])
+
+                else:
+                    for index in range(0,len(cart_list)):
+                        if productId== cart_list[index][0] and varId== cart_list[index][2]:
+                            quantity+= int(cart_list[index][1])
+                            existsFlag = True
+                            cart_list[index] = [productId, quantity, varId]
+                            break
+
+
+                    if existsFlag==False:
+                        cart_list.append([productId, quantity, varId])
+
 
             rend= redirect('/customer/detail/'+productId)
             seconds= 10*60
@@ -253,6 +282,14 @@ class Customer:
                 order['status']='pending'
                 allOrders = utils.connect_database("E-Bazar", 'Orders')
                 orderId=allOrders.insert_one(order)
+                customerColl= utils.connect_database("E-Bazar", 'Customer')
+                customerDocument= customerColl.find_one({'_id':ObjectId(customer_id)})
+                cusOrder= customerDocument['orders']
+                cusOrder.append(orderId.inserted_id)
+                query = {'_id':ObjectId(customer_id)}
+                update = {"$set": {"orders": cusOrder}}
+                customerColl.update_one(query, update)
+
 
                 for VendOrder in vendorOrder:
                     VendOrder["orderCreated"]=now
@@ -290,10 +327,6 @@ class Customer:
                 return response
 
 
-
-                #
-                # order_database.insert_one(order_dict)
-                # return redirect('logIn')
 
 
 

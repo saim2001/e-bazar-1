@@ -55,7 +55,7 @@ h1 {
     align-items: center;
     justify-content: space-between;
     padding: 20px 70px;
-    background: #8fc0de;
+    background: #343a40;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -75,14 +75,14 @@ h1 {
     text-decoration: none;
     font-size: 16px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: white;
     transition: 0.3s ease;
     position: relative;
 }
 
 #navbar li a:hover,
 #navbar li a.active{
-    color: #f8fcff;
+    color: #6dcfef;
 }
 
 #navbar li a.active::before,
@@ -90,7 +90,7 @@ h1 {
     content: "";
     width: 70%;
     height: 2px;
-    background: #f8fcff;
+    background: #6dcfef;
     position:absolute;
     bottom: -4px;
 

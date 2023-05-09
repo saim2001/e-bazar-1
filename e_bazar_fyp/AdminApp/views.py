@@ -18,29 +18,36 @@ class Verification:
         ebazar = utils.connect_database("E-Bazar")
         allvendorColl = ebazar["Vendors"]
         allvendors = allvendorColl.find({})
-        allvendorsDict = {"verified": [], "notverified": [], "disputed": []}
         notverified=[]
         for v in allvendors:
-            vendorDatabase = utils.connect_database(str(v["_id"]))
-            vendorInfoColl = vendorDatabase["Information"]
-            vendorInfo = vendorInfoColl.find_one({})
             if v["status"] == "notverified":
+                vendorDatabase = utils.connect_database(str(v["_id"]))
+                vendorInfoColl = vendorDatabase["Information"]
+                vendorInfo = vendorInfoColl.find_one({})
+                vendorInfo['id']= str(vendorInfo.pop('_id'))
                 notverified.append(vendorInfo)
-            # elif v["status"] == "notverified":
-            #     allvendorsDict["notverified"].append(vendorInfo)
-            # elif v["status"] == "disputed":
-            #     allvendorsDict["disputed"].append(vendorInfo)
-        print(notverified)
-        #return render(request, "AdminPanel/verification.html", {"vendors":notverified})
-      
         return render(request,'Verification/avPending.html', {"vendors":notverified})
     def avDisputed(self,request):
-       
-        return render(request,'Verification/avDisputed.html')
+        ebazar = utils.connect_database("E-Bazar")
+        allvendorColl = ebazar["Vendors"]
+        allvendors = allvendorColl.find({})
+        disputed = []
+        for v in allvendors:
+            if v["status"] == "disputed":
+                vendorDatabase = utils.connect_database(str(v["_id"]))
+                vendorInfoColl = vendorDatabase["Information"]
+                vendorInfo = vendorInfoColl.find_one({})
+                disputed.append(vendorInfo)
 
-    def avPendingDetails(self,request):
+        return render(request,'Verification/avDisputed.html',{"vendors": disputed})
+
+    def avPendingDetails(self,request,product_id):
+        ebazar = utils.connect_database(product_id)
+        allvendorColl = ebazar["Information"]
+        vendorDetail = allvendorColl.find_one({})
+        vendorDetail['id']= vendorDetail.pop('_id')
        
-        return render(request,'Verification/avPendingDetails.html')
+        return render(request,'Verification/avPendingDetails.html',{"vendor":vendorDetail})
     def avPendingConfirmation(self,request):
        
         return render(request,'Verification/avPendingConfirmation.html')

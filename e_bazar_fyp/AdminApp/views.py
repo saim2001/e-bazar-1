@@ -21,10 +21,12 @@ class Verification:
         allvendorsDict = {"verified": [], "notverified": [], "disputed": []}
         notverified=[]
         for v in allvendors:
-            vendorDatabase = utils.connect_database(str(v["_id"]))
-            vendorInfoColl = vendorDatabase["Information"]
-            vendorInfo = vendorInfoColl.find_one({})
+
             if v["status"] == "notverified":
+                vendorDatabase = utils.connect_database(str(v["_id"]))
+                vendorInfoColl = vendorDatabase["Information"]
+                vendorInfo = vendorInfoColl.find_one({})
+                vendorInfo['id'] = vendorInfo.pop('_id')
                 notverified.append(vendorInfo)
             # elif v["status"] == "notverified":
             #     allvendorsDict["notverified"].append(vendorInfo)
@@ -35,12 +37,14 @@ class Verification:
       
         return render(request,'Verification/avPending.html', {"vendors":notverified})
     def avDisputed(self,request):
-       
+
         return render(request,'Verification/avDisputed.html')
 
-    def avPendingDetails(self,request):
-       
-        return render(request,'Verification/avPendingDetails.html')
+    def avPendingDetails(self,request,vendor_id):
+        vendor = utils.connect_database(str(vendor_id))
+        info = vendor['Information'].find_one({})
+        print(info)
+        return render(request,'Verification/avPendingDetails.html',info)
     def avPendingConfirmation(self,request):
        
         return render(request,'Verification/avPendingConfirmation.html')

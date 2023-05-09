@@ -671,10 +671,14 @@ class Order:
         customer["id"] = customer.pop("_id")
         product = products_db.find_one(orders_data["productId"])
         product["id"] = product.pop("_id")
+        if 'varId' in orders_data:
+          context['varid'] = orders_data['varId']
+          context['var_prod'] = product['variations'][orders_data['varId']]
         orders_data["product"] = product
         orders_data["customer"] = customer
-        context['order'] = orders_data
         orders_data['id'] = orders_data.pop('_id')
+        context['order'] = orders_data
+
         print('/n','/n',context)
         info = self.vendor.getUser(request)
         context['user_info'] = info

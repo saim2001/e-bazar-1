@@ -59,7 +59,7 @@
             <br><br>
             <div class="container border border-1">
                 <p class="h4 pt-1">Order summary</p>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-sm-6 ">
                         <p class="text-muted fw-bold" style="text-align: left; float: left;">Ship by: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
                     </div>
@@ -68,23 +68,23 @@
                     </div>
                     
                     
-                </div>
+                </div> -->
                 <div class="row">
-                    <div class="col-sm-6">
+                    <!-- <div class="col-sm-6">
                         <p class="text-muted fw-bold" style="text-align: left; float: left;">Deliver by: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
-                    </div>
+                    </div> -->
                     <div class="col-sm-6">
-                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Fullfilment: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Fullfilment: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p >E-Bazar</p>
                     </div>
                     
                     
                 </div> 
                 <div class="row">
                     <div class="col-sm-6">
-                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Purchase date: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Purchase date: &nbsp;</p><p style="text-align: right; float: right;">{{order.orderCreated}}</p>
                     </div>
                     <div class="col-sm-6">
-                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Sales channel: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Sales channel: &nbsp;</p><p >E-Bazar.com</p>
                     </div>
                     
                     
@@ -98,17 +98,17 @@
                 <p class="h4 pt-1">Ship to</p>
                 <div class="row">
                     <div class="col-sm-5">
-                        <p class="fw-bold" style="text-align: left; float: left;">xxxx-x--xxx-----xxxxxxxxxxxxx</p>
+                        <p class="fw-bold" style="text-align: left; float: left;">{{order.customer.address}}</p>
                     </div>
                     <div class="col-sm-7">
-                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Address type: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Name: &nbsp;</p><p >{{order.customer.name}}</p>
                     </div>
                     
                     
                 </div>  
                 <div class="row">
                         <div class="col-sm-12">
-                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Phone number: &nbsp;</p><p style="text-align: right; float: right;">11111111111111</p>
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Phone number: &nbsp;</p><p >{{order.customer.phone}}</p>
                          </div>   
                     </div>
                     
@@ -136,6 +136,7 @@
                                     <th>Status</th>
                                     <th>Image</th>
                                     <th>Product name</th>
+                                    <th>SKU</th>
                                     <th>Qantity</th>
                                     <th>Unit price</th>
                                     <th>Proceed</th>
@@ -144,27 +145,54 @@
                                 </thead>
                                 <tbody class="border border-1">
                                   <tr>
-                                    <td><p class="bg-warning bg-gradient text-white">Unshipped</p></td>
-                                    <td>Image</td>
-                                    <td>T-shirt</td>
-                                    <td>2</td>
-                                    <td>Rs.900</td>
+                                    {% if order.status == "pending" %}
+                                        <td><p class="bg-warning bg-gradient text-white">{{order.status}}</p></td>
+                                    {% elif order.status == "inProcess" %}
+                                        <td><p class="bg-info bg-gradient text-white">{{order.status}}</p></td>
+                                    {% elif order.status == "upForDelivery" %}
+                                        <td><p class="bg-primary bg-gradient text-white">{{order.status}}</p></td>
+                                    {% elif order.status == "cancelled" %}
+                                        <td><p class="bg-danger bg-gradient text-white">{{order.status}}</p></td>
+                                    {% elif order.status == "deliverd" %}
+                                        <td><p class="bg-success bg-gradient text-white">{{order.status}}</p></td>
+                                    {% endif %}
+                                    
+                                    <td><img src="{{order.product.images.0}}" alt="" height="50" width="50"></td>
+                                    <td style="width: 150px;">{{order.product.name}}</td>
+                                   
+                                    {% if "varId" in order %}
+                                        
+                                        <td>{{var_prod.sku}}</td>
+                                    {% else %}
+                                        <td>{{order.product.sku}}</td>
+                                    {% endif %}
+                                    <td>{{order.units}}</td>
+                                    {% if "varId" in order %}
+                                        <td>Rs.{{var_prod.price}}</td>
+                                    {% else %}
+                                        <td>Rs.{{order.product.price}}</td>
+                                    {% endif %}
+                    
                                     <td> 
                                         <div class="row">
                                             <div class="column">
-                                                <p class="text-muted fw-bold" style="text-align: left; float: left;">Purchase subtotal: &nbsp;</p><p style="text-align: right; float: right;">Rs.900</p>
+                                                <p class="text-muted fw-bold" style="text-align: left; float: left;">Purchase subtotal: &nbsp;</p><p style="text-align: right; float: right;">Rs.{{order.subtotal}}</p>
                                             </div>
                                             
                                         </div>   
                                         <div class="row">
                                             <div class="column">
-                                                <p class="text-muted fw-bold" style="text-align: left; float: left;">Tax: &nbsp;</p><p style="text-align: right; float: right;">Rs.50</p>
+                                                <p class="text-muted fw-bold" style="text-align: left; float: left;">Tax: &nbsp;</p><p style="text-align: right; float: right;">Rs.0</p>
                                             </div>
                                             
                                         </div>  
                                         <div class="row">
                                             <div class="column">
-                                                <p class="text-muted fw-bold" style="text-align: left; float: left;">Item total: &nbsp;</p><p style="text-align: right; float: right;">Rs.950</p>
+                                                <p class="text-muted fw-bold" style="text-align: left; float: left;">Item total: &nbsp;</p><p style="text-align: right; float: right;">Rs.{{order.subtotal}}</p>
+                                            </div>
+                                            
+                                        </div>   
+                                        <div class="row"></p>
                                             </div>
                                             
                                         </div>  

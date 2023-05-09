@@ -40,11 +40,11 @@ class Verification:
 
         return render(request,'Verification/avDisputed.html')
 
-    def avPendingDetails(self,request,vendor_id):
-        vendor = utils.connect_database(str(vendor_id))
-        info = vendor['Information'].find_one({})
-        print(info)
-        return render(request,'Verification/avPendingDetails.html',info)
+    def avPendingDetails(self,request):
+        # vendor = utils.connect_database(str(vendor_id))
+        # info = vendor['Information'].find_one({})
+        # print(info)
+        return render(request,'Verification/avPendingDetails.html')
     def avPendingConfirmation(self,request):
        
         return render(request,'Verification/avPendingConfirmation.html')

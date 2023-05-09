@@ -102,43 +102,27 @@ class Customer:
             quantity= int(request.POST['units'])
             id= request.POST["cart"]
             idLst= id.split("+")
-            print("new item in cart", idLst)
+            print("new item in cart",idLst)
             productId= idLst[0]
             varId= idLst[1]
             string_cart = request.COOKIES.get('cart')
             print("cookies string cart",string_cart)
             if string_cart==None or string_cart=="":
                 cart_list=[]
-                if varId!="":
-                    cart_list.append([productId, quantity])
-                else:
-                    cart_list.append([productId, quantity, varId])
+                cart_list.append([productId, quantity, varId])
             else:
                 existsFlag= False
                 cart_list= ast.literal_eval(string_cart)
-                if varId=="":
-                    for index in range(0,len(cart_list)):
-                        if productId== cart_list[index][0]:
-                            quantity+= int(cart_list[index][1])
-                            existsFlag=True
-                            cart_list[index] = [productId, quantity]
-                            break
+                for index in range(0,len(cart_list)):
+                    if productId== cart_list[index][0] and varId== cart_list[index][2]:
+                        quantity+= int(cart_list[index][1])
+                        existsFlag = True
+                        cart_list[index] = [productId, quantity, varId]
+                        break
 
 
-                    if existsFlag==False:
-                        cart_list.append([productId, quantity, varId])
-
-                else:
-                    for index in range(0,len(cart_list)):
-                        if productId== cart_list[index][0] and varId== cart_list[index][2]:
-                            quantity+= int(cart_list[index][1])
-                            existsFlag = True
-                            cart_list[index] = [productId, quantity, varId]
-                            break
-
-
-                    if existsFlag==False:
-                        cart_list.append([productId, quantity, varId])
+                if existsFlag==False:
+                    cart_list.append([productId, quantity, varId])
 
 
             rend= redirect('/customer/detail/'+productId)

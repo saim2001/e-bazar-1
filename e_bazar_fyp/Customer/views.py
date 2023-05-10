@@ -29,7 +29,7 @@ class Customer:
     def renHomePage(self,request):
         all_products_lst =[]
         products = utils.connect_database("E-Bazar","Products")
-        all_products = products.find({})
+        all_products = products.find({'onlyb2b':'no'})
 
         for i in all_products:
             name= i["name"]
@@ -309,6 +309,62 @@ class Customer:
                 response = HttpResponse("Order Succesfull")
                 response.delete_cookie('cart')
                 return response
+
+
+    def b2bHome(self,request):
+        productsColl = utils.connect_database('E-Bazar', 'Products')
+        allProducts= productsColl.find({})
+        b2bProducts= []
+        for p in allProducts:
+            if p['isb2b']=='yes':
+                name= p["name"]
+                name= name[:26] + "..." if len(name) > 26 else name
+                temp={"name":name,"id":str(p["_id"])}
+
+                if p["isVariation"]=="yes":
+                    variations = p["variations"]
+                    for key, dic in variations.items():
+                        if "mainpage" in dic.keys():
+                            temp["batch"] = dic['batches'][0]
+                else:
+                    temp["batch"]=p['batches'][0]
+                img= p["images"]
+                temp["image"]= img[0]
+                reviews= p["reviews"]
+                temp["rating"] = self.getRating(reviews)
+                b2bProducts.append(temp)
+            context={
+                'products': b2bProducts
+            }
+
+        return render(request,"Homepage/indexb2b.html",context)
+
+    # all_products_lst = []
+    # products = utils.connect_database("E-Bazar", "Products")
+    # all_products = products.find({'onlyb2b': 'no'})
+    #
+    # for i in all_products:
+    #     name = i["name"]
+    #
+    #     name = name[:26] + "..." if len(name) > 26 else name
+    #     temp = {"name": name, "id": str(i["_id"])}
+    #     if i["isVariation"] == "yes":
+    #         variations = i["variations"]
+    #         for key, dic in variations.items():
+    #             if "mainpage" in dic.keys():
+    #                 temp["price"] = dic["price"]
+    #     else:
+    #         temp["price"] = i["price"]
+    #     img = i["images"]
+    #     temp["image"] = img[0]
+    #     reviews = i["reviews"]
+    #     temp["rating"] = self.getRating(reviews)
+    #     all_products_lst.append(temp)
+    # context = {
+    #     'products': all_products_lst
+    # }
+    #
+    # return render(request, "Homepage/index.html", context)
 
 
 

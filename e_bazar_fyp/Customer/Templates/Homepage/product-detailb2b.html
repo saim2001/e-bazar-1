@@ -1,0 +1,189 @@
+{% extends 'baseCus.html' %}
+{% load static %}
+
+
+    {% block title %}
+    Product detail
+{% endblock %}
+
+{% block content %}
+
+    <script>
+      var product_js = JSON.parse('{{ product_js|escapejs }}');
+      if (product_js=="none"){
+        console.log("no var")
+      }
+      else{
+        var varList= [];
+        var var_type= product_js['var_type']
+        for (const [key, value] of Object.entries(var_type)){
+          varList.push(key)
+        }
+
+
+
+      }
+
+      function changeVarAtt(){
+        var selectlst= [];
+        const selectDropDown = document.getElementsByClassName("varDropDown");
+        for (let i=0; i<selectDropDown.length ;i++){
+          selectlst.push(selectDropDown[i].value)
+        }
+        console.log(selectlst)
+        console.log(varList[0])
+        console.log(product_js["variations"])
+
+        for (const [key, value] of Object.entries(product_js["variations"])){
+
+          if ( varList.length>1 && selectlst.includes(value[varList[0]]) &&  selectlst.includes(value[varList[1]])){
+            //console.log(key)
+            const price = document.getElementById("price");
+            console.log("price",value["price"])
+            price.textContent= "PKR "+value["price"];
+            const unitsava = document.getElementById("unitsava");
+            unitsava.textContent= "Units available : "+value["units"];
+            var cartVarId = document.getElementById("cart");
+            cartVarId.value = product_js["id"]+"+"+ key;
+          }
+          else if ( varList.length==1 && selectlst.includes(value[varList[0]])){
+            const price = document.getElementById("price");
+            console.log("price",value["price"])
+            price.textContent= "PKR "+value["price"];
+            const unitsava = document.getElementById("unitsava");
+            unitsava.textContent= "Units available : "+value["units"];
+            var cartVarId = document.getElementById("cart");
+            cartVarId.value = product_js["id"]+"+"+ key;
+          }
+        }
+      
+      }
+
+  </script>
+
+
+<form action="{% url 'Customer:cart' %}" method="post">
+  {% csrf_token %}
+<section id="product-details" class="section-p1">
+    <div class="single-product-img">
+        <img src="{{product.images.0}}" width="500" height="500" id="mainimg">
+    <div  class="small-img-group">
+      {% for img in product.images %}
+        <div class="small-img-col">
+            <img src="{{img}}" class="small-img" width="200" height="200">
+        </div>
+      {% endfor %}
+
+    </div>
+</div>
+    <div class="single-product-details">
+        <h6>{{product.category}}</h6>
+        <h4>{{product.name}}</h4>
+        <p id="unitsava">Units available : {{product.units}}</p>
+        <h2 id="price">PKR {{product.price}}</h2>
+        {% for varname,varlist in product.var_type.items %}
+        <div id="variationsSelect">
+          <span>Select {{varname}}</span>
+          <select class="varDropDown" name="varSelected" onchange="changeVarAtt()">
+            {% for v in varlist %}
+              <option value="{{v}}">{{v}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        {% endfor %}
+
+
+        <input type="number" name="units" value="1">
+        <button class="normal-button" id="cart" name="cart" value="{{product.id}}+{{product.varid}}" >Add to cart</button>
+        <h4>Product details</h4>
+        <span>{{product.description}}</span>
+    </div>
+</section>
+</form>
+
+
+<section id="featured-products" class="section-p1">
+    <h2>Featured Products</h2>
+    <p>Summer collection Latest design available</p>
+    <div class="fe-pro-cont">
+      <div class="fe-product">
+        <img src="img/products/n1.jpg">
+        <div class="des">
+        <span>adidas</span>
+        <h5>Cartoon astronut T-Shirts</h5>
+        <div class="reviews">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <h4>$50</h4>
+        </div>
+        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+      <div class="fe-product">
+        <img src="img/products/n2.jpg">
+        <div class="des">
+        <span>adidas</span>
+        <h5>Cartoon astronut T-Shirts</h5>
+        <div class="reviews">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <h4>$50</h4>
+        </div>
+        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+      <div class="fe-product">
+        <img src="img/products/n3.jpg">
+        <div class="des">
+        <span>adidas</span>
+        <h5>Cartoon astronut T-Shirts</h5>
+        <div class="reviews">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <h4>$50</h4>
+        </div>
+        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+      <div class="fe-product">
+        <img src="img/products/n4.jpg">
+        <div class="des">
+        <span>adidas</span>
+        <h5>Cartoon astronut T-Shirts</h5>
+        <div class="reviews">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <h4>$50</h4>
+        </div>
+        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+      
+    </div>
+  </section>
+
+<script>
+
+    var mainimg= document.getElementById("mainimg");
+    var smallimg= document.getElementsByClassName("small-img");
+
+    for (let i=0; i<5;i++){
+    smallimg[i].onclick= function(){
+        mainimg.src= smallimg[i].src;
+    }}
+</script>
+
+{% endblock %}

@@ -135,6 +135,11 @@
         </td>
     </tr>
 
+    <tr>
+      <td><label for="onlyb2b">Only B2B</label></td>
+    <td><input type="checkbox" id="onlyb2b" name="onlyb2b" value="yes" disabled onclick="onlyBtoB()"></td>
+    </tr>
+
 
       <tr class="singleProduct">
       <td><label >Product SKU: <span class="required">*</span></label></td>
@@ -159,7 +164,7 @@
       
         <button type="button" class="btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Product you sell can be of other brand or your own products"  style="color: transparent;">
           <i class="fa-regular fa-circle-question fa-lg" style="color: #000000;"></i>
-        </button>      </td>
+        </button></td>
       
       </tr>
 
@@ -174,12 +179,12 @@
         <td><input class="no-border" type="file" name="imageSingle" ></td>
         </tr>
 
-      <tr class="singleProduct">
+      <tr class="singleProduct onlyb2bfields" >
         <td><label for="unitsSingle">Units:<span class="required">*</span></label></td>
         <td><input type="number" id="unitsSingle" name="unitsSingle"></td>
     </tr>
 
-    <tr class="singleProduct">
+    <tr class="singleProduct onlyb2bfields" >
       <td><label for="priceSingle">Price:<span class="required">*</span></label></td>
       <td><input type="number" id="priceSingle" name="priceSingle"></td>
   </tr>
@@ -263,9 +268,7 @@
         <th scope="col"></th>
         <th scope="col">#</th>
         <th scope="col">Seller SKU <span class="required">*</span></th>
-        <th scope="col">Units <span class="required">*</span></th>
         <th scope="col">Condition <span class="required">*</span></th>
-        <th scope="col">Price/unit(Rs) <span class="required">*</span></th>
         <th scope="col">Main Page<span class="required">*</span></th>
         
       </tr>

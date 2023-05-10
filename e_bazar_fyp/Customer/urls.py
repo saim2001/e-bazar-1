@@ -14,5 +14,6 @@ urlpatterns = [
     path('order/',customer.order,name='order'),
     path('register/',customer.register,name='register'),
     path('login/',customer.login,name='login'),
+    path('b2bhome/',customer.b2bHome,name='b2bhome')
 
 ]

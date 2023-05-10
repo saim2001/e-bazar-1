@@ -1,0 +1,70 @@
+{% extends 'baseCus.html' %}
+{% load static %}
+
+
+    {% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+<section id="home-base">
+  <h4>Clearance offer</h4>
+  <h2>Super discounted deals</h2>
+  <h1>On all products</h1>
+  <button>Shop now</button>
+
+</section>
+
+<section id="feature" class="section-p1">
+  <div class="fe-box">
+    <img src="{% static 'img/features/f2.png' %}">
+    <h6>Online order</h6>
+  </div>
+  <div class="fe-box">
+    <img src="{% static 'img/features/f3.png' %}">
+    <h6>Save money</h6>
+  </div>
+  <div class="fe-box">
+    <img src="{% static 'img/features/f4.png' %}">
+    <h6>Promotions</h6>
+  </div>
+  <div class="fe-box">
+    <img src="{% static 'img/features/f5.png' %}">
+    <h6>Happy sell</h6>
+  </div>
+  <div class="fe-box">
+    <img src="{% static 'img/features/f6.png' %}">
+    <h6>24/7 support</h6>
+  </div>
+</section>
+
+<section id="featured-products" class="section-p1">
+  <h2>Latest Products</h2>
+  <p>Best quality products with affordable prices</p>
+  <div class="fe-pro-cont">
+    {% for product in products %}
+    <div class="fe-product">
+      <img src={{product.image}} width="300" height="300">
+      <div class="des">
+      <!-- <h5>{{ product.name }}</h5> -->
+      <h5><a href="{% url 'Customer:productdetails' product.id %}">{{ product.name }}</a></h5>
+
+      <div class="reviews">
+        <!-- <i class="fa-solid fa-star"></i> -->
+        {% for i in product.rating %}
+        {% if i == "shine" %}
+        <i class="fas fa-star"></i>
+        {% else %}
+        <i class="far fa-star"></i>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <p>Minimum units:&nbsp;{{ product.batch.MinUnits }}</p>
+      <h4>PKR {{ product.batch.Price }}</h4>
+      </div>
+      <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

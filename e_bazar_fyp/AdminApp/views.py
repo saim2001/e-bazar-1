@@ -127,7 +127,7 @@ class Verification:
                 if count == len(order['products']):
                     order['status'] = 'inProcess'
 
-                    self.orderstatuschanger(order_id,'inProces')
+                    self.orderstatuschanger(order_id,'inProcess')
                 else:
                     order['status'] = 'pending'
 
@@ -482,6 +482,7 @@ class Verification:
             cluster = clusters.find_one({'_id':ObjectId(cluster_id)})
             clusters.update_one({'_id': ObjectId(cluster_id)},{'$set':{'status':'shipped'}})
             for order in cluster['orders']:
+                print(order)
                 self.orderstatuschanger(ObjectId(order),'shipped')
             messages.success(request,'Cluster shipped successfully')
         except Exception as e:

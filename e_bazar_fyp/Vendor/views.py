@@ -704,7 +704,7 @@ class Order:
             order["product"] = product
             order["customer"] = customer
             orders_lst.append(order)
-        context['orders.js'] = orders_lst
+        context['orders'] = orders_lst
         print(context)
         return render(request,'Orders/Manage_orders.html',context)
 

@@ -39,6 +39,7 @@ path('shipcluster/<str:cluster_id>/', obj.shipCluster, name='shipcluster'),
 path('oClusters/<str:status>/<str:order_lst>/', obj.oClustersUpd, name='oClustersupds'),
 path('changetoUfD/<str:order_id>/', obj.orderupfordel, name='changetoUfD'),
 path('addtocluster/<str:cluster_id>/<str:order_lst>/', obj.addToCluster, name='addtocluster'),
+path('deletecluster/<str:cluster_id>', obj.odelCluster, name='deletecluster'),
 path('delfromcluster/<str:cluster_id>/<str:order_id>/', obj.deleteFromCluster, name='delfromcluster')
 
 ]

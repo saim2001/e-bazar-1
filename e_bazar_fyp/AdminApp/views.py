@@ -550,6 +550,7 @@ class Verification:
                      messages.error(request, 'Failed to create cluster')
                  return redirect('oCreateCluster')
 
+
     def odelCluster(self,request,cluster_id):
         try:
             database = utils.connect_database('E-Bazar')

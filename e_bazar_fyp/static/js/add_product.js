@@ -293,20 +293,26 @@ autoCont.appendChild(newContainer)
 
 var initialContent=[];
   function createVarhtml(){
+    const checkb2b= document.getElementById("b2b_yes").checked;
+    const checkOnlyb2b= document.getElementById("onlyb2b").checked;
     var typeList= getVar();
+    newList= [...typeList];
+    newList.push(checkb2b);
+    newList.push(checkOnlyb2b);
     var preVarCheck= JSON.stringify(getPrevVarList());
-    var typeListCheck= JSON.stringify(getVar());
+    var typeListCheck= JSON.stringify(newList);
+    console.log('prev',preVarCheck,'new',typeListCheck)
     if (preVarCheck != typeListCheck){
-      const checkb2b= document.getElementById("b2b_yes").checked;
-      const checkOnlyb2b= document.getElementById("onlyb2b").checked;
-      newList= [...typeList];
-      newList.push(checkb2b);
-      newList.push(checkOnlyb2b);
       changePrevVarList(newList);
     //"Start" delete previous javascript
     var inputContRemove= document.getElementsByClassName("js_create")
     for (let i=0; i<inputContRemove.length;i++){
       inputContRemove[i].remove();
+      i--;
+    }
+    var b2bjsRemove= document.getElementsByClassName("notOnlyb2b")
+    for (let i=0; i<b2bjsRemove.length;i++){
+      b2bjsRemove[i].remove();
       i--;
     }
     //"End" delete previous javascript
@@ -436,10 +442,10 @@ function createTable(variationList){
   }
   const onlyb2b= document.getElementById("onlyb2b");
   if (!onlyb2b.checked){
-  tableHead.insertCell(lastColindex+2).outerHTML = '<th scope="col" class="js_create" >Units <span class="required">*</span></th>'
-  tableHead.insertCell(lastColindex+4).outerHTML = '<th scope="col" class="js_create" >Price/unit(Rs) <span class="required">*</span></th>'
-  var notOnlyb2bunits='<td class="js_create" > <input name="units" type="number" required> </td>';
-  var notOnlyb2bprice= '<td class="js_create" ><input name="price" type="number" required> </td>';
+  tableHead.insertCell(lastColindex+2).outerHTML = '<th scope="col" class="notOnlyb2b" >Units <span class="required">*</span></th>'
+  tableHead.insertCell(lastColindex+4).outerHTML = '<th scope="col" class="notOnlyb2b" >Price/unit(Rs) <span class="required">*</span></th>'
+  var notOnlyb2bunits='<td class="notOnlyb2b" > <input name="units" type="number" required> </td>';
+  var notOnlyb2bprice= '<td class="notOnlyb2b" ><input name="price" type="number" required> </td>';
 
 }
 else{
@@ -558,9 +564,8 @@ function deleteSelectedRows(){
   }
 }
 
-
-
 //"End" delete selected rows
+
 
 window.onload = function () {
   const data = JSON.parse(document.getElementById("my-data").textContent);
@@ -575,6 +580,15 @@ window.onload = function () {
    const var_types = Object.keys(data.var_type);
    console.log(var_types)
     document.getElementById('var_yes').click();
+    if (data.isb2b == 'yes' ){
+      document.getElementById('b2b_yes').click();
+    
+    if (data.onlyb2b=='yes'){
+      console.log('yes only b2b2')
+      document.getElementById('onlyb2b').checked=true;
+    }}
+
+
     for (const var_type  of var_types ){
       if (var_type == 'size'){
 
@@ -647,10 +661,18 @@ window.onload = function () {
     console.log(rows[i])
     let sku = rows[i].querySelector("[name = 'sku']");
     sku.value = var_data[i]["sku"];
-    let units = rows[i].querySelector("[name = 'units']");
-    units.value = var_data[i]["units"];
-    let price = rows[i].querySelector("[name = 'price']");
-    price.value = var_data[i]["price"];
+
+    if (data.isb2b=='yes'){
+
+    }
+    if (data.onlyb2b!='yes'){
+      let units = rows[i].querySelector("[name = 'units']");
+      units.value = var_data[i]["units"];
+      let price = rows[i].querySelector("[name = 'price']");
+      price.value = var_data[i]["price"];
+    }
+
+
     let condition =   rows[i].querySelector("[name = 'condition']");  
     condition.value = var_data[i]["condition"];
   }
@@ -690,7 +712,7 @@ window.onload = function () {
    }
 
 
-   if (data.isb2b == 'yes'){
+   if (data.isb2b == 'yes' && data.isVariation == "no" ){
     document.getElementById('b2b_yes').click();
     let batches = Object.values(data.batches);
     for (i=0; i<batches.length; i++){
@@ -721,7 +743,7 @@ window.onload = function () {
   let pro_points = data.points;
   for (i=0; i<pro_points.length; i++){
     point[i].value = pro_points[i];
-  }
-  
+  }
+  
 
 }

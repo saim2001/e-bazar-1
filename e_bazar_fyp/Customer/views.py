@@ -7,8 +7,10 @@ from datetime import datetime
 import json
 from django.http import JsonResponse
 import ast
+from django.contrib import messages
 class Customer:
     def __init__(self):
+        self.switch='b2c'
         pass
 
     def getRating(self,reviews):
@@ -27,6 +29,7 @@ class Customer:
 
             return rating_lst
     def renHomePage(self,request):
+        self.setSwitch('b2c')
         all_products_lst =[]
         products = utils.connect_database("E-Bazar","Products")
         all_products = products.find({'onlyb2b':'no'})
@@ -164,7 +167,10 @@ class Customer:
             return request.session["Customer_verify"]
     def login(self,request):
         if self.session_check(request):
-            return redirect("Customer:home")
+            if self.getSwitch()=='b2c':
+                return redirect("Customer:home")
+            else:
+                return redirect("Customer:b2bhome")
         elif request.method == 'POST':
             email = request.POST['email']
             password = request.POST['password']
@@ -172,7 +178,10 @@ class Customer:
             customer= database.find_one({"email":email.strip(),"password":password.strip()})
             if customer:
                 request.session["Customer_verify"] = str(customer['_id'])
-                return redirect("Customer:home")
+                if self.getSwitch() == 'b2c':
+                    return redirect("Customer:home")
+                else:
+                    return redirect("Customer:b2bhome")
             else:
                 return render(request, 'register/signin.html',context={"error_message": "Your email or password is incorrect!"})
         return render(request,"register/signin.html")
@@ -195,7 +204,10 @@ class Customer:
                 customer_id= customer_database.insert_one(customer_detail)
                 customer_id= customer_id.inserted_id
                 request.session["Customer_verify"] = str(customer_id)
-                return redirect("Customer:home")
+                if self.getSwitch() == 'b2c':
+                    return redirect("Customer:home")
+                else:
+                    return redirect("Customer:b2bhome")
             else:
                 return render(request, 'register/register.html', {
                     'error_message': "Email is already taken, use different email !",
@@ -204,6 +216,7 @@ class Customer:
         return render(request, 'register/register.html')
 
     def order(self,request):
+
         customer_id= self.session_check(request)
         if customer_id is None:
             return redirect("Customer:login")
@@ -312,6 +325,7 @@ class Customer:
 
 
     def b2bHome(self,request):
+        self.setSwitch('b2b')
         productsColl = utils.connect_database('E-Bazar', 'Products')
         allProducts= productsColl.find({'isb2b':'yes'})
         b2bProducts= []
@@ -442,7 +456,8 @@ class Customer:
         else:
             string_cart = request.COOKIES.get('cartb2b')
             if string_cart is None or len(string_cart)==0:
-                return HttpResponse("no items in cart")
+                messages.error(request, "Product update failed")
+                return redirect("Customer:b2bhome")
 
 
             else:
@@ -486,6 +501,7 @@ class Customer:
 
 
     def orderb2b(self,request):
+
         customer_id= self.session_check(request)
         if customer_id is None:
             return redirect("Customer:login")
@@ -578,6 +594,13 @@ class Customer:
                 response = HttpResponse("Order Succesfull")
                 response.delete_cookie('cartb2b')
                 return response
+
+    def setSwitch(self,type):
+        self.switch= type
+
+    def getSwitch(self):
+        return self.switch
+
 
 
 

@@ -30,6 +30,7 @@
                     <p>{{cluster.Shipby}}</p>
                     <p>{{cluster.Deliverby}}</p>
                     <a href="{% url 'oClusterDetails' cluster.id %}"><button id='oCCVDId'>View details</button></a>
+                    <a href="{% url 'deletecluster' cluster.id %}"><button id='oCCVDId'>Delete</button></a>
                      {% if orderlst %}
                         <br>
                         <a href="{% url 'addtocluster' cluster.id orderlst  %}"><button id='oCCVDId'>Add to cluster</button></a>

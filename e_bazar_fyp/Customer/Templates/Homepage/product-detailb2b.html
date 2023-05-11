@@ -6,6 +6,18 @@
     Product detail
 {% endblock %}
 
+{% block homeurl %}
+<a href="{% url 'Customer:b2bhome' %}">
+{% endblock %}
+
+{% block carturl %}
+<a href="{% url 'Customer:cartb2b' %}">
+{% endblock %}
+
+{% block switchurl %} 
+onclick="location.href='{% url 'Customer:home' %}'"> Switch to B2C
+{% endblock %}
+
 {% block content %}
 
     <script>
@@ -14,6 +26,7 @@
         console.log("no var")
       }
       else{
+        console.log('productjs',product_js)
         var varList= [];
         var var_type= product_js['var_type']
         for (const [key, value] of Object.entries(var_type)){
@@ -38,11 +51,13 @@
 
           if ( varList.length>1 && selectlst.includes(value[varList[0]]) &&  selectlst.includes(value[varList[1]])){
             //console.log(key)
-            const price = document.getElementById("price");
-            console.log("price",value["price"])
-            price.textContent= "PKR "+value["price"];
-            const unitsava = document.getElementById("unitsava");
-            unitsava.textContent= "Units available : "+value["units"];
+            const batchUnits = document.getElementsByClassName('batchUnits');
+            const batchPrice = document.getElementsByClassName('batchPrice');
+            var batches= value['batches'];
+            for (let index=0; index<batches.length;index++){
+              batchUnits[index].textContent= "Pieces: "+batches[index]['text']
+              batchPrice[index].textContent= "Price:PKR "+batches[index]['Price']
+            }
             var cartVarId = document.getElementById("cart");
             cartVarId.value = product_js["id"]+"+"+ key;
           }
@@ -62,11 +77,12 @@
   </script>
 
 
-<form action="{% url 'Customer:cart' %}" method="post">
+<form action="{% url 'Customer:cartb2b' %}" method="post">
   {% csrf_token %}
 <section id="product-details" class="section-p1">
     <div class="single-product-img">
         <img src="{{product.images.0}}" width="500" height="500" id="mainimg">
+        <br><br>
     <div  class="small-img-group">
       {% for img in product.images %}
         <div class="small-img-col">
@@ -79,8 +95,10 @@
     <div class="single-product-details">
         <h6>{{product.category}}</h6>
         <h4>{{product.name}}</h4>
-        <p id="unitsava">Units available : {{product.units}}</p>
-        <h2 id="price">PKR {{product.price}}</h2>
+        {% for b in product.batches %}
+        <p class="batchUnits">Pieces: {{ b.text }}</p>
+        <h6 class="batchPrice">Price:PKR {{ b.Price }}</h6><br><br>
+        {% endfor %}
         {% for varname,varlist in product.var_type.items %}
         <div id="variationsSelect">
           <span>Select {{varname}}</span>

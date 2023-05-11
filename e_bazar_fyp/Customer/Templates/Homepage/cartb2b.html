@@ -6,6 +6,18 @@
     Cart
 {% endblock %}
 
+{% block homeurl %}
+<a href="{% url 'Customer:b2bhome' %}">
+{% endblock %}
+
+{% block carturl %}
+<a href="{% url 'Customer:cartb2b' %}">
+{% endblock %}
+
+{% block switchurl %} 
+onclick="location.href='{% url 'Customer:home' %}'"> Switch to B2C
+{% endblock %}
+
 {% block content %}
 
 <section style="background-image: url('{% static 'img/b1.jpg' %}');" id="shop-header">
@@ -21,8 +33,8 @@
                 <td>Remove</td>
                 <td>Images</td>
                 <td>Product</td>
-                <td>Price</td>
-                <td>Available Units</td>
+                <td>Units Range</td>
+                <td>Price/unit</td>
                 <td>Quantity</td>
                 <td>Subtotal</td>
             </tr>
@@ -32,9 +44,9 @@
             <tr class="cartItems">
                 <td><i class="far fa-times-circle" id="removeItem{{ forloop.counter0 }}"></i></td>
                 <td><img src="{{product.images.0}}"></td>
-                <td>{{product.name}}</td>
-                <td class="price">{{product.price}}</td>
-                <td>{{product.units}}</td>
+                <td><a href="{% url 'Customer:productdetailsb2b' product.id %}">{{product.name}}</a></td>
+                <td class="batchtext">{{product.batch.text}}</td>
+                <td class="price">{{product.batch.Price}}</td>
                 <td><input class="units" type="number" value="{{product.quantity}}" max="{{product.unitsava}}" oninput="calSubtot()"></td>
                 <td class="itemSubtotal">0</td>
             </tr>
@@ -77,6 +89,9 @@
 </section>
 <script>
   var cart_js = JSON.parse('{{ cart_js|escapejs }}');
+  var batchesLst = JSON.parse('{{ batches|escapejs }}');
+  console.log(cart_js);
+  console.log(batches)
   const cart= document.getElementsByClassName("cartItems");
 for (var i = 0; i < cart.length; i++ ){
     var removeButton=document.getElementById("removeItem"+i);
@@ -95,8 +110,17 @@ calSubtot("start");
 function calSubtot(onstart="none"){
   const varItems= document.getElementsByClassName("cartItems");
 for (let i=0; i<varItems.length;i++){  
-  price= varItems[i].querySelector(".price").innerHTML;
+  price= varItems[i].querySelector(".price").innerHTML; 
   units= varItems[i].querySelector(".units").value;
+  var batches= batchesLst[i]
+  for (let bInd=0; bInd<batches.length;bInd++){
+    if (batches[bInd]['MaxUnits']=='infinite' || parseInt(units) <= batches[bInd]['MaxUnits'] ){
+      varItems[i].querySelector(".batchtext").innerHTML=batches[bInd]['text'];
+      varItems[i].querySelector(".price").innerHTML= batches[bInd]['Price'];
+      break
+    }
+  }
+
   cart_js[i][1]=parseInt(units);
   itemSubtotal= varItems[i].querySelector(".itemSubtotal");
   var sub= parseInt(price)* parseInt(units);
@@ -125,8 +149,8 @@ function updateCartCookies(){
   else{
     var cookieValue = JSON.stringify(cart_js);
   }
-const cookieName = 'cart';
-const url = "{% url 'Customer:cart' %}";
+const cookieName = 'cartb2b';
+const url = "{% url 'Customer:cartb2b' %}";
 const expirationDate = new Date(Date.now() + 100000); // expires in 10 min
 const cookieString = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/;`;
 document.cookie = cookieString;

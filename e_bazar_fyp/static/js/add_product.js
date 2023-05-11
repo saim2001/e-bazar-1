@@ -55,6 +55,18 @@ function openPage(pageName, elmnt, color, context) {
 
   //new code after saim 
 
+  var prevVarList=[];
+
+function changePrevVarList(varLst){
+  console.log(varLst,"changes")
+  prevVarList= varLst
+
+}
+
+function getPrevVarList(){
+ return prevVarList
+}
+
 
 function showVar() {
     
@@ -81,6 +93,11 @@ function showVar() {
   }
 
   function hideVar() {
+    document.querySelector('.myDiv input[type="checkbox"]');
+    const var_checkboxes = document.querySelectorAll('.variations input[type="checkbox"]');
+    var_checkboxes.forEach(checkbox => {
+      checkbox.checked = false;
+    });
     var var_div= document.getElementById('variations_enable');
     var b2bno= document.getElementById("b2b_no");
     var b2bRows= document.getElementsByClassName("b2bBatches");
@@ -272,17 +289,6 @@ autoCont.appendChild(newContainer)
 //"Start" function to create labels and headings for according to input
 // provided from product information tab
 
-var prevVarList=[];
-
-function changePrevVarList(varLst){
-  console.log(varLst,"changes")
-  prevVarList= varLst
-
-}
-
-function getPrevVarList(){
- return prevVarList
-}
 
 
 var initialContent=[];

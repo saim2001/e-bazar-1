@@ -496,6 +496,7 @@ class Product:
             productDict={}
             dateCreated= datetime.datetime.now()
             isb2b = request.POST.get("B2Boptions")
+            onlyb2b= request.POST.get("onlyb2b")
             isvar= request.POST.get("options")
             vartype= request.POST.getlist("varname")
             category= request.POST.get("category")
@@ -509,6 +510,10 @@ class Product:
             brand = request.POST.get("brand")
             expireDate = request.POST.get("expireDate")
             productDict["points"] = request.POST.getlist("points")
+            if onlyb2b =='yes':
+                productDict['onlyb2b']= 'yes'
+            else:
+                productDict['onlyb2b']='no'
 
 
             if brand:
@@ -523,18 +528,16 @@ class Product:
 
             if len(vartype)==0:
                 sku= request.POST.get("skuSingle")
-                units = request.POST.get("unitsSingle")
-                price = request.POST.get("priceSingle")
                 condition = request.POST.get("conditionSingle")
 
-                batches = {}
+                batches = []
                 if isb2b =="yes":
 
                     for i in range(1,4):
-                        batchUnits = request.POST.get("batchUnits"+str(i))
-                        batchPrice = request.POST.get("batchPrice"+str(i))
+                        batchUnits = int(request.POST.get("batchUnits"+str(i)))
+                        batchPrice = int(request.POST.get("batchPrice"+str(i)))
                         if int(batchUnits)!=0 and int(batchPrice)!=0:
-                            batches[str(uuid.uuid4())]={"MinUnits":batchUnits,"Price":batchPrice}
+                            batches.append({"MinUnits":batchUnits,"Price":batchPrice})
 
                 images = request.FILES.getlist('imageSingle')
                 imagesList=[]
@@ -542,11 +545,18 @@ class Product:
                     if img.content_type.startswith('image/'):
                         img_url = azureCon.uploadimg(img)
                         imagesList.append(img_url)
-                productDict.update({'sku':sku , 'units':units, 'price':price,'condition':condition,'images':imagesList})
+
+                if onlyb2b=='yes':
+                    productDict.update({'sku':sku ,'condition':condition,'images':imagesList})
+                else:
+                    units = request.POST.get("unitsSingle")
+                    price = request.POST.get("priceSingle")
+                    productDict.update(
+                        {'sku': sku, 'units': units, 'price': price, 'condition': condition, 'images': imagesList})
                 if len(batches) != 0:
+                    batches = sorted(batches, key=lambda x: x['MinUnits'], reverse=False)
                     productDict["batches"]=batches
-                print(productDict)
-                #return redirect("Vendor:reninvtry")
+
 
             else:
                 variations={}
@@ -556,6 +566,7 @@ class Product:
                 condition = request.POST.getlist("condition")
                 images = request.FILES.getlist('images')
                 imagesList=[]
+                varList= []
                 for img in images:
                     if img.content_type.startswith('image/'):
                         img_url = azureCon.uploadimg(img)
@@ -572,22 +583,28 @@ class Product:
 
                 if len(vartype)==1:
                     varatt = request.POST.getlist("var")
+                    varRemoveDuplicate= set(varatt)
+                    varList.append(list(varRemoveDuplicate))
                     for index in range(0,len(varatt)):
-                        tempVar= {'vartype':varatt[index] ,'sku':sku[index] , 'units':units[index], 'price':price[index],'condition':condition[index]}
+                        tempVar= {vartype[0]:varatt[index] ,'sku':sku[index] , 'condition':condition[index]}
+                        if onlyb2b!='yes':
+                            tempVar['units']=units[index]
+                            tempVar['price']=price[index]
                         if mainpage == varatt[index]:
                             tempVar['mainpage']=True
 
 
                         if isb2b == "yes":
-                            batches = {}
+                            batches = []
                             if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
-                                batches[str(uuid.uuid4())]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
+                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
                             if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
-                                batches[str(uuid.uuid4())]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
+                                batches.append({"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])})
                             if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
-                                batches[str(uuid.uuid4())]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
+                                batches.append({"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])})
 
                             if len(batches)!=0:
+                                batches = sorted(batches, key=lambda x: x['MinUnits'], reverse=False)
                                 tempVar["batches"]=batches
                         variations[str(uuid.uuid4())]=tempVar
 
@@ -595,29 +612,45 @@ class Product:
                     mainpage= mainpage.split("-")
                     varatt1 = request.POST.getlist("var1")
                     varatt2 = request.POST.getlist("var2")
+                    varRemoveDuplicate1 = set(varatt1)
+                    varRemoveDuplicate2 = set(varatt2)
+                    varList.append(list(varRemoveDuplicate1))
+                    varList.append(list(varRemoveDuplicate2))
                     for index in range(0, len(varatt1)):
-                        tempVar= {'vartype1': varatt1[index],'vartype2': varatt2[index], 'sku': sku[index],
-                             'units': units[index], 'price': price[index], 'condition': condition[index],
+                        tempVar= {vartype[0]: varatt1[index],vartype[1]: varatt2[index], 'sku': sku[index],
+                             'condition': condition[index],
                              }
+
+                        if onlyb2b!='yes':
+                            tempVar['units']=units[index]
+                            tempVar['price']=price[index]
 
                         if mainpage[0] == varatt1[index] and mainpage[1]== varatt2[index]:
                             tempVar['mainpage']=True
 
                         if isb2b == "yes":
-                            batches = {}
+                            batches = []
                             if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
-                                batches[str(uuid.uuid4())]={"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])}
+                                batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
                             if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
-                                batches[str(uuid.uuid4())]={"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])}
+                                batches.append({"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])})
                             if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
-                                batches[str(uuid.uuid4())]={"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])}
+                                batches.append({"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])})
 
                             if len(batches)!=0:
+                                batches = sorted(batches, key=lambda x: x['MinUnits'], reverse=False)
                                 tempVar["batches"]=batches
                         variations[str(uuid.uuid4())]=tempVar
 
 
+
+
                 productDict['variations']=variations
+                varNamesTypes={}
+                for v in range(len(vartype)):
+                    varNamesTypes[vartype[v]]= varList[v]
+                productDict["var_type"] = varNamesTypes
+
 
             reviews= {}
             reviews["reviewDetail"]={}
@@ -625,7 +658,6 @@ class Product:
             productDict["reviews"]=reviews
             productDict['status']="enabled"
             vendorId= request.session.get('Vendor_Db')
-            print(vendorId,"vendor")
             vendorDatabase= utils.connect_database(vendorId)
             ebazarDatabase= utils.connect_database("E-Bazar")
             allProducts= ebazarDatabase["Products"]
@@ -635,7 +667,7 @@ class Product:
             allProducts.update_one({"_id":ObjectId(product_id)},{"$set":productDict})
             return redirect("Vendor:reninvtry")
         else:
-            return "some error"
+            return HttpResponse("some error")
 
 
 

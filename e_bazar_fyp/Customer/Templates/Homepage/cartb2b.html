@@ -83,15 +83,13 @@ onclick="location.href='{% url 'Customer:home' %}'"> Switch to B2C
                 </tr>
                 
             </table>
-            <button class= "normal-button" ><a style="text-decoration: none;color: white;" href="{% url 'Customer:order' %}" class="button">Proceed to checkout</a></button>
+            <button class= "normal-button" ><a style="text-decoration: none;color: white;" href="{% url 'Customer:orderb2b' %}" class="button">Proceed to checkout</a></button>
         </div>
     
 </section>
 <script>
   var cart_js = JSON.parse('{{ cart_js|escapejs }}');
   var batchesLst = JSON.parse('{{ batches|escapejs }}');
-  console.log(cart_js);
-  console.log(batches)
   const cart= document.getElementsByClassName("cartItems");
 for (var i = 0; i < cart.length; i++ ){
     var removeButton=document.getElementById("removeItem"+i);
@@ -151,7 +149,8 @@ function updateCartCookies(){
   }
 const cookieName = 'cartb2b';
 const url = "{% url 'Customer:cartb2b' %}";
-const expirationDate = new Date(Date.now() + 100000); // expires in 10 min
+var expirationDate = new Date();
+expirationDate.setTime(expirationDate.getTime() + (30 * 60 * 1000));
 const cookieString = `${cookieName}=${cookieValue}; expires=${expirationDate.toUTCString()}; path=/;`;
 document.cookie = cookieString;
 }

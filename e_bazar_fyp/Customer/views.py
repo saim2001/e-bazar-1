@@ -126,7 +126,7 @@ class Customer:
 
 
             rend= redirect('/customer/detail/'+productId)
-            seconds= 10*60
+            seconds= 30*60
             rend.set_cookie('cart',cart_list,max_age=seconds)
             return rend
         else:
@@ -436,7 +436,8 @@ class Customer:
 
 
             rend= redirect('/customer/b2bdetail/'+productId)
-            rend.set_cookie('cartb2b',cart_list)
+            seconds = 30 * 60
+            rend.set_cookie('cartb2b',cart_list,max_age=seconds)
             return rend
         else:
             string_cart = request.COOKIES.get('cartb2b')
@@ -511,30 +512,34 @@ class Customer:
                         if findProduct["isVariation"]=="yes":
                             getVariation= findProduct["variations"]
                             if product[2] in getVariation.keys():
-                                batches = self.addTextToBatches(getVariation[product[2]])
+                                batches = self.addTextToBatches(getVariation[product[2]]['batches'])
+                                if product[1] < batches[0]['MinUnits']:
+                                    return redirect('Customer:cartb2b')
                                 for b in batches:
                                     if b['MaxUnits'] == 'infinite' or product[1] <= b['MaxUnits']:
                                         price = b['Price']
                                         break
                                 subTotal+= int(price)*int(product[1])
-                                tempVendorOrder.update({"productId": findProduct['_id'],'varId':product[2],'units': product[1],'vendorId':vendorId,'updUnits':int(unitsava)-int(product[1]),'subtotal':subTotal})
+                                tempVendorOrder.update({"productId": findProduct['_id'],'varId':product[2],'units': product[1],'b2bprice':price, 'vendorId':vendorId,'subtotal':subTotal})
                                 vendorOrder.append(tempVendorOrder)
                                 tempOrder.update(
-                                    {"productId": findProduct['_id'],'varId':product[2],'units': product[1], 'vendorId': vendorId,'subtotal':subTotal})
-
+                                    {"productId": findProduct['_id'],'varId':product[2],'units': product[1],'b2bprice':price, 'vendorId': vendorId,'subtotal':subTotal})
                             else:
                                 return HttpResponse("No such variation available")
                         else:
-                            unitsava= int(findProduct["units"])
-                            if unitsava >= int(product[1]):
-                                price = findProduct['price']
-                                subTotal += int(price) * int(product[1])
-                                tempVendorOrder.update(
-                                    {"productId": findProduct['_id'], 'units': product[1],'vendorId':vendorId,'updUnits':int(unitsava)-int(product[1]),'subtotal':subTotal})
-                                vendorOrder.append(tempVendorOrder)
-                                tempOrder.update({"productId":findProduct['_id'],'units':product[1],'vendorId':vendorId,'subtotal':subTotal})
-                            else:
-                                return HttpResponse("Available units are less than required")
+                            batches = self.addTextToBatches(findProduct['batches'])
+                            if product[1] < batches[0]['MinUnits']:
+                                return redirect('Customer:cartb2b')
+                            for b in batches:
+                                if b['MaxUnits'] == 'infinite' or product[1] <= b['MaxUnits']:
+                                    price = b['Price']
+                                    break
+                            subTotal += int(price) * int(product[1])
+                            tempVendorOrder.update(
+                                {"productId": findProduct['_id'], 'units': product[1],'vendorId':vendorId,'subtotal':subTotal})
+                            vendorOrder.append(tempVendorOrder)
+                            tempOrder.update({"productId":findProduct['_id'],'units':product[1],'vendorId':vendorId,'subtotal':subTotal})
+
 
                     totalAmount+=subTotal
                     orderProducts.append(tempOrder)
@@ -562,26 +567,8 @@ class Customer:
                     VendOrder['orderId']=orderId.inserted_id
                     VendOrder['customerId']= customer_id
                     VendOrder['status']='pending'
-
-
-
-                    allProducts = utils.connect_database("E-Bazar", 'Products')
-                    specVendorProducts = utils.connect_database(str(VendOrder["vendorId"]), 'Products')
-                    if "varId" in VendOrder.keys():
-                        query = {"_id": ObjectId(VendOrder['productId'])}
-                        update = {"$set": {"variations."+VendOrder['varId']+".units": int(VendOrder['updUnits'])}}
-                        allOrderUpd = allProducts.update_one(query, update)
-                        vendorOrderUpd = specVendorProducts.update_one(query, update)
-
-                    else:
-                        query = {"_id": ObjectId(VendOrder['productId'])}
-                        update = {"$set": {"units": int(VendOrder['updUnits'])}}
-                        allOrderUpd = allProducts.update_one(query, update)
-                        vendorOrderUpd = specVendorProducts.update_one(query, update)
-
                     specVendorOrders = utils.connect_database(str(VendOrder["vendorId"]), 'Orders')
                     del VendOrder['vendorId']
-                    del VendOrder['updUnits']
                     specVendorOrders.insert_one(VendOrder)
 
                 print("All order")
@@ -589,7 +576,7 @@ class Customer:
                 print("Vendor order")
                 print(vendorOrder)
                 response = HttpResponse("Order Succesfull")
-                response.delete_cookie('cart')
+                response.delete_cookie('cartb2b')
                 return response
 
 

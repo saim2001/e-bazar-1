@@ -297,7 +297,12 @@ var initialContent=[];
     var preVarCheck= JSON.stringify(getPrevVarList());
     var typeListCheck= JSON.stringify(getVar());
     if (preVarCheck != typeListCheck){
-      changePrevVarList(typeList);
+      const checkb2b= document.getElementById("b2b_yes").checked;
+      const checkOnlyb2b= document.getElementById("onlyb2b").checked;
+      newList= [...typeList];
+      newList.push(checkb2b);
+      newList.push(checkOnlyb2b);
+      changePrevVarList(newList);
     //"Start" delete previous javascript
     var inputContRemove= document.getElementsByClassName("js_create")
     for (let i=0; i<inputContRemove.length;i++){
@@ -431,10 +436,10 @@ function createTable(variationList){
   }
   const onlyb2b= document.getElementById("onlyb2b");
   if (!onlyb2b.checked){
-  tableHead.insertCell(lastColindex+2).outerHTML = '<th scope="col">Units <span class="required">*</span></th>'
-  tableHead.insertCell(lastColindex+4).outerHTML = '<th scope="col">Price/unit(Rs) <span class="required">*</span></th>'
-  var notOnlyb2bunits='<td> <input name="units" type="number" required> </td>';
-  var notOnlyb2bprice= '<td><input name="price" type="number" required> </td>';
+  tableHead.insertCell(lastColindex+2).outerHTML = '<th scope="col" class="js_create" >Units <span class="required">*</span></th>'
+  tableHead.insertCell(lastColindex+4).outerHTML = '<th scope="col" class="js_create" >Price/unit(Rs) <span class="required">*</span></th>'
+  var notOnlyb2bunits='<td class="js_create" > <input name="units" type="number" required> </td>';
+  var notOnlyb2bprice= '<td class="js_create" ><input name="price" type="number" required> </td>';
 
 }
 else{

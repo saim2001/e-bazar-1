@@ -17,10 +17,10 @@
     <a href="#"><img src="https://ebazar-bucket.s3.ap-south-1.amazonaws.com/logo+white.svg" class="logo" alt="" width="100" height="100"></a>
     <div>
         <ul id="navbar">
-            <li><a class="active" href="{% url 'Customer:home' %}">Home</a></li>
+            <li>{% block homeurl %}<a class="active" href="{% url 'Customer:home' %}">{% endblock %}Home</a></li>
             <li><a href="{% url 'Customer:login' %}">Sign in</a></li>
-            <li><a href="{% url 'Customer:cart' %}"><i class="fa-solid fa-cart-shopping"></i></a></li>
-            <li><button type="button" class="btn btn-primary" onclick="location.href='{% url 'Customer:b2bhome' %}'">Switch to B2B</button></li>
+            <li>{% block carturl %}<a href="{% url 'Customer:cart' %}">{% endblock %}<i class="fa-solid fa-cart-shopping"></i></a></li>
+            <li><button type="button" class="btn btn-primary" {% block switchurl %} onclick="location.href='{% url 'Customer:b2bhome' %}'"> Switch to B2B{% endblock %} </button></li>
 
         </ul>
     </div>

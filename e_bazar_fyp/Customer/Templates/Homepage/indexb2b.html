@@ -6,6 +6,18 @@
     Home
 {% endblock %}
 
+{% block homeurl %}
+<a href="{% url 'Customer:b2bhome' %}">
+{% endblock %}
+
+{% block carturl %}
+<a href="{% url 'Customer:cartb2b' %}">
+{% endblock %}
+
+{% block switchurl %} 
+onclick="location.href='{% url 'Customer:home' %}'"> Switch to B2C
+{% endblock %}
+
 {% block content %}
 <section id="home-base">
   <h4>Clearance offer</h4>
@@ -47,7 +59,7 @@
       <img src={{product.image}} width="300" height="300">
       <div class="des">
       <!-- <h5>{{ product.name }}</h5> -->
-      <h5><a href="{% url 'Customer:productdetails' product.id %}">{{ product.name }}</a></h5>
+      <h5><a href="{% url 'Customer:productdetailsb2b' product.id %}">{{ product.name }}</a></h5>
 
       <div class="reviews">
         <!-- <i class="fa-solid fa-star"></i> -->

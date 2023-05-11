@@ -23,6 +23,7 @@ class vendorRegister:
     def logIn(self,request):
         if request.method == "POST":
             email = request.POST["Email"]
+            email= email.lower()
             password = request.POST["password"]
             dataBase = utils.connect_database("E-Bazar")
             vendors = dataBase["Vendors"]

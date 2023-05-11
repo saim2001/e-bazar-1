@@ -1,47 +1,49 @@
-{% extends 'Verification/orderOption.html' %}
+{% extends 'Verification/clusteroptions.html' %}
+
+
 {% block  subContent %}
+
+
+{% include 'message_a.html' %}
 <div class="content" id="clustersId">
 
     <div class="pending">
         <div class="pendingAttributes">
             <p>Cluster ID </p>
-            <p>Order</p>
+            <p>Orders</p>
             <p>Status</p>
-
+            <p>Ship to</p>
+            <p>Ship by</p>
+            <p>Delivered by</p>
 
             <p>Actions</p>
         </div>
-        <div class="pendingData">
-            <p>#111 </p>
-            <p>50</p>
-            <p>Unshipped</p>
+
+        {% if clusters %}
+            {% for cluster in clusters %}
+                <div class="pendingData">
+
+                    <p>{{cluster.id}}</p>
+                    <p>{{cluster.orderno}}</p>
+                    <p>{{cluster.status}}</p>
+                    <p>{{cluster.city}}</p>
+                    <p>{{cluster.Shipby}}</p>
+                    <p>{{cluster.Deliverby}}</p>
+                    <a href="{% url 'oClusterDetails' cluster.id %}"><button id='oCCVDId'>View details</button></a>
+                     {% if orderlst %}
+                        <br>
+                        <a href="{% url 'addtocluster' cluster.id orderlst  %}"><button id='oCCVDId'>Add to cluster</button></a>
+                     {% endif %}
+
+                    </div>
+            {% endfor %}
+        {% else %}
+            <div class="pendingData">
+            <p>There are no clusters in this state</p>
+            </div>
+        {% endif %}
 
 
-            <p class="pButton">
-                <a href="{% url 'oClusterDetails' %}">  <button id='oCVDId'>View details</button></a>
-
-               
-                <button>Shipment</button>
-
-            </p>
-
-
-        </div>
-        <div class="pendingData">
-            <p>#112 </p>
-            <p>30</p>
-            <p>Shipped</p>
-
-
-            <p class="pButton">
-
-                <button onclick="OrderViewDetails(`oCVDId`)">View details</button>
-                <button>Shipment</button>
-
-            </p>
-
-
-        </div>
         <a href="{% url 'oCreateCluster' %}"><button id='oCCVDId'>Create Cluster</button></a>
       
 
@@ -49,9 +51,11 @@
 
 
 
-    </div>
+
 
 </div>
+    </div>
+
 
 
 {% endblock %}

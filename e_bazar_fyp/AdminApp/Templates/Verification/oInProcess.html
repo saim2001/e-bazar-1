@@ -1,6 +1,6 @@
 {% extends 'Verification/orderOption.html' %}
 {% block  subContent %}
-<div class="content" id="fulfilledId">
+<div class="content" id="upForDelivery">
 
      <div class="pending">
             <div class="pendingAttributes">
@@ -32,7 +32,7 @@
                 {% endfor %}
             {% else %}
                 <div class="pendingData">
-                    <p>There are no orders</p>
+                    <p>There are no orders in Process</p>
 
                 </div>
             {% endif %}

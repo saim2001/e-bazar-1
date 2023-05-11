@@ -388,10 +388,10 @@ Button:hover {
 
 
 form {
-    max-width: 500px;
-    margin: auto;
-    border: 5px solid  #dcdcdc;
-    padding: 50px;
+    max-width:max-content;
+    width: max-content;
+    
+    
   }
   
   label {

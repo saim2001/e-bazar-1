@@ -6,98 +6,39 @@
         <div class="pending">
             <div class="pendingAttributes">
                 <p>Order ID </p>
-                <p>Buyer </p>
+                <p>Buyer</p>
                 <p>Date</p>
                 <p>Items</p>
                 <p>Status</p>
                 <p>Actions</p>
             </div>
-            <div class="pendingData">
-                <p>#123 </p>
-                <p>Saim</p>
-                <p>1/11/2022</p>
-                <p>2</p>
-                <p>Not ready</p>
-                <p class="pButton">
-                    <a href="{% url 'oUnfulfilledDetails' %}"> <button id='oVDId'>View details</button></a>
-                    <a href="{% url 'oUnfulfilledUpdate' %}">   <button id='oUpId'>Update</button></a>
+            {% if orders %}
+                {% for order in orders %}
 
-                 
-                   
-                </p>
+                    <div class="pendingData">
+                        <p>{{order.id}} </p>
+                        <p>{{order.customer.name}}</p>
+                        <p>{{order.orderCreated}}</p>
+                        <p>{{order.products|length}}</p>
+                        <p>{{order.status}}</p>
+                        <p class="pButton">
+                            <a href="{% url 'oUnfulfilledDetails' order.id  %}"> <button id='oVDId'>View details</button></a>
+                            <a href="{% url 'oUnfulfilledUpdate' %}">   <button id='oUpId'>Update</button></a>
 
-            </div>
+
+
+                        </p>
+
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="pendingData">
+                    <p>There are no orders</p>
+
+                </div>
+            {% endif %}
            
-            <div class="pendingData">
-                <p>#123 </p>
-                <p>Saim</p>
-                <p>1/11/2022</p>
-                <p>2</p>
-                <p>Not ready</p>
-                <p class="pButton">
 
-                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
-                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
-                </p>
-
-            </div>
-           
-            <div class="pendingData">
-                <p>#123 </p>
-                <p>Saim</p>
-                <p>1/11/2022</p>
-                <p>2</p>
-                <p>Not ready</p>
-                <p class="pButton">
-
-                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
-                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
-                </p>
-
-            </div>
-           
-            <div class="pendingData">
-                <p>#123 </p>
-                <p>Saim</p>
-                <p>1/11/2022</p>
-                <p>2</p>
-                <p>Not ready</p>
-                <p class="pButton">
-
-                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
-                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
-                </p>
-
-            </div>
-           
-            <div class="pendingData">
-                <p>#123 </p>
-                <p>Saim</p>
-                <p>1/11/2022</p>
-                <p>2</p>
-                <p>Not ready</p>
-                <p class="pButton">
-
-                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
-                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
-                </p>
-
-            </div>
-           
-            <div class="pendingData">
-                <p>#123 </p>
-                <p>Saim</p>
-                <p>1/11/2022</p>
-                <p>2</p>
-                <p>Not ready</p>
-                <p class="pButton">
-
-                    <button onclick="OrderViewDetails(`oVDId`)">View details</button>
-                    <button onclick="OrderViewDetails(`oUpId`)">Update</button>
-                </p>
-
-            </div>
-           
 
 
         </div>

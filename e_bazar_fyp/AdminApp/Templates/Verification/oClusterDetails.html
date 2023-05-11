@@ -1,55 +1,85 @@
 {% extends 'Verification/main.html' %}
 {% block content %}
 
-<div class="tableContainer" id="oCVDId">
-    <h4>Order summary</h4>
+{% include 'message_a.html' %}
+<div class="tableContainer" id="oVDId">
+    <h4>Cluster summary</h4>
     <table class="table">
 
+
+         <tr>
+
+            <td>City</td>
+            <td>{{cluster.city}}</td>
+        </tr>
         <tr>
 
             <td>Ship by</td>
-            <td>7 july, 2022 to 8 july, 2022</td>
+            <td>{{cluster.Shipby}}</td>
         </tr>
+
         <tr>
 
-            <td>Deliver by</td>
-            <td>9 july, 2022 to 12 july, 2022</td>
+            <td>Delivered by</td>
+            <td>{{cluster.Deliverby}}</td>
         </tr>
-        <tr>
-
-            <td>Sales Channel</td>
-            <td>E-bazar.com</td>
-        </tr>
-        <tr>
+         <tr>
 
             <td>Shipping service</td>
-            <td>Standard</td>
+            <td>{{cluster.service}}</td>
         </tr>
         <tr>
 
-            <td>Fullfilment</td>
-            <td>E-Bazar</td>
-
+            <td>Status</td>
+            <td>{{cluster.status}}</td>
         </tr>
+
 
 
     </table>
 
-    <h4>Ship to</h4>
 
+    <h4>Cluster content</h4>
+
+
+
+        {% for order in cluster.order_info %}
+    <h4>Order ID: {{order.id}} </h4>
     <table class="table">
 
-        <tr>
+                <tr>
+                    <td>Placed</td>
+                    <td>{{order.orderCreated}}</td>
+                </tr>
+                <tr>
+                    <td>Tax</td>
+                    <td>Rs.0</td>
+                </tr>
+                <tr>
+                    <td>Total Amount</td>
+                    <td>Rs.{{order.totalAmount}}</td>
+                </tr>
 
-            <td>City</td>
-            <td>Karachi</td>
-        </tr>
 
-    </table>
 
-    <a href="{% url 'oClusters' %}">  <button id='clustersId'>Back to List</button></a>
+                <tr>
+                    <td>Units</td>
+                    <td>{{order.units}}</td>
+                </tr>
+                 <tr>
+                    <td>Actions</td>
+                    <td><a href="{% url 'delfromcluster' cluster.id order.id %}">  <button id='clustersId'>Remove</button></a></td>
+                </tr>
 
-  
+        </table>
+        {% endfor %}
+
+
+    {% if cluster.status == 'pending' %}
+        <a href="{% url 'shipcluster' cluster.id %}">  <button id='clustersId'>Ship</button></a>
+    {% endif %}
+    <a href="{% url 'oClusters' cluster.status %}">  <button id='clustersId'>Back to List</button></a>
+
 
 
 

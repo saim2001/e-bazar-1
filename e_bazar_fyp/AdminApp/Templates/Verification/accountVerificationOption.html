@@ -6,6 +6,7 @@
               
                 <a  href="{% url 'avPending' %}">  <span class='active'  id='pendingId'>Pending</span></a>
                 <a href="{% url 'avDisputed' %}">  <span class='active' id='disputedId'>Disputed</span></a>
+                <a href="{% url 'avVerified' %}">  <span class='active' id='verifiedId'>Verified</span></a>
               
                 {% comment %} <span class='active' onclick="AccountVerification('disputedId')">Disputed</span> {% endcomment %}
                 {% block subContent %}

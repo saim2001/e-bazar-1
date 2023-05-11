@@ -1,6 +1,7 @@
 
 {% extends 'Verification/main.html' %}
 {% block content %}
+{% include 'message_a.html' %}
  <div class="tableContainer" id="oCCVDId">
     {% if orderlist %}
         <form action="{% url 'postclusterWthOrd' %}" method="post">

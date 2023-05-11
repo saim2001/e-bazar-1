@@ -7,12 +7,10 @@ allProductsColl = ebazar["Products"]
 
 
 allProductsGet= allProductsColl.find({})
-count=0
 
 for p in allProductsGet:
-    count+=1
 
-    if p['isb2b']=='yes' and p['isVariation']=='no' and count!=1:
+    if p['isb2b']=='yes' and p['isVariation']=='no' and type(p['batches'])==dict:
 
         sellerdata = client[p['vendorId']]
         sellerColl = sellerdata["Products"]

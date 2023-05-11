@@ -293,15 +293,16 @@ autoCont.appendChild(newContainer)
 
 var initialContent=[];
   function createVarhtml(){
+    const checkb2b= document.getElementById("b2b_yes").checked;
+    const checkOnlyb2b= document.getElementById("onlyb2b").checked;
     var typeList= getVar();
+    newList= [...typeList];
+    newList.push(checkb2b);
+    newList.push(checkOnlyb2b);
     var preVarCheck= JSON.stringify(getPrevVarList());
-    var typeListCheck= JSON.stringify(getVar());
+    var typeListCheck= JSON.stringify(newList);
+    console.log('prev',preVarCheck,'new',typeListCheck)
     if (preVarCheck != typeListCheck){
-      const checkb2b= document.getElementById("b2b_yes").checked;
-      const checkOnlyb2b= document.getElementById("onlyb2b").checked;
-      newList= [...typeList];
-      newList.push(checkb2b);
-      newList.push(checkOnlyb2b);
       changePrevVarList(newList);
     //"Start" delete previous javascript
     var inputContRemove= document.getElementsByClassName("js_create")
@@ -564,7 +565,7 @@ function deleteSelectedRows(){
 
 window.onload = function () {
   const data = JSON.parse(document.getElementById("my-data").textContent);
-  console.log(data)
+  console.log(data,'data')
    const cat_name = document.getElementById("cat_name");
    cat_name.readOnly = false;
    cat_name.value = data.category;
@@ -638,11 +639,13 @@ window.onload = function () {
    document.querySelector("[onclick='createVariations()']").click();
    let var_table = document.querySelector('#varTable');
    let tbody = var_table.querySelector('tbody');
+   console.log('tbody',tbody.length)
    let rows = tbody.querySelectorAll('.js_create');
    console.log(rows.length);
    let variations = Object.keys(data.variations);
    let var_data = Object.values(data.variations);
-   for (i=0; i<rows.length; i++){
+   console.log('var_datav',var_data);
+   for (let i=0; i<rows.length; i++){
     console.log(i)
     console.log(rows[i])
     let sku = rows[i].querySelector("[name = 'sku']");

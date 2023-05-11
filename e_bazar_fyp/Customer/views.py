@@ -200,7 +200,7 @@ class Customer:
 
 
             if customers_find is None:
-                customer_detail={'name':full_name,'email':email,'password':password,'phone':phone,'address':address,"orders":[]}
+                customer_detail={'name':full_name,'email':email,'password':password,'phone':phone,'address':address,"orders.js":[]}
                 customer_id= customer_database.insert_one(customer_detail)
                 customer_id= customer_id.inserted_id
                 request.session["Customer_verify"] = str(customer_id)
@@ -281,10 +281,10 @@ class Customer:
                 orderId=allOrders.insert_one(order)
                 customerColl= utils.connect_database("E-Bazar", 'Customer')
                 customerDocument= customerColl.find_one({'_id':ObjectId(customer_id)})
-                cusOrder= customerDocument['orders']
+                cusOrder= customerDocument['orders.js']
                 cusOrder.append(orderId.inserted_id)
                 query = {'_id':ObjectId(customer_id)}
-                update = {"$set": {"orders": cusOrder}}
+                update = {"$set": {"orders.js": cusOrder}}
                 customerColl.update_one(query, update)
 
 
@@ -571,10 +571,10 @@ class Customer:
                 orderId=allOrders.insert_one(order)
                 customerColl= utils.connect_database("E-Bazar", 'Customer')
                 customerDocument= customerColl.find_one({'_id':ObjectId(customer_id)})
-                cusOrder= customerDocument['orders']
+                cusOrder= customerDocument['orders.js']
                 cusOrder.append(orderId.inserted_id)
                 query = {'_id':ObjectId(customer_id)}
-                update = {"$set": {"orders": cusOrder}}
+                update = {"$set": {"orders.js": cusOrder}}
                 customerColl.update_one(query, update)
 
 

@@ -2,36 +2,43 @@
 {% extends 'Verification/main.html' %}
 {% block content %}
  <div class="tableContainer" id="oCCVDId">
-
-    <form>
+    {% if orderlist %}
+        <form action="{% url 'postclusterWthOrd' %}" method="post">
+    {% else %}
+        <form action="{% url 'postcluster' %}" method="post">
+    {% endif %}
+            {% csrf_token %}
         <label for="Shipto">Ship to: </label>
         <input type="text" name="Shipto" required placeholder="City"><br><br>
 
-        <label for="Shipby">Ship by:</label>
-        <input type="text" name="Shipby" required placeholder="DD/MM/YY"><br><br>
-
-        <label for="To">To:</label>
-        <input type="text" name="To" required placeholder="DD/MM/YY"><br><br>
-
-        <label for="Deliverby">Deliver by:</label>
-        <input type="text" name="Deliverby" required placeholder="DD/MM/YY"><br><br>
-
-        <label for="To">To:</label>
-        <input type="text" name="To" required placeholder="DD/MM/YY"><br><br>
+        <label for="Shipby">Ship by:</label><br>
+        <input type="date" name="Shipby" required placeholder="DD/MM/YY" ><br><br>
 
 
-        <label for="service">Shippint service:</label>
+        <label for="Deliverby">Deliver by:</label><br>
+        <input type="date" name="Deliverby" required placeholder="DD/MM/YY"><br><br>
+        {% if orderlist %}
+            <label for="order">Orders:</label>
+            {% for order in orderlist %}
+                 <input type="text" name="order" disabled  value="{{order}}">
+                 <input type="hidden" name="order" value="{{order}}">
+            {% endfor %}
+        {% endif %}
+
+
+
+        <label for="service">Shipping service:</label>
         <select name="service" placeholder="Servie type">
-            <option>service 1</option>
-            <option>service 2</option>
-            <option>service 3</option>
+            <option value="Standard">Standard</option>
+            <option value="Express">Express</option>
 
         </select><br><br>
-
+    <button id='clustersId' type="submit">Create Cluster</button>
+            <a href="{% url 'oClusters' 'pending' %}">  <button id='clustersId' type="button">Back to List</button></a>
     </form>
   
-    <a href="{% url 'oClusters' %}">  <button id='clustersId'>Back to List</button></a>
-    <a href="{% url 'oClusters' %}">  <button id='clustersId'>Create Cluster</button></a>
+
+
    
 </div>
 

@@ -1,0 +1,80 @@
+{% extends 'Verification/main.html' %}
+{% block content %}
+
+<div class="tableContainer" id="oRVDId">
+    <h4>Order summary</h4>
+    <table class="table">
+
+        <tr>
+
+            <td>Ship by</td>
+            <td>7 july, 2022 to 8 july, 2022</td>
+        </tr>
+        <tr>
+
+            <td>Deliver by</td>
+            <td>9 july, 2022 to 12 july, 2022</td>
+        </tr>
+        <tr>
+
+            <td>Purchase date</td>
+            <td>6/25/2022 2:07pm</td>
+        </tr>
+        <tr>
+
+            <td>Shipping service</td>
+            <td>Standard</td>
+        </tr>
+        <tr>
+
+            <td>Fullfilment</td>
+            <td>Seller</td>
+
+        </tr>
+
+        <tr>
+
+            <td>Sales channel</td>
+            <td>E-bazar.com</td>
+        </tr>
+
+    </table>
+
+    <h4>Ship to</h4>
+
+    <table class="table">
+
+        <tr>
+
+            <td>Name</td>
+            <td>Maaz</td>
+        </tr>
+        <tr>
+
+            <td>Address</td>
+            <td>123 street
+                Gulshan,Karachi 7500</td>
+        </tr>
+        <tr>
+
+            <td>Address type</td>
+            <td>Residentia</td>
+        </tr>
+        <tr>
+
+            <td>Phone number:</td>
+            <td>123454565</td>
+        </tr>
+
+    </table>
+
+    <a href="{% url 'oReturned' %}">  <button id='returnedId'>Back to List</button></a>
+
+  
+
+
+
+</div>
+
+
+{% endblock content %}

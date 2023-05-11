@@ -15,47 +15,30 @@
             <p>Actions
             </p>
         </div>
-        <div class="pendingData">
-            <p>1/11/2022 </p>
-            <p>Indiviual</p>
-            <p>Alisportscenter</p>
-            <p>Karachi</p>
-            <p>Pending</p>
-            <p class="pButton">
-               
-                <a href="{% url 'avDisputedDetails' %}"> <button id='accVDDId'>View details</button></a>
-                <a href="#">  <button>Notify</button></a>
-            </p>
+        {% if vendors %}
+            {% for vendor in vendors %}
+                <div class="pendingData">
+                    <p>{{vendor.dto}}</p>
+                    <p>{{vendor.businessType}}</p>
+                    <p>{{vendor.storename}}</p>
+                    <p>{{vendor.city}}</p>
+                    <p>Disputed</p>
+                    <p class="pButton">
+                        <a href="{% url 'avPendingDetails' vendor.id %}">   <button id='accVPDId' >View details</button></a>
 
-        </div>
 
-        <div class="pendingData">
-            <p>1/11/2022 </p>
-            <p>Indiviual</p>
-            <p>Alisportscenter</p>
-            <p>Karachi</p>
-            <p>Pending</p>
-            <p class="pButton">
-               
-                  <a href="{% url 'avDisputedDetails' %}"> <button id='accVDDId'>View details</button></a>
-                  <a href="#">  <button>Notify</button></a>
-            </p>
+                    </p>
 
-        </div>
+                </div>
+            {% endfor %}
+        {% else %}
+           <div class="Data">
+               <p class="strong">No disputed vendors found</p>
 
-        <div class="pendingData">
-            <p>1/11/2022 </p>
-            <p>Indiviual</p>
-            <p>Alisportscenter</p>
-            <p>Karachi</p>
-            <p>Pending</p>
-            <p class="pButton">
-               
-                <a href="{% url 'avDisputedDetails' %}"> <button id='accVDDId'>View details</button></a>
-                <a href="#">  <button>Notify</button></a>
-            </p>
+            </div>
+        {% endif %}
 
-        </div>
+
 
 
 

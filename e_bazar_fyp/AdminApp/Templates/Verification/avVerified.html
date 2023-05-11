@@ -1,0 +1,44 @@
+
+{% extends 'Verification/accountVerificationOption.html' %}
+{% block  subContent %}
+
+<div class="content" >
+    {% include 'message_a.html' %}
+
+    <div class="pending">
+        <div class="pendingAttributes">
+            <p>Date applied </p>
+            <p>Buisness type</p>
+            <p>Store name</p>
+            <p>City</p>
+            <p>Status</p>
+            <p>Actions
+            </p>
+        </div>
+        {% for vendor in vendors %}
+        <div class="pendingData">
+            <p>{{vendor.dto}}</p>
+            <p>{{vendor.businessType}}</p>
+            <p>{{vendor.storename}}</p>
+            <p>{{vendor.city}}</p>
+            <p>Verified</p>
+            <p class="pButton">
+                <a href="{% url 'avPendingDetails' vendor.id %}">   <button id='accVPDId' >View details</button></a>
+               
+             
+            </p>
+
+        </div>
+        {% endfor %}
+
+
+
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}
+

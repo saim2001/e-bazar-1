@@ -1,7 +1,10 @@
 {% extends 'Verification/orderOption.html' %}
 {% block  subContent %}
-<div class="content" id="fulfilledId">
-
+<div class="content" id="upForDelivery">
+    <form action="{% url 'cluster'%}" method="post">
+        <button type="submit" name="create" >Create cluster</button>
+        <button type="submit" name="add" >Add to existing cluster</button>
+        {% csrf_token %}
      <div class="pending">
             <div class="pendingAttributes">
                 <p>Order ID </p>
@@ -11,17 +14,21 @@
                 <p>Status</p>
                 <p>Actions</p>
             </div>
+           
+            
             {% if orders %}
                 {% for order in orders %}
 
                     <div class="pendingData">
+                        <input type="checkbox" name="ordercheck" value="{{order.id}}">
+                    
                         <p>{{order.id}} </p>
                         <p>{{order.customer.name}}</p>
                         <p>{{order.orderCreated}}</p>
                         <p>{{order.products|length}}</p>
                         <p>{{order.status}}</p>
                         <p class="pButton">
-                            <a href="{% url 'oUnfulfilledDetails' order.id  %}"> <button id='oVDId'>View details</button></a>
+                            <a href="{% url 'oUnfulfilledDetails' order.id  %}"> <button type="button" id='oVDId' onclick="location.href='{% url 'oUnfulfilledDetails' order.id  %}'">View details</button></a>
                             <a href="{% url 'oUnfulfilledUpdate' %}">   <button id='oUpId'>Update</button></a>
 
 
@@ -30,9 +37,10 @@
 
                     </div>
                 {% endfor %}
+            </form>
             {% else %}
                 <div class="pendingData">
-                    <p>There are no orders</p>
+                    <p>There are no orders up for delivery</p>
 
                 </div>
             {% endif %}
@@ -41,6 +49,7 @@
 
 
         </div>
+    
 
 </div>
 

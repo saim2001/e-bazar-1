@@ -3,6 +3,7 @@
 {% block  subContent %}
 
 <div class="content" >
+    {% include 'message_a.html' %}
 
     <div class="pending">
         <div class="pendingAttributes">
@@ -14,21 +15,29 @@
             <p>Actions
             </p>
         </div>
-        {% for vendor in vendors %}
-        <div class="pendingData">
-            <p>{{vendor.dto}}</p>
-            <p>{{vendor.businessType}}</p>
-            <p>{{vendor.storename}}</p>
-            <p>{{vendor.city}}</p>
-            <p>Pending</p>
-            <p class="pButton">
-                <a href="{% url 'avPendingDetails' vendor.id %}">   <button id='accVPDId' >View details</button></a>
-               
-             
-            </p>
+        {% if vendor %}
+            {% for vendor in vendors %}
+            <div class="pendingData">
+                <p>{{vendor.dto}}</p>
+                <p>{{vendor.businessType}}</p>
+                <p>{{vendor.storename}}</p>
+                <p>{{vendor.city}}</p>
+                <p>Pending</p>
+                <p class="pButton">
+                    <a href="{% url 'avPendingDetails' vendor.id %}">   <button id='accVPDId' >View details</button></a>
 
-        </div>
-        {% endfor %}
+
+                </p>
+
+            </div>
+            {% endfor %}
+        {% else %}
+              <div class="pendingData">
+                <p class="strong">No pending vendors found</p>
+
+            </div>
+        {% endif %}
+
 
 
 

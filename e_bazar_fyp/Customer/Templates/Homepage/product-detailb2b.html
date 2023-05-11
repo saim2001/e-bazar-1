@@ -62,11 +62,13 @@ onclick="location.href='{% url 'Customer:home' %}'"> Switch to B2C
             cartVarId.value = product_js["id"]+"+"+ key;
           }
           else if ( varList.length==1 && selectlst.includes(value[varList[0]])){
-            const price = document.getElementById("price");
-            console.log("price",value["price"])
-            price.textContent= "PKR "+value["price"];
-            const unitsava = document.getElementById("unitsava");
-            unitsava.textContent= "Units available : "+value["units"];
+            const batchUnits = document.getElementsByClassName('batchUnits');
+            const batchPrice = document.getElementsByClassName('batchPrice');
+            var batches= value['batches'];
+            for (let index=0; index<batches.length;index++){
+              batchUnits[index].textContent= "Pieces: "+batches[index]['text']
+              batchPrice[index].textContent= "Price:PKR "+batches[index]['Price']
+            }
             var cartVarId = document.getElementById("cart");
             cartVarId.value = product_js["id"]+"+"+ key;
           }

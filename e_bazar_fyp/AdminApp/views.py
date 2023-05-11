@@ -97,10 +97,12 @@ class Verification:
         orders = database["Orders"]
         order = orders.find_one({'_id':ObjectId(order_id)})
         for product in order['products']:
+
             product_info = products.find_one({'_id':ObjectId(product['productId'])})
             vendordb = utils.connect_database(product_info['vendorId'])
             vendor_orders = vendordb['Orders']
-            vendor_orders.update_many({'orderId':ObjectId(order['_id'])},{'$set':{'status':status}})
+            update = vendor_orders.update_many({'orderId':ObjectId(order['_id'])},{'$set':{'status':status}})
+            print(update)
 
 
 
@@ -563,6 +565,36 @@ class Verification:
         except:
             messages.error('Failed to delete cluster')
         return redirect('oClusters',status)
+
+    # def delivered(self, request, cluster_id,order_id):
+    #      database = utils.connect_database("E-Bazar")
+    #      orders = database["Orders"]
+    #      clusters = database["Clusters"]
+    #      order = orders.find_one({"_id": ObjectId(order_id)})
+    #      cluster = clusters.find_one({"_id": ObjectId(cluster_id)})
+    #      count = 0
+    #      try:
+    #
+    #             for order in cluster['orders']:
+    #                 if order == str(order_id):
+    #                     order.append(request.POST['receivedcheck'])
+    #                 if 'delivered' in order:
+    #                     # if product['received'] == 'True':
+    #                     #     count += 1
+    #             if count == len(order['products']):
+    #                 order['status'] = 'inProcess'
+    #
+    #                 self.orderstatuschanger(order_id, 'inProces')
+    #             else:
+    #                 order['status'] = 'pending'
+    #
+    #                 self.orderstatuschanger(order_id, 'pending')
+    #             orders.update_one({"_id": ObjectId(order_id)}, {'$set': order})
+    #             messages.success(request, "Product status updated successfully")
+    #      except:
+    #          messages.error(request, 'Status update failed')
+    #
+    #      return redirect('oUnfulfilledDetails', order_id)
 
 
 

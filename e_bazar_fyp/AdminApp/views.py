@@ -532,7 +532,7 @@ class Verification:
                      messages.success(request, 'Cluster created successfully')
                  else:
                      messages.error(request, 'Failed to create cluster')
-                 return redirect('oClusters')
+                 return redirect('oCreateCluster')
 
 
 

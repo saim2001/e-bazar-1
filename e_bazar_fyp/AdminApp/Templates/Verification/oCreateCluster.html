@@ -7,6 +7,7 @@
     {% else %}
         <form action="{% url 'postcluster' %}" method="post">
     {% endif %}
+                {% include 'message_a.html' %}
             {% csrf_token %}
         <label for="Shipto">Ship to: </label>
         <input type="text" name="Shipto" required placeholder="City"><br><br>

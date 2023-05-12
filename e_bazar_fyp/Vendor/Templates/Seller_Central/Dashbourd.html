@@ -21,6 +21,13 @@
         <div class="col-md-3">
             <div class="card border-dark h-100 text-center" >
                 <div class="card-body text-dark">
+                    {%if new_orders %}
+
+                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{new_orders}}
+                        <span class="visually-hidden">unread messages</span>
+                     </span>
+                    {% endif %}
                   <div class="row align-items-center">
                     <div class="col">
                         <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" 
@@ -35,7 +42,7 @@
                     </div>
                     <div class="col">
                         <h4 class="fw-bold">
-                            00
+                            {{order_count}}
                         </h4>
                         <h4>
                             Orders

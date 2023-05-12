@@ -47,6 +47,23 @@ class vendorRegister:
     def renDashboard(self,request):
             info=self.getUser(request)
             print(info)
+            db = utils.connect_database(str(info['_id']))
+            orders = db['Orders']
+            order_count = orders.count_documents({})
+            info['order_count'] = order_count
+            query = {"count": {"$exists": True}}
+            count = orders.count_documents(query)
+            if count == 0:
+                orders.insert_one({'count':order_count})
+            else:
+                old_count = orders.find_one(query)
+                orders.update_one(query,{'$set':{'count':order_count}})
+                if old_count['count'] < order_count:
+                    info['new_orders'] = order_count - old_count['count']
+
+            new_order_count =orders.count_documents({})
+
+
             return render(request,"Seller_Central/Dashbourd.html",context=info)
 
 

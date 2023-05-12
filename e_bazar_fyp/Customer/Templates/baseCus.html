@@ -1,7 +1,5 @@
 {% load static %}
-      {% load bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,58 +13,60 @@
     <link rel="stylesheet" href="{% static 'css/customer_style.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/206ab30c21.js" crossorigin="anonymous"></script>
-</head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+  </head>
 <body>
 
 <section id="header">
 
-    <a href="#"><img src="https://ebazar-bucket.s3.ap-south-1.amazonaws.com/logo+white.svg" class="logo" alt="" width="100" height="100"></a>
+    <a href="#"><svg width="35" height="35" viewBox="0 0 97 97" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M14.4388 96.7921C18.6406 96.7921 19.6503 94.7173 19.6503 92.9108C19.6503 91.4566 18.9467 90.2802 17.068 89.686C18.2604 89.1039 19.0578 88.0353 19.0578 86.5068C19.0578 84.5949 17.9271 82.9945 14.3474 82.9945H8.81247C8.56066 82.9945 8.43228 83.1215 8.43228 83.3634V96.4231C8.43228 96.6675 8.56066 96.7921 8.81247 96.7921H14.4388ZM12.2169 86.121H14.2808C15.3645 86.121 15.725 86.5786 15.725 87.2255C15.725 87.8556 15.3645 88.3492 14.2808 88.3492H12.2169V86.121ZM12.2169 91.1068H14.3647C15.4756 91.1068 15.8558 91.6626 15.8558 92.4005C15.8558 93.1097 15.4756 93.6655 14.3647 93.6655H12.2169V91.1068Z" fill="white"/>
+<path d="M31.7988 82.9945C31.51 82.4291 31.0582 82.4291 30.7718 82.9945L24.2543 96.3513C24.1334 96.6124 24.2543 96.7921 24.5333 96.7921H27.8735C28.0784 96.7921 28.234 96.6843 28.308 96.495L28.7721 95.3378H33.7985L34.2602 96.495C34.3342 96.6843 34.4922 96.7921 34.6947 96.7921H38.0374C38.3139 96.7921 38.4348 96.6124 38.3139 96.3513L31.7988 82.9945ZM31.2903 89.1135L32.6876 92.5802H29.8831L31.2903 89.1135Z" fill="white"/>
+<path d="M48.6579 93.6655L54.8594 83.4353C55.015 83.2029 54.9039 82.9945 54.6002 82.9945H43.8068C43.5674 82.9945 43.4365 83.1215 43.4365 83.3634V85.7521C43.4365 85.9965 43.5674 86.121 43.8068 86.121H48.7789L42.5947 96.3512C42.4466 96.586 42.5577 96.7921 42.8638 96.7921H54.8027C55.052 96.7921 55.1828 96.6675 55.1828 96.4231V94.0345C55.1828 93.7925 55.052 93.6655 54.8027 93.6655H48.6579Z" fill="white"/>
+<path d="M67.0542 82.9945C66.7654 82.4291 66.3136 82.4291 66.0272 82.9945L59.5097 96.3513C59.3887 96.6124 59.5097 96.7921 59.7887 96.7921H63.1289C63.3338 96.7921 63.4893 96.6843 63.5634 96.495L64.0275 95.3378H69.0539L69.5156 96.495C69.5896 96.6843 69.7476 96.7921 69.9501 96.7921H73.2927C73.5692 96.7921 73.6902 96.6124 73.5692 96.3513L67.0542 82.9945ZM66.5457 89.1135L67.943 92.5802H65.1385L66.5457 89.1135Z" fill="white"/>
+<path d="M87.9028 91.6099C89.3001 90.9007 90.0951 89.4273 90.0951 87.4316C90.0951 85.0693 89.0039 82.9945 84.9946 82.9945H79.0918C78.84 82.9945 78.7116 83.1215 78.7116 83.3634V96.4231C78.7116 96.6675 78.84 96.7921 79.0918 96.7921H82.1358C82.3851 96.7921 82.516 96.6675 82.516 96.4231V92.0843H84.1157L86.4018 96.5142C86.4956 96.7034 86.6339 96.7921 86.8388 96.7921H90.2901C90.5765 96.7921 90.6876 96.6124 90.5592 96.3512L87.9028 91.6099ZM84.3379 86.121C85.0983 86.121 86.3105 86.121 86.3105 87.4675C86.3105 88.9601 84.8662 88.9601 84.3379 88.9601H82.516V86.121H84.3379Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M49.6366 0C69.6014 0 85.7791 15.6472 85.7791 34.9552C85.7791 37.2073 85.5594 39.4091 85.1348 41.5438H30.5408C33.3354 49.1361 40.8256 54.5627 49.6366 54.5627C55.5122 54.5627 60.8052 52.1477 64.5108 48.2736H85.8581C86.7049 46.4408 88.6009 45.1615 90.808 45.1615C93.7976 45.1615 96.2145 47.507 96.2145 50.3916C96.2145 53.2833 93.7976 55.6217 90.808 55.6217C88.6009 55.6217 86.7049 54.3399 85.8581 52.5071H72.3343C71.885 51.3379 70.7197 50.509 69.3619 50.509C67.5992 50.509 66.1772 51.8842 66.1772 53.5804C66.1772 55.2791 67.5992 56.6615 69.3619 56.6615C70.7197 56.6615 71.885 55.8253 72.3343 54.6561H79.4986C72.9885 63.8705 62.0396 69.92 49.6366 69.92C29.6743 69.92 13.4892 54.2632 13.4892 34.9552C13.4892 33.0026 13.6546 31.0907 13.9829 29.222H42.0427C43.4005 31.9604 46.2939 33.8459 49.6366 33.8459C54.2877 33.8459 58.0526 30.2043 58.0526 25.7073C58.0526 21.2199 54.2877 17.5758 49.6366 17.5758C46.2939 17.5758 43.4005 19.4614 42.0427 22.1998H12.4548C11.45 24.4016 9.16638 25.9469 6.51001 25.9469C2.92045 25.9469 0.00978988 23.1318 0.00978988 19.6506C0.00978988 16.1767 2.92045 13.3616 6.51001 13.3616C9.16638 13.3616 11.45 14.9069 12.4548 17.1063H26.1736C26.6748 18.8816 28.351 20.1873 30.3458 20.1873C32.7355 20.1873 34.6686 18.309 34.6686 15.997C34.6686 13.685 32.7355 11.8163 30.3458 11.8163C28.351 11.8163 26.6748 13.1148 26.1736 14.8877H20.0412C26.5785 5.88656 37.3941 0 49.6366 0Z" fill="white"/>
+</svg></a>
     <div>
-        <ul id="navbar">
-            <li>{% block homeurl %}<a class="active" href="{% url 'Customer:home' %}">{% endblock %}Home</a></li>
-            <li>{% block carturl %}<a href="{% url 'Customer:cart' %}">{% endblock %}<i class="fa-solid fa-cart-shopping"></i></a></li>
-            <li><button type="button" class="btn btn-primary" {% block switchurl %} onclick="location.href='{% url 'Customer:b2bhome' %}'"> Switch to B2B{% endblock %} </button></li>
-            <!-- profile -->
-              <li class="nav-item">
-                  <a class="nav-link  fw-bold" href="#">
-                      {% block name %}
-                {% endblock name %}
-                  </a>
-    
-              </li>
+      <ul id="navbar">
+          <li>{% block homeurl %}<a class="active" href="{% url 'Customer:home' %}">{% endblock %}Home</a></li>
+          <li>{% block carturl %}<a href="{% url 'Customer:cart' %}">{% endblock %}<i class="fa-solid fa-cart-shopping"></i></a></li>
+          <li><button type="button" class="btn btn-primary" {% block switchurl %} onclick="location.href='{% url 'Customer:b2bhome' %}'"> Switch to B2B{% endblock %} </button></li>
+
           <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle"
-                 href="#" id="navbarDropdown" role="button"
-                 data-bs-toggle="dropdown" aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     width="25" height="25" fill="currentColor"
-                     class="bi bi-person-circle" viewBox="0 0 16 16">
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                <path fill-rule="evenodd"
-                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-    
-                </svg>
-              </a>
-    
-    
-    
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-    <!--            <li><a class="dropdown-item" href="#">Action</a></li>-->
-    <!--            <li><a class="dropdown-item" href="#">Another action</a></li>-->
-                <li><hr class="dropdown-divider"></li>
+          <a class="nav-link dropdown-toggle"
+             href="#" id="navbarDropdown" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="25" height="25" fill="currentColor"
+                 class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+            <path fill-rule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+
+            </svg>
+          </a>
+
+
+
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 {% if request.session.Customer_verify %}
-                <li><a class="dropdown-item" style="color: black;" href="{% url 'Customer:logout' %}">Logout</a></li>
-                <li><a class="dropdown-item" style="color: black;" href=#>Orders</a></li>
+                <a class="dropdown-item" style="color: black;" href="{% url 'Customer:logout' %}">Logout</a>
+                <a class="dropdown-item" style="color: black;" href="{% url 'Customer:orders' %}">Orders</a></li>
                 {% else %}
-                <li><a class="dropdown-item" style="color: black;" href="{% url 'Customer:login' %}">Sign in</a></li>
+                <a class="dropdown-item" style="color: black;" href="{% url 'Customer:login' %}">Sign in</a>
                 {% endif %}
-
-              </ul>
-            </li>
-
-
+          </ul>
+        </li>
         </ul>
-    </div>
+          
+      </ul>
+      
+  </div>
 
 </section>
 

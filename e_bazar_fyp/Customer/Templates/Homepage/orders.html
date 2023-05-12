@@ -1,0 +1,37 @@
+{% extends 'baseCus.html' %}
+{% load static %}
+
+{% block content %}
+<h1>maaz</h1>
+
+
+    <table id="inprocess-table" class="table">
+                    <thead class="table-light border border-1">
+                      <tr>
+                        <th>Order date</th>
+                        <th>Image</th>
+                        <th>Product name</th>
+
+                        <th>Status</th>
+
+                      </tr>
+                    </thead>
+                    <tbody class="border border-1">
+                      {% for order in orders %}
+
+
+                          <tr>
+                            <td>{{order.orderCreated}}</td>
+                            {% for image in order. %}
+                            <td><img src="{{order.product.images.0}}" alt="" height="50" width="50"></td>
+                            <td>{{order.product.name}}</td>
+                            <td>
+                          <p class="bg-secondary bg-gradient text-white">{{order.status}}</p></td>
+                          </tr>
+                        {% endif %}
+                      {% endfor %}
+
+                    </tbody>
+                  </table></div>
+{% endblock %}
+

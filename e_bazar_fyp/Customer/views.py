@@ -8,6 +8,7 @@ import json
 from django.http import JsonResponse
 import ast
 from django.contrib import messages
+import random
 class Customer:
     def __init__(self):
         self.switch='b2c'
@@ -56,13 +57,56 @@ class Customer:
         }
 
         return render(request,"Homepage/index.html",context)
+    def renOrders(self,request):
+        Orders = utils.connect_database('E-Bazar','Orders')
+        products = utils.connect_database('E-Bazar','Products')
 
+        customer_orders = Orders.find({'customerId':request.session["Customer_verify"] })
+        orders = []
+        for order in customer_orders:
+            products_info = []
+            for product in order['products']:
+                order_prod = products.find_one({'_id':ObjectId(product['productId'])})
+                products_info.append(order_prod['name'])
+            order['product_info'] = products_info
+            orders.append(order)
+        context = {'orders':orders}
+        print(context)
+        return render(request,'Homepage/orders.html',context)
+    def getRelatedProducts(self,list,id):
+        all_products_lst=[]
+        for i in list:
+            if i['_id']== ObjectId(id):
+                continue
 
+            name= i["name"]
+
+            name= name[:26] + "..." if len(name) > 26 else name
+            temp={"name":name,"id":str(i["_id"])}
+            if i["isVariation"]=="yes":
+                variations= i["variations"]
+                for key,dic in variations.items():
+                    if "mainpage" in dic.keys():
+                        temp["price"]=dic["price"]
+            else:
+                temp["price"]=i["price"]
+            img= i["images"]
+            temp["image"]= img[0]
+            reviews= i["reviews"]
+            temp["rating"] = self.getRating(reviews)
+            all_products_lst.append(temp)
+
+        return all_products_lst
     def productdetail(self,request,product_id):
         database = utils.connect_database("E-Bazar","Products")
         product = database.find_one({'_id':ObjectId(product_id) })
         product['id'] = product.pop('_id')
         producthtml = dict(product)
+        documents = database.find({'category':product['category'],'onlyb2b':'no'})
+        relatedProducts = random.sample(list(documents),documents.count())
+        relatedProducts= self.getRelatedProducts(relatedProducts,product_id)
+        print("related Products",relatedProducts)
+
         del producthtml["reviews"]
         if product["isVariation"] == "yes":
             del producthtml["variations"]
@@ -96,7 +140,8 @@ class Customer:
 
         context = {
             'product_js' : product_js,
-            'product':producthtml
+            'product':producthtml,
+            'relatedProducts':relatedProducts
         }
         return render(request, 'Homepage/product-detail.html', context)
 

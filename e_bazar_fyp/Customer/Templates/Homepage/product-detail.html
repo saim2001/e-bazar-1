@@ -105,73 +105,31 @@
 
 
 <section id="featured-products" class="section-p1">
-    <h2>Featured Products</h2>
-    <p>Summer collection Latest design available</p>
+    <h2>Related Products</h2>
+    <p>Best quality products</p>
     <div class="fe-pro-cont">
-      <div class="fe-product">
-        <img src="img/products/n1.jpg">
-        <div class="des">
-        <span>adidas</span>
-        <h5>Cartoon astronut T-Shirts</h5>
-        <div class="reviews">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-        </div>
-        <h4>$50</h4>
-        </div>
-        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+    {% for product in relatedProducts %}
+    <div class="fe-product">
+      <img src={{product.image}} width="300" height="300">
+      <div class="des">
+      <!-- <h5>{{ product.name }}</h5> -->
+      <h5><a href="{% url 'Customer:productdetails' product.id %}">{{ product.name }}</a></h5>
+
+      <div class="reviews">
+        <!-- <i class="fa-solid fa-star"></i> -->
+        {% for i in product.rating %}
+        {% if i == "shine" %}
+        <i class="fas fa-star"></i>
+        {% else %}
+        <i class="far fa-star"></i>
+        {% endif %}
+        {% endfor %}
       </div>
-      <div class="fe-product">
-        <img src="img/products/n2.jpg">
-        <div class="des">
-        <span>adidas</span>
-        <h5>Cartoon astronut T-Shirts</h5>
-        <div class="reviews">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-        </div>
-        <h4>$50</h4>
-        </div>
-        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+      <h4>PKR {{ product.price }}</h4>
       </div>
-      <div class="fe-product">
-        <img src="img/products/n3.jpg">
-        <div class="des">
-        <span>adidas</span>
-        <h5>Cartoon astronut T-Shirts</h5>
-        <div class="reviews">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-        </div>
-        <h4>$50</h4>
-        </div>
-        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
-      </div>
-      <div class="fe-product">
-        <img src="img/products/n4.jpg">
-        <div class="des">
-        <span>adidas</span>
-        <h5>Cartoon astronut T-Shirts</h5>
-        <div class="reviews">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-        </div>
-        <h4>$50</h4>
-        </div>
-        <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
-      </div>
+      <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+    {% endfor %}
       
     </div>
   </section>

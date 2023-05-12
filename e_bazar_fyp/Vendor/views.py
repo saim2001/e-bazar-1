@@ -29,9 +29,13 @@ class vendorRegister:
             vendors = dataBase["Vendors"]
             vendor = vendors.find_one({"email":email,"password":password})
             if vendor:
-                vendorDtbase = str(vendor["_id"])
-                request.session["Vendor_Db"] = vendorDtbase
-                return redirect("Vendor:renDashbrd")
+                if vendor['status']=='verified':
+                    vendorDtbase = str(vendor["_id"])
+                    request.session["Vendor_Db"] = vendorDtbase
+                    return redirect("Vendor:renDashbrd")
+                else:
+                    return render(request, 'Login/login.html', {
+                        'error_message': "You are not verified, wait for it!", })
             else:
                 return render(request, 'Login/login.html', {
                     'error_message': "Email or password is incorrect !",})
@@ -442,7 +446,6 @@ class Product:
     def edit_inv(self,request,product_id,var_id):
         print("in")
         if request.method == "POST":
-                print("in")
                 try:
                     e_bazar_con = utils.connect_database("E-Bazar")
                     vendor_con = utils.connect_database(request.session["Vendor_Db"])
@@ -450,15 +453,15 @@ class Product:
                     e_bazar_products = e_bazar_con["Products"]
                     if vendor_products.find_one({"_id":ObjectId(product_id)})["isVariation"] == "yes":
                         print("in1")
-                        vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"variations.{}.units".format(var_id):request.POST.get("units"),"variations.{}.price".format(var_id):request.POST.get("price")}})
+                        vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"variations.{}.units".format(var_id):int(request.POST.get("units")),"variations.{}.price".format(var_id):int(request.POST.get("price"))}})
                         e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
-                            "$set": {"variations.{}.units".format(var_id): request.POST.get("units"),
-                                     "variations.{}.price".format(var_id): request.POST.get("price")}})
+                            "$set": {"variations.{}.units".format(var_id): int(request.POST.get("units")),
+                                     "variations.{}.price".format(var_id): int(request.POST.get("price"))}})
                     else:
                         print("in2")
-                        vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"units":request.POST.get("units"),"price":request.POST.get("price")}})
+                        vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"units":int(request.POST.get("units")),"price":int(request.POST.get("price"))}})
                         e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
-                            "$set": {"units": request.POST.get("units"), "price": request.POST.get("price")}})
+                            "$set": {"units": int(request.POST.get("units")), "price": int(request.POST.get("price"))}})
                     messages.success(request, "Product updated successfully")
                 except:
                     messages.error(request,"Product update failed")

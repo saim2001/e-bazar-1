@@ -1,0 +1,47 @@
+{% extends 'baseCus.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+    <table id="inprocess-table" class="table">
+                    <thead class="table-light border border-1">
+                      <tr>
+                        <th>Order date</th>
+                        <th>Product name</th>
+
+                        <th>Status</th>
+
+                      </tr>
+                    </thead>
+                    <tbody class="border border-1">
+                      {% for order in orders %}
+
+
+                          <tr>
+                            <td>{{order.orderCreated}}</td>
+
+
+
+                            <td>
+                                <ul>
+                                {% for name in order.product_info %}
+                                    <li>{{name}}</li>
+
+                                {% endfor %}
+                                    </ul>
+                            </td>
+
+
+
+                          <td>{{order.status}}</td>
+
+                      </tr>
+
+                      {% endfor %}
+
+                    </tbody>
+                  </table></div>
+{% endblock %}
+

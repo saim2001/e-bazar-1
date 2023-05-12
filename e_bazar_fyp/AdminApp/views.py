@@ -127,7 +127,7 @@ class Verification:
                 if count == len(order['products']):
                     order['status'] = 'inProcess'
 
-                    self.orderstatuschanger(order_id,'inProces')
+                    self.orderstatuschanger(order_id,'inProcess')
                 else:
                     order['status'] = 'pending'
 
@@ -482,6 +482,7 @@ class Verification:
             cluster = clusters.find_one({'_id':ObjectId(cluster_id)})
             clusters.update_one({'_id': ObjectId(cluster_id)},{'$set':{'status':'shipped'}})
             for order in cluster['orders']:
+                print(order)
                 self.orderstatuschanger(ObjectId(order),'shipped')
             messages.success(request,'Cluster shipped successfully')
         except Exception as e:
@@ -526,7 +527,7 @@ class Verification:
                 messages.success(request,'Cluster created successfully')
             else:
                 messages.error(request,'Failed to create cluster')
-            return redirect('oClusters')
+            return redirect('oCreateCluster')
 
 
 
@@ -567,41 +568,41 @@ class Verification:
             messages.error('Failed to delete cluster')
         return redirect('oClusters',status)
 
-    # def delivered(self, request, cluster_id,order_id):
-    #      database = utils.connect_database("E-Bazar")
-    #      orders = database["Orders"]
-    #      clusters = database["Clusters"]
-    #      order = orders.find_one({"_id": ObjectId(order_id)})
-    #      cluster = clusters.find_one({"_id": ObjectId(cluster_id)})
-    #      count = 0
-    #      try:
-    #
-    #             for order in cluster['orders']:
-    #                 if order == str(order_id):
-    #                     order.append(request.POST['receivedcheck'])
-    #                 if 'delivered' in order:
-    #                     # if product['received'] == 'True':
-    #                     #     count += 1
-    #             if count == len(order['products']):
-    #                 order['status'] = 'inProcess'
-    #
-    #                 self.orderstatuschanger(order_id, 'inProces')
-    #             else:
-    #                 order['status'] = 'pending'
-    #
-    #                 self.orderstatuschanger(order_id, 'pending')
-    #             orders.update_one({"_id": ObjectId(order_id)}, {'$set': order})
-    #             messages.success(request, "Product status updated successfully")
-    #      except:
-    #          messages.error(request, 'Status update failed')
-    #
-    #      return redirect('oUnfulfilledDetails', order_id)
+    def oDelivered(self, request, cluster_id,order_id):
 
+         try:
+            if request.method == 'POST':
+                database = utils.connect_database("E-Bazar")
+                clusters = database['Clusters']
+                cluster = clusters.find_one({'_id': ObjectId(cluster_id)})
+                orders = database['Orders']
+                self.orderstatuschanger(order_id,request.POST['receivedcheck'])
+                messages.success(request,'Status updated successfully')
+         except Exception as e:
+             print(e)
+             messages.error(request,'Failed to update status')
+         return redirect('oClusterDetails',cluster_id)
 
-
-
-
-
+    def ShipWholeCluster(self,request,cluster_id):
+        try:
+            database = utils.connect_database("E-Bazar")
+            clusters = database['Clusters']
+            cluster = clusters.find_one({'_id': ObjectId(cluster_id)})
+            orders = database['Orders']
+            count = 0
+            for order in cluster['orders']:
+                db_order = orders.find_one({'_id': ObjectId(order)})
+                if db_order['status'] == 'delivered':
+                    count += 1
+            if count == len(cluster['orders']):
+                cluster['status'] = 'delivered'
+                messages.success(request, 'Status updated successfully')
+                clusters.update_one({'_id': ObjectId(cluster_id)}, {'$set': cluster})
+            else:
+                messages.warning(request, 'Cannot mark delivered until all orders delivered')
+        except:
+            messages.error(request, 'Failed to update status')
+        return redirect('oClusterDetails', cluster_id)
     def admin(self,request):
        
      
@@ -699,6 +700,7 @@ class Verification:
                 allvendorsDict["disputed"].append(vendorInfo)
         print(allvendorsDict)
         return render(request, "AdminPanel/verification.html", {"vendors":allvendorsDict})
+
 
 
 

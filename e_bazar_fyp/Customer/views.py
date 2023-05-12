@@ -456,8 +456,8 @@ class Customer:
         else:
             string_cart = request.COOKIES.get('cartb2b')
             if string_cart is None or len(string_cart)==0:
-                messages.error(request, "Product update failed")
-                return redirect("Customer:b2bhome")
+                messages.warning(request, "No Products in Cart")
+                return render(request, "Homepage/cartb2b.html")
 
 
             else:

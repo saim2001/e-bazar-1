@@ -60,10 +60,15 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="cancelled-tab" data-bs-toggle="tab" data-bs-target="#cancelled" type="button" role="tab" aria-controls="contact" aria-selected="false"><p class="h6">Cancelled</p></button>
+                </li>
+                      <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shipped-tab" data-bs-toggle="tab" data-bs-target="#shipped" type="button" role="tab" aria-controls="contact" aria-selected="false"><p class="h6">Shipped</p></button>
                   </li>
+                </li>
                       <li class="nav-item" role="presentation">
                     <button class="nav-link" id="delivered-tab" data-bs-toggle="tab" data-bs-target="#deliverd" type="button" role="tab" aria-controls="contact" aria-selected="false"><p class="h6">Delivered</p></button>
                   </li>
+
               </ul>
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
@@ -95,7 +100,7 @@
                             <td><img src="{{order.product.images.0}}" alt="" height="50" width="50"></td>
                             <td>{{order.product.name}}</td>
                             <td>
-                          <p class="bg-success bg-gradient text-white">{{order.status}}</p></td>
+                          <p class="bg-warning bg-gradient ">{{order.status}}</p></td>
                           </tr>
                         {% endif %}
                       {% endfor %}
@@ -113,7 +118,7 @@
                         <th>Order details</th>
                         <th>Image</th>
                         <th>Product name</th>
-                        <th>Customer options</th>
+
                         <th>Status</th>
                         
                       </tr>
@@ -133,7 +138,7 @@
                             <td><img src="{{order.product.images.0}}" alt="" height="50" width="50"></td>
                             <td>{{order.product.name}}</td>
                             <td>
-                          <p class="bg-success bg-gradient text-white">{{order.status}}</p></td>
+                          <p class="bg-secondary bg-gradient text-white">{{order.status}}</p></td>
                           </tr>
                         {% endif %}
                       {% endfor %}
@@ -149,7 +154,6 @@
                         <th>Order details</th>
                         <th>Image</th>
                         <th>Product name</th>
-                        <th>Customer options</th>
                         <th>Status</th>
                         
                       </tr>
@@ -169,7 +173,7 @@
                           <td><img src="{{order.product.images.0}}" alt="" height="50" width="50"></td>
                           <td>{{order.product.name}}</td>
                           <td>
-                        <p class="bg-success bg-gradient text-white">{{order.status}}</p></td>
+                        <p class="bg-primary bg-gradient text-white">{{order.status}}</p></td>
                         </tr>
                       {% endif %}
                     {% endfor %}
@@ -184,7 +188,7 @@
                         <th>Order details</th>
                         <th>Image</th>
                         <th>Product name</th>
-                        <th>Customer options</th>
+
                         <th>Status</th>
                         
                       </tr>
@@ -204,7 +208,7 @@
                           <td><img src="{{order.product.images.0}}" alt="" height="50" width="50"></td>
                           <td>{{order.product.name}}</td>
                           <td>
-                        <p class="bg-success bg-gradient text-white">{{order.status}}</p></td>
+                        <p class="bg-danger bg-gradient text-white">{{order.status}}</p></td>
                         </tr>
                       {% endif %}
                     {% endfor %}
@@ -219,7 +223,7 @@
                         <th>Order details</th>
                         <th>Image</th>
                         <th>Product name</th>
-                        <th>Customer options</th>
+
                         <th>Status</th>
                         
                       </tr>
@@ -227,7 +231,7 @@
                     <tbody class="border border-1">
                       {% for order in orders %}
                         
-                        {% if order.status == "deliverd" %}
+                        {% if order.status == "delivered" %}
                           <tr>
                             <td>{{order.orderCreated}}</td>
                             <td> <a href='{% url "Vendor:renorder_dtls" order.id %}'> ID: {{order.id}} <br>
@@ -244,6 +248,41 @@
                         {% endif %}
                       {% endfor %}
                          
+                    </tbody>
+                  </table></div>
+             <div class="tab-pane fade" id="shipped" role="tabpanel" aria-labelledby="deliverd-tab"> <table id="delivered-table" class="table">
+                    <br><br>
+                    <thead class="table-light border border-1">
+                      <tr>
+                        <th>Order date</th>
+                        <th>Order details</th>
+                        <th>Image</th>
+                        <th>Product name</th>
+
+                        <th>Status</th>
+
+                      </tr>
+                    </thead>
+                    <tbody class="border border-1">
+                      {% for order in orders %}
+
+                        {% if order.status == "shipped" %}
+                          <tr>
+                            <td>{{order.orderCreated}}</td>
+                            <td> <a href='{% url "Vendor:renorder_dtls" order.id %}'> ID: {{order.id}} <br>
+                              Buyer name: {{order.customer.name}} <br>
+                              Sales channel : E-bazar.com
+                            </a>
+
+                            </td>
+                            <td><img src="{{order.product.images.0}}" alt="" height="50" width="50"></td>
+                            <td>{{order.product.name}}</td>
+                            <td>
+                          <p class="bg-info bg-gradient text-white">{{order.status}}</p></td>
+                          </tr>
+                        {% endif %}
+                      {% endfor %}
+
                     </tbody>
                   </table></div>
               </div>

@@ -732,6 +732,19 @@ class Order:
         orders_data["customer"] = customer
         orders_data['id'] = orders_data.pop('_id')
         context['order'] = orders_data
+        context['packagin_info'] = {
+            'orderid' : str(context['order']['id']),
+            'Puchase':context['order']['orderCreated'],
+            'salecchannel' : 'E-bazar',
+            'fulfillment' : 'E-bazar',
+            'custaddress' : context['order']['customer']['address'],
+            'custname' : context['order']['customer']['name'],
+            'custphone': context['order']['customer']['phone'],
+            'subtotal' : context['order']['subtotal'],
+            'total': context['order']['subtotal'],
+            'tax' : 0
+
+        }
 
         print('/n','/n',context)
         info = self.vendor.getUser(request)

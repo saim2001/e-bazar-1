@@ -5,6 +5,7 @@
     {% load static %}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <!-- CSS CUSTOM -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Select Category</title>
@@ -43,7 +44,7 @@
         <div class="col-sm-3">
             <br>
 
-            <button type="button" class="btn btn-success bg-gradient text-white btn-outline-dark" style="width: 230px
+            <button type="button" id="printbtn" class="btn btn-success bg-gradient text-white btn-outline-dark" style="width: 230px
             ;">Print packaging slip</button>
               </div>
               <div class="col-sm-3">
@@ -57,7 +58,7 @@
     <div class="row">
         <div class="col-sm-7">
             <br><br>
-            <div class="container border border-1">
+            <div  id="sum" class="container border border-1">
                 <p class="h4 pt-1">Order summary</p>
                 <!-- <div class="row">
                     <div class="col-sm-6 ">
@@ -74,7 +75,7 @@
                         <p class="text-muted fw-bold" style="text-align: left; float: left;">Deliver by: &nbsp;</p><p style="text-align: right; float: right;">byubuyubby</p>
                     </div> -->
                     <div class="col-sm-6">
-                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Fullfilment: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p >E-Bazar</p>
+                        <p class="text-muted fw-bold" style="text-align: left; float: left;">Fulfillment: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p >E-Bazar</p>
                     </div>
                     
                     
@@ -148,13 +149,15 @@
                                     {% if order.status == "pending" %}
                                         <td><p class="bg-warning bg-gradient text-white">{{order.status}}</p></td>
                                     {% elif order.status == "inProcess" %}
-                                        <td><p class="bg-info bg-gradient text-white">{{order.status}}</p></td>
+                                        <td><p class="bg-secondary bg-gradient text-white">{{order.status}}</p></td>
                                     {% elif order.status == "upForDelivery" %}
                                         <td><p class="bg-primary bg-gradient text-white">{{order.status}}</p></td>
                                     {% elif order.status == "cancelled" %}
                                         <td><p class="bg-danger bg-gradient text-white">{{order.status}}</p></td>
-                                    {% elif order.status == "deliverd" %}
+                                    {% elif order.status == "delivered" %}
                                         <td><p class="bg-success bg-gradient text-white">{{order.status}}</p></td>
+                                    {% elif order.status == "shipped" %}
+                                        <td><p class="bg-info bg-gradient text-white">{{order.status}}</p></td>
                                     {% endif %}
                                     
                                     <td><img src="{{order.product.images.0}}" alt="" height="50" width="50"></td>
@@ -206,7 +209,7 @@
                     </div>
                     </div>
                 
-             
+                    {% if order.status == 'pending' %}
                     <div class="accordion" id="accordionExample">
                         <br>
                         <div class="accordion-item">
@@ -248,11 +251,20 @@
                         </div>
                        
                       </div>
+                    {% endif %}
            
        
 </div>
+    {% if order %}
+<!--  {{ product|json_script }}-->
+        {{ packagin_info|json_script:"packaging-data" }}
+
+    {% endif %}
 </main>
 {% endblock %}
+{% block extrajs %}
+<script type="text/javascript" src="{% static 'js/orders.js' %}"></script>
+{% endblock extrajs %}
 <script src="https://code.jquery.com/jquery-3.5.1.j"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>

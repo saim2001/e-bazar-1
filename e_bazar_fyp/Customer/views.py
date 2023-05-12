@@ -135,7 +135,8 @@ class Customer:
         else:
             string_cart = request.COOKIES.get('cart')
             if string_cart is None or len(string_cart)==0:
-                return HttpResponse("no items in cart")
+                messages.warning(request, "No Products in Cart")
+                return render(request, "Homepage/cart.html",context={'empty':'No items in cart'})
                 #return render(request, 'Homepage/cart.html', {'empty':cart_list})
 
 
@@ -252,9 +253,11 @@ class Customer:
                                     tempOrder.update(
                                         {"productId": findProduct['_id'],'varId':product[2],'units': product[1], 'vendorId': vendorId,'subtotal':subTotal})
                                 else:
-                                    return HttpResponse("Available units are less than required")
+                                    messages.warning(request, "Your required units are above than available units")
+                                    return redirect('Customer:cart')
                             else:
-                                return HttpResponse("No such variation available")
+                                messages.warning(request, "No such variations available")
+                                return redirect('Customer:cart')
                         else:
                             unitsava= int(findProduct["units"])
                             if unitsava >= int(product[1]):
@@ -265,7 +268,8 @@ class Customer:
                                 vendorOrder.append(tempVendorOrder)
                                 tempOrder.update({"productId":findProduct['_id'],'units':product[1],'vendorId':vendorId,'subtotal':subTotal})
                             else:
-                                return HttpResponse("Available units are less than required")
+                                messages.warning(request, "Your required units are above than available units")
+                                return redirect('Customer:cart')
 
                     totalAmount+=subTotal
                     orderProducts.append(tempOrder)
@@ -319,7 +323,8 @@ class Customer:
                 print(order)
                 print("Vendor order")
                 print(vendorOrder)
-                response = HttpResponse("Order Succesfull")
+                messages.success(request, "Order is placed succesfully")
+                response=redirect('Customer:home')
                 response.delete_cookie('cart')
                 return response
 
@@ -426,11 +431,9 @@ class Customer:
             quantity= int(request.POST['units'])
             id= request.POST["cart"]
             idLst= id.split("+")
-            print("new item in cart",idLst)
             productId= idLst[0]
             varId= idLst[1]
             string_cart = request.COOKIES.get('cartb2b')
-            print("cookies string cart",string_cart)
             if string_cart==None or string_cart=="":
                 cart_list=[]
                 cart_list.append([productId, quantity, varId])
@@ -457,7 +460,8 @@ class Customer:
             string_cart = request.COOKIES.get('cartb2b')
             if string_cart is None or len(string_cart)==0:
                 messages.warning(request, "No Products in Cart")
-                return render(request, "Homepage/cartb2b.html")
+                return render(request, "Homepage/cartb2b.html",context={'empty':'No items in cart'})
+
 
 
             else:
@@ -492,7 +496,6 @@ class Customer:
                         product["batch"] = batch
                     product["quantity"] = item[1]
                     cartItemLst.append(product)
-                print(batchLst)
                 batchLst= json.dumps(batchLst)
 
 
@@ -508,8 +511,8 @@ class Customer:
         else:
             string_cart = request.COOKIES.get('cartb2b')
             if string_cart==None:
-                cart_list='No items in cart'
-                return render(request, 'Homepage/cart.html', {'empty':cart_list})
+                messages.warning(request, "No Products in Cart")
+                return render(request, "Homepage/cartb2b.html",context={'empty':'No items in cart'})
             else:
                 cart_list= ast.literal_eval(string_cart)
                 order={}
@@ -530,6 +533,7 @@ class Customer:
                             if product[2] in getVariation.keys():
                                 batches = self.addTextToBatches(getVariation[product[2]]['batches'])
                                 if product[1] < batches[0]['MinUnits']:
+                                    messages.warning(request, "Your units are less than minimum units")
                                     return redirect('Customer:cartb2b')
                                 for b in batches:
                                     if b['MaxUnits'] == 'infinite' or product[1] <= b['MaxUnits']:
@@ -545,6 +549,7 @@ class Customer:
                         else:
                             batches = self.addTextToBatches(findProduct['batches'])
                             if product[1] < batches[0]['MinUnits']:
+                                messages.warning(request, "Your units are less than minimum units")
                                 return redirect('Customer:cartb2b')
                             for b in batches:
                                 if b['MaxUnits'] == 'infinite' or product[1] <= b['MaxUnits']:
@@ -591,7 +596,8 @@ class Customer:
                 print(order)
                 print("Vendor order")
                 print(vendorOrder)
-                response = HttpResponse("Order Succesfull")
+                messages.success(request,'Order is placed succesfully')
+                response = redirect('Customer:b2bhome')
                 response.delete_cookie('cartb2b')
                 return response
 
@@ -600,6 +606,14 @@ class Customer:
 
     def getSwitch(self):
         return self.switch
+
+    def logout(self,request):
+        print("in logout")
+        del request.session["Customer_verify"]
+        if self.getSwitch()=='b2b':
+            return redirect("Customer:b2bhome")
+        else:
+            return redirect("Customer:home")
 
 
 

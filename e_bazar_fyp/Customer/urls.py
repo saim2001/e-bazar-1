@@ -18,6 +18,7 @@ urlpatterns = [
     path('b2bdetail/<str:product_id>/', customer.productdetailb2b, name='productdetailsb2b'),
     path('cartb2b/',customer.add_to_cartb2b,name='cartb2b'),
     path('orderb2b/',customer.orderb2b,name='orderb2b'),
+    path('logout/', customer.logout, name='logout'),
 
 
 ]

@@ -20,7 +20,13 @@ onclick="location.href='{% url 'Customer:home' %}'"> Switch to B2C
 
 {% block content %}
 
+    {% if empty %}
+
     {% include 'messageCus.html' %}
+
+{% else %}
+        {% include 'messageCus.html' %}
+
 
 <section style="background-image: url('{% static 'img/b1.jpg' %}');" id="shop-header">
   <h2>#BigDiscounts</h2>
@@ -158,5 +164,5 @@ document.cookie = cookieString;
 }
 
 </script>
-
+{% endif %}
 {% endblock %}

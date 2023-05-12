@@ -1,4 +1,7 @@
 {% load static %}
+      {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,9 +24,46 @@
     <div>
         <ul id="navbar">
             <li>{% block homeurl %}<a class="active" href="{% url 'Customer:home' %}">{% endblock %}Home</a></li>
-            <li><a href="{% url 'Customer:login' %}">Sign in</a></li>
             <li>{% block carturl %}<a href="{% url 'Customer:cart' %}">{% endblock %}<i class="fa-solid fa-cart-shopping"></i></a></li>
             <li><button type="button" class="btn btn-primary" {% block switchurl %} onclick="location.href='{% url 'Customer:b2bhome' %}'"> Switch to B2B{% endblock %} </button></li>
+            <!-- profile -->
+              <li class="nav-item">
+                  <a class="nav-link  fw-bold" href="#">
+                      {% block name %}
+                {% endblock name %}
+                  </a>
+    
+              </li>
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle"
+                 href="#" id="navbarDropdown" role="button"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="25" height="25" fill="currentColor"
+                     class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                <path fill-rule="evenodd"
+                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+    
+                </svg>
+              </a>
+    
+    
+    
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+    <!--            <li><a class="dropdown-item" href="#">Action</a></li>-->
+    <!--            <li><a class="dropdown-item" href="#">Another action</a></li>-->
+                <li><hr class="dropdown-divider"></li>
+                {% if request.session.Customer_verify %}
+                <li><a class="dropdown-item" style="color: black;" href="{% url 'Customer:logout' %}">Logout</a></li>
+                <li><a class="dropdown-item" style="color: black;" href=#>Orders</a></li>
+                {% else %}
+                <li><a class="dropdown-item" style="color: black;" href="{% url 'Customer:login' %}">Sign in</a></li>
+                {% endif %}
+
+              </ul>
+            </li>
+
 
         </ul>
     </div>

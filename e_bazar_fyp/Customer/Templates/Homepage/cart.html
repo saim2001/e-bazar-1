@@ -8,6 +8,14 @@
 
 {% block content %}
 
+
+    {% if empty %}
+
+    {% include 'messageCus.html' %}
+
+{% else %}
+        {% include 'messageCus.html' %}
+
 <section style="background-image: url('{% static 'img/b1.jpg' %}');" id="shop-header">
   <h2>#BigDiscounts</h2>
   <p>Use coupons and get upto 70% discount on all products</p>
@@ -134,4 +142,5 @@ document.cookie = cookieString;
 
 </script>
 
+{% endif %}
 {% endblock %}

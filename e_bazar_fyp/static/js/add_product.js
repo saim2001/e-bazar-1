@@ -664,13 +664,16 @@ window.onload = function () {
 
     if (data.isb2b=='yes'){
 
-    }
     if (data.onlyb2b!='yes'){
       let units = rows[i].querySelector("[name = 'units']");
       units.value = var_data[i]["units"];
       let price = rows[i].querySelector("[name = 'price']");
       price.value = var_data[i]["price"];
     }
+  
+    
+
+  }
 
 
     let condition =   rows[i].querySelector("[name = 'condition']");  

@@ -58,11 +58,20 @@ class Customer:
 
         return render(request,"Homepage/index.html",context)
     def renOrders(self,request):
-        database = utils.connect_database('E-Bazar')
-        orders = database['Orders']
-        products = database['Products']
-        customer_orders = orders.find({'customerId':request.session["Customer_verify"] })
-        context = {'orders':customer_orders}
+        Orders = utils.connect_database('E-Bazar','Orders')
+        products = utils.connect_database('E-Bazar','Products')
+
+        customer_orders = Orders.find({'customerId':request.session["Customer_verify"] })
+        orders = []
+        for order in customer_orders:
+            products_info = []
+            for product in order['products']:
+                order_prod = products.find_one({'_id':ObjectId(product['productId'])})
+                products_info.append(order_prod['name'])
+            order['product_info'] = products_info
+            orders.append(order)
+        context = {'orders':orders}
+        print(context)
         return render(request,'Homepage/orders.html',context)
     def getRelatedProducts(self,list,id):
         all_products_lst=[]

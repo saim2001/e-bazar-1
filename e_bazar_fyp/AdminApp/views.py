@@ -211,7 +211,7 @@ class Verification:
                 order['customer'] = customer
         except:
             return HttpResponse(status=500)
-        context['orders.js'] = orders
+        context['orders'] = orders
 
 
 
@@ -227,7 +227,7 @@ class Verification:
                  order['customer'] = customer
          except:
              return HttpResponse(status=500)
-         context['orders.js'] = orders
+         context['orders'] = orders
 
          return render(request, 'Verification/oshipped.html', context)
 
@@ -239,7 +239,7 @@ class Verification:
                 customer = self.getCustInfo(order['customerId'])
                 customer['id'] = customer.pop("_id")
                 order['customer'] = customer
-            context['orders.js'] = orders
+            context['orders'] = orders
         except:
             return HttpResponse(status=500)
 
@@ -255,7 +255,7 @@ class Verification:
                 order['customer'] = customer
         except:
             return HttpResponse(status=500)
-        context['orders.js'] = orders
+        context['orders'] = orders
         return render(request,'Verification/oupForDelivery.html',context)
 
     def oinProcess(self, request):
@@ -269,7 +269,7 @@ class Verification:
                  order['customer'] = customer
          except:
              return HttpResponse(status=500)
-         context['orders.js'] = orders
+         context['orders'] = orders
          return render(request, 'Verification/oInProcess.html', context)
 
     def ocancelled(self, request):
@@ -283,7 +283,7 @@ class Verification:
                  order['customer'] = customer
          except:
              return HttpResponse(status=500)
-         context['orders.js'] = orders
+         context['orders'] = orders
          return render(request, 'Verification/oCancelled.html', context)
 
     def getClusters(self, request, status):
@@ -307,7 +307,7 @@ class Verification:
         clusters = self.getClusters(request,status)
         for cluster in clusters:
             print(cluster)
-            cluster['orderno'] = len(cluster['orders.js'])
+            cluster['orderno'] = len(cluster['orders'])
         context['clusters'] = clusters
 
        
@@ -318,7 +318,7 @@ class Verification:
          clusters = self.getClusters(request, status)
          for cluster in clusters:
              print(cluster)
-             cluster['orderno'] = len(cluster['orders.js'])
+             cluster['orderno'] = len(cluster['orders'])
          context['clusters'] = clusters
          context['orderlst'] = order_lst
 
@@ -326,7 +326,7 @@ class Verification:
 
     def order_checker(self,request,order_id):
         for cluster in self.getClusters(request,'pending'):
-            for order in cluster['orders.js']:
+            for order in cluster['orders']:
                 if order ==  order_id:
                     return True
         return False
@@ -350,7 +350,7 @@ class Verification:
                     if flag == True:
                         messages.warning(request,'order already added in another cluster')
                     elif flag == False:
-                        cluster['orders.js'].append(order)
+                        cluster['orders'].append(order)
                         messages.success(request, 'order added to cluster successfully')
                 clusters.update_one({'_id':ObjectId(cluster_id)},{"$set":cluster})
 
@@ -358,7 +358,7 @@ class Verification:
                 messages.warning(request, 'Orders can only be added to pending clusters')
             return redirect('oClusterDetails', cluster_id)
         else:
-            messages.warning(request, 'No orders.js selected')
+            messages.warning(request, 'No orders selected')
             return redirect('oClusters', 'pending')
 
     def deleteFromCluster(self,request,cluster_id,order_id):
@@ -366,7 +366,7 @@ class Verification:
             database = utils.connect_database("E-Bazar")
             clusters = database["Clusters"]
             cluster = clusters.find_one({'_id':ObjectId(cluster_id)})
-            cluster['orders.js'].pop(cluster['orders.js'].index(order_id))
+            cluster['orders'].pop(cluster['orders'].index(order_id))
             clusters.update_one({'_id':ObjectId(cluster_id)},{'$set':cluster})
             messages.success(request,'Order removed successfully')
         except:
@@ -455,7 +455,7 @@ class Verification:
         cluster['id'] = cluster.pop('_id')
         print(cluster)
         order_lst = []
-        for order in cluster['orders.js']:
+        for order in cluster['orders']:
             print(order)
             order_dict = {}
             if order != '':
@@ -481,7 +481,7 @@ class Verification:
             clusters = database['Clusters']
             cluster = clusters.find_one({'_id':ObjectId(cluster_id)})
             clusters.update_one({'_id': ObjectId(cluster_id)},{'$set':{'status':'shipped'}})
-            for order in cluster['orders.js']:
+            for order in cluster['orders']:
                 print(order)
                 self.orderstatuschanger(ObjectId(order),'shipped')
             messages.success(request,'Cluster shipped successfully')
@@ -516,10 +516,10 @@ class Verification:
             cluster_dict['city'] = request.POST['Shipto']
             cluster_dict['Shipby'] = request.POST['Shipby']
             cluster_dict['Deliverby'] = request.POST['Deliverby']
-            cluster_dict['orders.js'] = []
+            cluster_dict['orders'] = []
             print(request.POST.getlist('order'))
             for order in request.POST.getlist('order'):
-                cluster_dict['orders.js'].append(order)
+                cluster_dict['orders'].append(order)
             cluster_dict['service'] = request.POST['service']
             cluster_dict['status'] = 'pending'
             cluster = clusters.insert_one(cluster_dict)
@@ -541,7 +541,7 @@ class Verification:
                  cluster_dict['city'] = request.POST['Shipto']
                  cluster_dict['Shipby'] = request.POST['Shipby']
                  cluster_dict['Deliverby'] = request.POST['Deliverby']
-                 cluster_dict['orders.js'] = []
+                 cluster_dict['orders'] = []
                  cluster_dict['service'] = request.POST['service']
                  cluster_dict['status'] = 'pending'
                  cluster = clusters.insert_one(cluster_dict)
@@ -558,12 +558,12 @@ class Verification:
             clusters = database['Clusters']
             cluster = clusters.find_one({'_id':ObjectId(cluster_id)})
             status = cluster['status']
-            if len(cluster['orders.js']) == 0 and cluster['status'] == 'pending':
+            if len(cluster['orders']) == 0 and cluster['status'] == 'pending':
 
                 clusters.delete_one({'_id':ObjectId(cluster_id)})
                 messages.success(request,'Cluster deleted successfully')
             else:
-                messages.warning(request, 'Cannot delete cluster with orders.js or with status[Shipped and Delivered]')
+                messages.warning(request, 'Cannot delete cluster with orders or with status[Shipped and Delivered]')
         except:
             messages.error('Failed to delete cluster')
         return redirect('oClusters',status)
@@ -590,16 +590,16 @@ class Verification:
             cluster = clusters.find_one({'_id': ObjectId(cluster_id)})
             orders = database['Orders']
             count = 0
-            for order in cluster['orders.js']:
+            for order in cluster['orders']:
                 db_order = orders.find_one({'_id': ObjectId(order)})
                 if db_order['status'] == 'delivered':
                     count += 1
-            if count == len(cluster['orders.js']):
+            if count == len(cluster['orders']):
                 cluster['status'] = 'delivered'
                 messages.success(request, 'Status updated successfully')
                 clusters.update_one({'_id': ObjectId(cluster_id)}, {'$set': cluster})
             else:
-                messages.warning(request, 'Cannot mark delivered until all orders.js delivered')
+                messages.warning(request, 'Cannot mark delivered until all orders delivered')
         except:
             messages.error(request, 'Failed to update status')
         return redirect('oClusterDetails', cluster_id)

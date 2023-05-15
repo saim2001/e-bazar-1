@@ -309,6 +309,7 @@ class Verification:
             print(cluster)
             cluster['orderno'] = len(cluster['orders'])
         context['clusters'] = clusters
+        context['status'] = status
 
        
         return render(request,'Verification/oClusters.html',context)

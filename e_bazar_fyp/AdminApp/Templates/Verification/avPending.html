@@ -2,6 +2,16 @@
 {% extends 'Verification/accountVerificationOption.html' %}
 {% block  subContent %}
 
+
+{% block options %}
+<a  href="{% url 'avPending' %}" style="text-decoration: none; font-weight: bold;">  <span class='active'  id='pendingId' style="background-color: #321abc; color: white; padding: 5px;"  >Pending</span></a>
+<a href="{% url 'avDisputed' %}"  style="text-decoration: none; font-weight: bold;">  <span class='active' id='disputedId'>Disputed</span></a>
+<a href="{% url 'avVerified' %}"  style="text-decoration: none; font-weight: bold;">  <span class='active' id='verifiedId'>Verified</span></a>
+
+{% endblock options %}
+
+
+
 <div class="content" >
     {% include 'message_a.html' %}
 
@@ -18,7 +28,7 @@
         {% if vendors %}
             {% for vendor in vendors %}
             <div class="pendingData">
-                <p>{{vendor.dto}}</p>
+                <p>{{vendor.}}</p>
                 <p>{{vendor.businessType}}</p>
                 <p>{{vendor.storename}}</p>
                 <p>{{vendor.city}}</p>

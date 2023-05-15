@@ -712,9 +712,10 @@ class Order:
         e_bazar_database = utils.connect_database("E-Bazar")
         customer_db = e_bazar_database['Customer']
         products_db = database['Products']
-        orders = database['Orders']
-        orders_data = orders.find({})
+        ordersColl = database['Orders']
+        orders_data = ordersColl.find({ 'count': { '$exists': False }})
         for order in orders_data:
+            print(order,'order')
             cust_id = order["customerId"]
             order["id"] = order.pop("_id")
             customer = customer_db.find_one({"_id": ObjectId(cust_id)})

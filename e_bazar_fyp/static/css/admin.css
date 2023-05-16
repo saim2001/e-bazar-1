@@ -247,7 +247,7 @@
 
 .tableContainer{
     padding: 0px 30px;
- 
+    padding-left: 22vw;
     height: 70vh;
     overflow: auto;
     margin: 60px;

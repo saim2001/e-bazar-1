@@ -3,12 +3,8 @@
 
 <div class="avContainer" id="oContainerid">
 
-    <a href="{% url 'oUnfulfilled' %}">  <span class='active' id='unfulfilledId'>Pending</span></a>
-    <a href="{% url 'oFulfilled' %}"> <span class='active' id='fulfilledId'>Delivered</span></a>
-    <a href="{% url 'oReturned' %}"> <span class='active' id='returnedId'>Up For Delivery</span></a>
-    <a href="{% url 'oinProcess' %}"> <span class='active' id='clustersId'>In Process</span></a>
-    <a href="{% url 'oShipped' %}"> <span class='active' id='clustersId'>Shipped</span></a>
-    <a href="{% url 'ocancelled' %}"> <span class='active' id='clustersId'>Cancelled</span></a>
+{% block options %}
+{% endblock options %}
 
 
     {% block subContent %}

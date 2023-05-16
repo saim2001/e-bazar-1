@@ -1,6 +1,21 @@
 {% extends 'Verification/clusteroptions.html' %}
 
+{% block options %}
+    {% if status == 'pending' %}
+        <a href="{% url 'oClusters' 'pending' %}" style="text-decoration: none; font-weight: bold;">  <span class='active' id='unfulfilledId' style="background-color: #321abc; color: white; padding: 5px;">Pending</span></a>
+        <a href="{% url 'oClusters' 'shipped' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='fulfilledId'>Shipped</span></a>
+        <a href="{% url 'oClusters' 'delivered' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='fulfilledId'>Delivered</span></a>
+    {% elif status == 'shipped' %}
+        <a href="{% url 'oClusters' 'pending' %}" style="text-decoration: none; font-weight: bold;">  <span class='active' id='unfulfilledId' >Pending</span></a>
+        <a href="{% url 'oClusters' 'shipped' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='fulfilledId' style="background-color: #321abc; color: white; padding: 5px;">Shipped</span></a>
+        <a href="{% url 'oClusters' 'delivered' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='fulfilledId'>Delivered</span></a>
+    {% elif status == 'delivered' %}
+        <a href="{% url 'oClusters' 'pending' %}" style="text-decoration: none; font-weight: bold;">  <span class='active' id='unfulfilledId' >Pending</span></a>
+        <a href="{% url 'oClusters' 'shipped' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='fulfilledId'>Shipped</span></a>
+        <a href="{% url 'oClusters' 'delivered' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='fulfilledId' style="background-color: #321abc; color: white; padding: 5px;">Delivered</span></a>
+    {% endif %}
 
+{% endblock options %}
 {% block  subContent %}
 
 

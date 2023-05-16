@@ -1,4 +1,12 @@
 {% extends 'Verification/orderOption.html' %}
+{% block options %}
+<a href="{% url 'oUnfulfilled' %}" style="text-decoration: none; font-weight: bold;">  <span class='active' id='unfulfilledId'   >Pending</span></a>
+    <a href="{% url 'oFulfilled' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='fulfilledId'>Delivered</span></a>
+    <a href="{% url 'oReturned' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='returnedId' style="background-color: #321abc; color: white; padding: 5px;">Up For Delivery</span></a>
+    <a href="{% url 'oinProcess' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='clustersId'>In Process</span></a>
+    <a href="{% url 'oShipped' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='clustersId'>Shipped</span></a>
+    <a href="{% url 'ocancelled' %}" style="text-decoration: none; font-weight: bold;"> <span class='active' id='clustersId'>Cancelled</span></a>
+{% endblock options %}
 {% block  subContent %}
 <div class="content" id="upForDelivery">
     <form action="{% url 'cluster'%}" method="post">
@@ -29,7 +37,7 @@
                         <p>{{order.status}}</p>
                         <p class="pButton">
                             <a href="{% url 'oUnfulfilledDetails' order.id  %}"> <button type="button" id='oVDId' onclick="location.href='{% url 'oUnfulfilledDetails' order.id  %}'">View details</button></a>
-                            <a href="{% url 'oUnfulfilledUpdate' %}">   <button id='oUpId'>Update</button></a>
+
 
 
 

@@ -3,9 +3,10 @@
 
 <div class="avContainer" id="oContainerid">
 
-    <a href="{% url 'oClusters' 'pending' %}">  <span class='active' id='unfulfilledId'>Pending</span></a>
-    <a href="{% url 'oClusters' 'shipped' %}"> <span class='active' id='fulfilledId'>Shipped</span></a>
-    <a href="{% url 'oClusters' 'delivered' %}"> <span class='active' id='fulfilledId'>Delivered</span></a>
+    {% block options %}
+    {% endblock options %}
+
+
 
 
 

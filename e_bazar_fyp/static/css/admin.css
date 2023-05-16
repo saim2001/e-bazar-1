@@ -8,20 +8,22 @@
 .container {
     display: flex;
     background-color: hsl(0, 0%, 100%);
+    padding: 0px;
+    margin: 0px;
 }
 
 
 .navbar {
     
-    width: 80vw;
+    width: 100vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #321abc;
-    height: 8vh;
+    height: 10vh;
     padding: 0 20px;
-    overflow: hidden;
     font-size: 1rem;
+    z-index: 2;
 }
 
 
@@ -31,20 +33,24 @@
 
 
 .sidebar {
+    position:absolute;
     background-color: #f4f4f4;
     width: 20vw;
-    height: 100vh;
-    padding: 2.5rem 1.7rem ;
+    height: calc(100vh - 10vh);
+    padding: 4rem 1.7rem ;
+    bottom: 0px;
     justify-content: space-between;
-
+    z-index: 1;
+    
 }
 
 .sidebar p {
-    margin-top: 1.8rem;
+    
     
     cursor: pointer;
+
   
-    padding: 0.4rem;
+    padding: 1rem;
 }
 
 .sidebar p:hover {
@@ -61,7 +67,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 2.5rem 2rem 0rem 1.5rem; 
+    padding: 2.5rem 2rem 0rem ;
+    padding-left: 22vw; 
 
 
 }
@@ -85,7 +92,7 @@
 .accountVerification button {
     background-color: #321abc;
     color: beige;
-    height: 6vh;
+    height: 7.5vh;
 
 }
 
@@ -99,6 +106,7 @@
     padding: 2rem;
     display: flex;
     flex-wrap: wrap;
+    padding-left: 22vw;
     
 
 
@@ -222,7 +230,7 @@
     
     padding: 0.2rem;
     text-align: center;
-    height:1.5rem;
+    height:3rem;
     width: 6.5rem;
     margin-top: 0.3rem;
     background-color: #321abc;
@@ -239,7 +247,7 @@
 
 .tableContainer{
     padding: 0px 30px;
- 
+    padding-left: 22vw;
     height: 70vh;
     overflow: auto;
     margin: 60px;
@@ -356,7 +364,7 @@ button {
     cursor: pointer;
     background-color: #321abc;
 
-    border: 1px solid #007bff;
+    border: 1px solid #ffffff;
     color: #fff;
     border-radius: 4px;
 }

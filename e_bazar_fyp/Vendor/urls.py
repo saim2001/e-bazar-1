@@ -31,6 +31,8 @@ urlpatterns = [
     path('update/<str:product_id>/<str:var_id>/',product.edit_inv,name="edit_pr_am"),
     path('update/<str:product_id>/',product.edit_inv,{"var_id":None},name="edit_pr_am"),
     path('ren_update/<str:product_id>/',product.ren_upd_product,name="ren_upd"),
-    path('updateproduct/<str:product_id>/',product.update,name="update_product")
+    path('updateproduct/<str:product_id>/',product.update,name="update_product"),
+    path('updateb2b/<str:product_id>/<str:var_id>/', product.edit_invb2b, name="edit_pr_amb2b"),
+    path('updateb2b/<str:product_id>/', product.edit_invb2b, {"var_id": None}, name="edit_pr_amb2b"),
 
 ]

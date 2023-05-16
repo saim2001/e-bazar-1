@@ -398,11 +398,11 @@ class Product:
 
                         if isb2b == "yes":
                             batches = []
-                            if int(batch1MinUnit[index])!=0 and int(batch1price[index])!=0:
+                            if int(batch1MinUnit[index])>0 and int(batch1price[index])>0:
                                 batches.append({"MinUnits": int(batch1MinUnit[index]), "Price":int(batch1price[index])})
-                            if int(batch2MinUnit[index]) !=0 and int(batch2price[index])!=0:
+                            if int(batch2MinUnit[index]) >0 and int(batch2price[index])>0:
                                 batches.append({"MinUnits": int(batch2MinUnit[index]), "Price":int(batch2price[index])})
-                            if int(batch3MinUnit[index])!=0 and int(batch3price[index])!=0:
+                            if int(batch3MinUnit[index])>0 and int(batch3price[index])>0:
                                 batches.append({"MinUnits": int(batch3MinUnit[index]), "Price":int(batch3price[index])})
 
                             if len(batches)!=0:
@@ -468,6 +468,46 @@ class Product:
 
         return redirect("Vendor:reninvtry")
 
+
+    @session_check
+    def edit_invb2b(self,request,product_id,var_id):
+        if request.method == "POST":
+                try:
+                    e_bazar_con = utils.connect_database("E-Bazar")
+                    vendor_con = utils.connect_database(request.session["Vendor_Db"])
+                    vendor_products = vendor_con["Products"]
+                    e_bazar_products = e_bazar_con["Products"]
+                    batch1Units= request.POST.get('batch1Units')
+                    batch1Price= request.POST.get('batch1Price')
+                    batch2Units= request.POST.get('batch2Units')
+                    batch2Price= request.POST.get('batch2Price')
+                    batch3Units= request.POST.get('batch3Units')
+                    batch3Price= request.POST.get('batch3Price')
+                    batches = []
+                    if int(batch1Units) > 0 and int(batch1Price) > 0:
+                        batches.append({"MinUnits": int(batch1Units), "Price": int(batch1Price)})
+                    if int(batch2Units) > 0 and int(batch2Price) > 0:
+                        batches.append({"MinUnits": int(batch2Units), "Price": int(batch2Price)})
+                    if int(batch3Units) > 0 and int(batch3Price) > 0:
+                        batches.append({"MinUnits": int(batch3Units), "Price": int(batch3Price)})
+
+                    if len(batches)!=0:
+                        batches = sorted(batches, key=lambda x: x['MinUnits'], reverse=False)
+
+                    if vendor_products.find_one({"_id":ObjectId(product_id)})["isVariation"] == "yes":
+                        vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"variations.{}.batches".format(var_id):batches}})
+                        e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
+                            "$set": {"variations.{}.batches".format(var_id): batches}})
+                    else:
+                        vendor_products.update_one({"_id":ObjectId(product_id)},{"$set":{"batches":batches}})
+                        e_bazar_products.update_one({"_id": ObjectId(product_id)}, {
+                            "$set": {"batches": batches}})
+
+                    messages.success(request, 'Product updated successfully')
+                except:
+                    messages.error(request,"Product update failed")
+
+        return redirect("Vendor:reninvtry")
 
 
 
@@ -683,8 +723,14 @@ class Product:
             allProducts= ebazarDatabase["Products"]
             vendorProducts= vendorDatabase["Products"]
             productDict["vendorId"]= vendorId
-            vendorProductupdate= vendorProducts.update_one({"_id":ObjectId(product_id)},{"$set":productDict})
-            allProducts.update_one({"_id":ObjectId(product_id)},{"$set":productDict})
+            productget= allProducts.find_one({'_id':ObjectId(product_id)})
+            productDict['reviews']= productget['reviews']
+            productDict['images']=productget['images']
+            productDict['_id']= ObjectId(product_id)
+            vendorProducts.delete_one({"_id":ObjectId(product_id)})
+            allProducts.delete_one({"_id":ObjectId(product_id)})
+            vendorProducts.insert_one(productDict)
+            allProducts.insert_one(productDict)
             return redirect("Vendor:reninvtry")
         else:
             return HttpResponse("some error")

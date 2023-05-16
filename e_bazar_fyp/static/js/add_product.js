@@ -521,7 +521,7 @@ else{
       count++;
       let newRow = tbody.insertRow(-1);
       if (b2byes.checked){
-        let htmlRowwithb2b= '<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+count+' </th> <td> <input name="var1" readonly value="'+variationList[0][i]+'" > </td> <td> <input name="var2" readonly value="'+variationList[1][j]+'" > </td> <td> <input name="sku" type="text" required> </td> '+ notOnlyb2bunits +' <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> '+ notOnlyb2bprice +' <td> <input type="radio" name="mainpage" value="'+variationList[0][i]+"-"+variationList[1][j]+'" checked> </td> <td> <input name="batch1MinUnit" type="number" value="0" > </td> <td>  <input name="batch1price" type="number" value="0"> </td> <td><input name="batch2MinUnit" type="number" value="0" > </td> <td> <input name="batch2price" type="number" value="0"> </td> <td><input name="batch3MinUnit" type="number" value="0" > </td> <td> <input name="batch3price" type="number" value="0"> </td> </tr>'
+        let htmlRowwithb2b= '<tr> <td> <input type="checkbox" onclick="selectRow(this)"/> </td> <th scope="row">'+count+' </th> <td> <input name="var1" readonly value="'+variationList[0][i]+'" > </td> <td> <input name="var2" readonly value="'+variationList[1][j]+'" > </td> <td> <input name="sku" type="text" required> </td> '+ notOnlyb2bunits +' <td> <select name="condition" class="form-select" aria-label="Default select example" required> <option selected value="new">New</option> <option value="old">Old</option> </select> </td> '+ notOnlyb2bprice +' <td> <input type="radio" name="mainpage" value="'+variationList[0][i]+"-"+variationList[1][j]+'" checked> </td> <td> <input name="batch1MinUnit" id=batch1MinUnit"'+variationList[0]+variationList[1]+'" type="number" value="0" > </td> <td>  <input name="batch1price" id=batch1price"'+variationList[0]+variationList[1]+'" type="number" value="0"> </td> <td><input name="batch2MinUnit" id=batch2MinUnit"'+variationList[0]+variationList[1]+'" type="number" value="0" > </td> <td> <input name="batch2price" id=batch2price"'+variationList[0]+variationList[1]+'" type="number" value="0"> </td> <td><input name="batch3MinUnit" id=batch3MinUnit"'+variationList[0]+variationList[1]+'" type="number" value="0" > </td> <td> <input name="batch3price" id=batch3price"'+variationList[0]+variationList[1]+'" type="number" value="0"> </td> </tr>'
         newRow.innerHTML= htmlRowwithb2b;
       }
       else{
@@ -662,18 +662,15 @@ window.onload = function () {
     let sku = rows[i].querySelector("[name = 'sku']");
     sku.value = var_data[i]["sku"];
 
-    if (data.isb2b=='yes'){
 
-    if (data.onlyb2b!='yes'){
+
+    if (data.onlyb2b=='no'){
       let units = rows[i].querySelector("[name = 'units']");
       units.value = var_data[i]["units"];
       let price = rows[i].querySelector("[name = 'price']");
       price.value = var_data[i]["price"];
     }
   
-    
-
-  }
 
 
     let condition =   rows[i].querySelector("[name = 'condition']");  
@@ -724,6 +721,16 @@ window.onload = function () {
 
     }
    }
+
+  //  if (data.isb2b == 'yes' && data.isVariation == "yes" ){
+  //   document.getElementById('b2b_yes').click();
+  //   let batches = Object.values(data.variations);
+  //   for (i=0; i<batches.length; i++){
+  //     document.querySelector("[name = 'batch"+i+"MinUnit']").value = batches[i]["MinUnits"];
+  //     document.querySelector("[name = 'batch"+i+"price']").value = batches[i]["Price"];
+
+  //   }
+  //  }
    document.getElementById("productname").value = data.name;
    if (data.brand){
     document.getElementById('brand').value = data.brand;

@@ -1,23 +1,21 @@
 {% load static %}
-{% load bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
+
 {% block content %}
 <head>
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
 </head>
 
 <div class="sidebar">
-              
-    
-    <a href="{% url 'avPending' %}" ><p  id='pendingId'>Account Verifications</p></a>
-    <a href="{% url 'oUnfulfilled' %}"><p class='activeSB' id='unfulfilledId'>Orders</p></a>
-    <a href="{% url 'oClusters' 'pending' %}"><p class='activeSB' id='unfulfilledId'>Clusters</p></a>
-   
+
+
+    <a href="{% url 'avPending' %}" style="text-decoration: none; font-weight: bold;"><p id='pendingId'>Account Verifications</p></a>
+    <a href="{% url 'oUnfulfilled' %}" style="text-decoration: none; font-weight: bold;"><p class='activeSB' id='unfulfilledId'>Orders</p></a>
+    <a href="{% url 'oClusters' 'pending' %}" style="text-decoration: none; font-weight: bold;"><p class='activeSB' id='unfulfilledId'>Clusters</p></a>
+
     {% comment %} <a href="{% url 'AccountVerifications' %}"><p class='activeSB' id='pendingId'>Account Verifications</p></a>
     <a href="{% url 'Orders' %}"><p class='activeSB' id='unfulfilledId'>Orders</p></a>
     {% endcomment %}
-    
+
 
 </div>
 {% endblock %}

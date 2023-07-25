@@ -580,7 +580,7 @@ window.onload = function () {
    const var_types = Object.keys(data.var_type);
    console.log(var_types)
     document.getElementById('var_yes').click();
-    if (data.isb2b == 'yes' ){
+    if (data.isb2b == 'yes' ){  
       document.getElementById('b2b_yes').click();
     
     if (data.onlyb2b=='yes'){

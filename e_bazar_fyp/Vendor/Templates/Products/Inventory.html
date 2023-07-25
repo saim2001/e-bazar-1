@@ -49,7 +49,7 @@
             <form >
                 <div style="display: inline-flex;">
                     
-                    <input type="text" class="form-control"   placeholder="Search product by SKU" aria-label="Search product by SKU" aria-describedby="button-addon2" >
+                    <input type="number" class="form-control"   placeholder="Search product by SKU" aria-label="Search product by SKU" aria-describedby="button-addon2" >
                     <button class="btn bg-success bg-gradient text-white btn-outline-dark" type="button" id="button-addon3" style="width: 200px;" >
                       <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i> Search 
                     </button>
@@ -81,7 +81,7 @@
             <table id="Inventorytable" class="table" >
               <thead class="table-light border border-1">
                 <tr>
-                  <th>Status</th>
+                  <th>Select</th>
                   <th>Image</th>
                   <th>SKU Condition</th>
                   <th>Product name</th>
@@ -94,7 +94,8 @@
               <tbody class="border border-1">
               {% for product in products %}
 
-                {% if product.isVariation == "yes" %}
+                {% if product.isVariation == "yes" and product.onlyb2b == "no" %}
+
                     {% for var, var_det in product.variations.items %}
                         <form  action='{% url "Vendor:edit_pr_am" product.id var %}' method="POST">
                             {% csrf_token %}
@@ -108,28 +109,32 @@
                           <td> {{var_det.sku}} Condition: {{var_det.condition}}</td>
                           <td>{{product.name}}</td>
                           <td>{{product.CreatedDateTime}}</td>
-                          <td><input type="text" class="form-control" id="formGroupExampleInput1" placeholder="Amount" value={{var_det.units}} name="units"></td>
-                          <td><input type="text" class="form-control" id="formGroupExampleInput1" placeholder="PKR" value={{var_det.price}} name="price"></td>
+                          <td><input type="number" class="form-control" id="formGroupExampleInput1" placeholder="Amount" value={{var_det.units}} name="units"></td>
+                          <td><input type="number" class="form-control" id="formGroupExampleInput1" placeholder="PKR" value={{var_det.price}} name="price"></td>
                           <td>
 
-                            <div style="display: flex; justify-content: flex-end">
+                            <div style="display: flex; justify-content: flex-start">
 
                             <button style="width: 100px;" type="submit" class="btn btn-success btn-outline-dark text-white bg-gradient" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>
                                 <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
                               </svg>Save</button>
                                  </form>
-                                 <button style="width: 100px;" type="button" class="btn btn-primary btn-outline-dark text-white bg-gradient" onclick="location.href='{% url 'Vendor:ren_upd' product.id %}'"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                              </svg> Edit</button>
+
                             </div>
                           </td>
                         </tr>
 
                     {% endfor %}
+                    <tr class="group-separator">
+                      <td style="border: none;" colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+                    </tr>
+                    <td style="border: none;"  colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+                  </tr>
+                  <td colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+                </tr>
                 {% endif %}
-                {% if product.isVariation == "no" %}
+                {% if product.isVariation == "no" and product.onlyb2b == "no" %}
               <form  action='{% url "Vendor:edit_pr_am" product.id %}' method="POST" >
                   {% csrf_token %}
                          <tr>
@@ -140,8 +145,8 @@
                           <td>{{product.sku}} Condition: {{product.condition}}</td>
                           <td>{{product.name}}</td>
                           <td>{{product.CreatedDateTime}}</td>
-                          <td><input type="text" class="form-control" id="formGroupExampleInput" placeholder="Amount" value={{product.units}} name="units"></td>
-                          <td><input type="text" class="form-control" id="formGroupExampleInput" placeholder="PKR" value={{product.price}} name="price"></td>
+                          <td><input type="number" class="form-control" id="formGroupExampleInput" placeholder="Amount" value={{product.units}} name="units"></td>
+                          <td><input type="number" class="form-control" id="formGroupExampleInput" placeholder="PKR" value={{product.price}} name="price"></td>
                           <td>
 
                             <div style="display: flex; justify-content: flex-end">
@@ -151,13 +156,17 @@
                                 <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
                               </svg>Save</button>
                                   </form>
-                                 <button style="width: 100px;" type="button" class="btn btn-primary btn-outline-dark text-white bg-gradient" onclick="location.href='{% url 'Vendor:ren_upd' product.id %}'"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                              </svg> Edit</button>
+
                             </div>
                           </td>
                         </tr>
+                        <tr class="group-separator">
+                          <td style="border: none;" colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+                        </tr>
+                        <td style="border: none;"  colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+                      </tr>
+                      <td colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+                    </tr>
 
                 {% endif %}
               {% endfor %}
@@ -165,6 +174,191 @@
               </tbody>
             </table>
           </div>
+
+<!-- b2b tab -->
+
+
+<div class="tab-pane fade row" id="b2bProducts" role="tabpanel" aria-labelledby="b2b-tab">
+
+      <br><br>
+      <table id="Inventorytable" class="table" >
+        <thead class="table-light border border-1">
+          <tr>
+            <th>Image</th>
+            <th>SKU Condition</th>
+            <th>Product name</th>
+            <th>Date created</th>
+
+            <th><th>
+          </tr>
+        </thead>
+        <tbody class="border border-1">
+        {% for product in products %}
+
+          {% if product.isVariation == "yes" and product.isb2b == "yes"  %}
+
+              {% for var, var_det in product.variations.items %}
+                  <form  action='{% url "Vendor:edit_pr_amb2b" product.id var %}' method="POST">
+                      {% csrf_token %}
+                  <tr>
+
+                       <td>
+                             <img src="{{product.images.0}}" style="height:100px; width:100px;">
+                         </td>
+
+                    <td> {{var_det.sku}} Condition: {{var_det.condition}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.CreatedDateTime}}</td>
+                    <td>
+
+                      <div style="display: flex; justify-content: flex-start">
+
+                      <button style="width: 100px;" type="submit" class="btn btn-success btn-outline-dark text-white bg-gradient" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>
+                          <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
+                        </svg>Save</button>
+
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="6">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input1" class="form-label">Batch 1 Min units:</label>
+                              <input type="number" id="input1" name="batch1Units" value="{{var_det.batches.0.MinUnits}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 1 Unit price:</label>
+                              <input type="number" id="input2" name="batch1Price" value="{{var_det.batches.0.Price}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 2 Min units:</label>
+                              <input type="number" id="input2" name="batch2Units" value="{{var_det.batches.1.MinUnits}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 2 Unit price:</label>
+                              <input type="number" id="input2" name="batch2Price" value="{{var_det.batches.1.Price}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 3 Min units:</label>
+                              <input type="number" id="input2" name="batch3Units" value="{{var_det.batches.2.MinUnits}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 3 Unit Price:</label>
+                              <input type="number" id="input2" name="batch3Price" value="{{var_det.batches.2.Price}}" class="form-control">
+                            </div>
+                          </div>
+                          </div>
+                      </div>
+                    </td>
+                  </tr>
+                </form>
+
+
+              {% endfor %}
+              <tr class="group-separator">
+                <td style="border: none;" colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+              </tr>
+              <td style="border: none;"  colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+            </tr>
+            <td colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+          </tr>
+          {% endif %}
+          {% if product.isVariation == "no" and product.isb2b == "yes" %}
+        <form  action='{% url "Vendor:edit_pr_amb2b" product.id %}' method="POST" >
+            {% csrf_token %}
+                   <tr>
+                         <td>
+                             <img src="{{product.images.0}}" style="height:100px; width:100px;">
+                         </td>
+                    <td>{{product.sku}} Condition: {{product.condition}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.CreatedDateTime}}</td>
+                    <td>
+
+                      <div style="display: flex; justify-content: flex-end">
+
+                      <button style="width: 100px;" type="submit" class="btn btn-success btn-outline-dark text-white bg-gradient"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>
+                          <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
+                        </svg>Save</button>
+
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="6">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input1" class="form-label">Batch 1 Min units:</label>
+                              <input type="number" id="input1" name="batch1Units" value="{{product.batches.0.MinUnits}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 1 Unit price:</label>
+                              <input type="number" id="input2" name="batch1Price" value="{{product.batches.0.Price}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 2 Min units:</label>
+                              <input type="number" id="input2" name="batch2Units" value="{{product.batches.1.MinUnits}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 2 Unit price:</label>
+                              <input type="number" id="input2" name="batch2Price" value="{{product.batches.1.Price}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 3 Min units:</label>
+                              <input type="number" id="input2" name="batch3Units" value="{{product.batches.2.MinUnits}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-lg-2">
+                            <div class="mb-3">
+                              <label for="input2" class="form-label">Batch 3 Unit Price:</label>
+                              <input type="number" id="input2" name="batch3Price" value="{{product.batches.2.Price}}" class="form-control">
+                            </div>
+                          </div>
+                          </div>
+                      </div>
+                    </td>
+                  </tr>
+                </form>
+                  <tr class="group-separator">
+                    <td style="border: none;" colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+                  </tr>
+                  <td style="border: none;"  colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+                </tr>
+                <td colspan="8"></td> <!-- Empty cell spanning multiple columns -->
+              </tr>
+
+          {% endif %}
+        {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+
 </main>
 {% endblock %}
 {% block extrajs %}
